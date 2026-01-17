@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Metaschema.Core/Metaschema.Core.csproj" />
+    <Project Path="src/Metaschema.Databind/Metaschema.Databind.csproj" />
+    <Project Path="src/Metaschema.Schemagen/Metaschema.Schemagen.csproj" />
+    <Project Path="src/Metaschema.Cli/Metaschema.Cli.csproj" />
+    <Project Path="src/Metaschema.SourceGenerator/Metaschema.SourceGenerator.csproj" />
+    <Project Path="src/Metaschema.Testing/Metaschema.Testing.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Metaschema.Core.Tests/Metaschema.Core.Tests.csproj" />
+    <Project Path="test/Metaschema.Databind.Tests/Metaschema.Databind.Tests.csproj" />
+    <Project Path="test/Metaschema.Schemagen.Tests/Metaschema.Schemagen.Tests.csproj" />
+    <Project Path="test/Metaschema.Cli.Tests/Metaschema.Cli.Tests.csproj" />
+    <Project Path="test/Metaschema.SourceGenerator.Tests/Metaschema.SourceGenerator.Tests.csproj" />
+  </Folder>
+</Solution>

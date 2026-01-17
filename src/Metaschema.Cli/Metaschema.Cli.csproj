@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <Description>Command-line interface for Metaschema operations including validation, schema generation, code generation, and format conversion.</Description>
+    <IsPackable>true</IsPackable>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>metaschema</ToolCommandName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Metaschema.Core\Metaschema.Core.csproj" />
+    <ProjectReference Include="..\Metaschema.Databind\Metaschema.Databind.csproj" />
+    <ProjectReference Include="..\Metaschema.Schemagen\Metaschema.Schemagen.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.CommandLine" />
+  </ItemGroup>
+
+</Project>

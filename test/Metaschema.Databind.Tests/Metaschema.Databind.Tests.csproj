@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Metaschema.Databind\Metaschema.Databind.csproj" />
+    <ProjectReference Include="..\..\src\Metaschema.Testing\Metaschema.Testing.csproj" />
+  </ItemGroup>
+
+</Project>
