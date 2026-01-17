@@ -3,7 +3,8 @@
 namespace Metaschema.Databind;
 
 /// <summary>
-/// Placeholder class for the Metaschema.Databind library.
+/// Entry point for the Metaschema.Databind library providing data binding
+/// for serializing and deserializing Metaschema-based content.
 /// </summary>
 public static class MetaschemaDatabind
 {

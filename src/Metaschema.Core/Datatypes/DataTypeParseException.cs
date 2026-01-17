@@ -23,8 +23,21 @@ public class DataTypeParseException : MetaschemaException
     /// <param name="typeName">The Metaschema type name.</param>
     /// <param name="value">The value that failed to parse.</param>
     /// <param name="message">The error message.</param>
+    public DataTypeParseException(string typeName, string value, string message)
+        : base(message)
+    {
+        TypeName = typeName;
+        Value = value;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DataTypeParseException"/> class.
+    /// </summary>
+    /// <param name="typeName">The Metaschema type name.</param>
+    /// <param name="value">The value that failed to parse.</param>
+    /// <param name="message">The error message.</param>
     /// <param name="innerException">The inner exception.</param>
-    public DataTypeParseException(string typeName, string value, string message, Exception? innerException = null)
+    public DataTypeParseException(string typeName, string value, string message, Exception innerException)
         : base(message, innerException)
     {
         TypeName = typeName;
