@@ -28,7 +28,7 @@ public class MetaschemaException : Exception
     /// </summary>
     /// <param name="message">The error message.</param>
     /// <param name="innerException">The inner exception.</param>
-    public MetaschemaException(string message, Exception innerException)
+    public MetaschemaException(string message, Exception? innerException)
         : base(message, innerException)
     {
     }
