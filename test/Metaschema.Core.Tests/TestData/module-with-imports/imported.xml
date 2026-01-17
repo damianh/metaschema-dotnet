@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<METASCHEMA xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0">
+  <schema-name>Imported Module</schema-name>
+  <short-name>imported</short-name>
+  <schema-version>1.0.0</schema-version>
+  <namespace>http://example.com/ns/imported</namespace>
+  <json-base-uri>http://example.com/schema/imported</json-base-uri>
+
+  <define-flag name="shared-id" as-type="token">
+    <formal-name>Shared Identifier</formal-name>
+    <description>A shared identifier flag.</description>
+  </define-flag>
+
+  <define-field name="shared-field" as-type="string">
+    <formal-name>Shared Field</formal-name>
+    <description>A shared field definition.</description>
+  </define-field>
+
+  <define-flag name="local-only" as-type="string" scope="local">
+    <formal-name>Local Only</formal-name>
+    <description>This flag is local and should not be exported.</description>
+  </define-flag>
+
+</METASCHEMA>

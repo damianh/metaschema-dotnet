@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<METASCHEMA xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0">
+  <schema-name>Main Module With Imports</schema-name>
+  <short-name>main</short-name>
+  <schema-version>1.0.0</schema-version>
+  <namespace>http://example.com/ns/main</namespace>
+  <json-base-uri>http://example.com/schema/main</json-base-uri>
+
+  <import href="imported.xml"/>
+
+  <define-flag name="local-id" as-type="token">
+    <formal-name>Local Identifier</formal-name>
+    <description>A local identifier flag.</description>
+  </define-flag>
+
+  <define-assembly name="root">
+    <formal-name>Root</formal-name>
+    <description>The root assembly.</description>
+    <root-name>root</root-name>
+    <flag ref="shared-id" required="yes"/>
+    <flag ref="local-id"/>
+    <model>
+      <field ref="shared-field" min-occurs="0" max-occurs="unbounded"/>
+    </model>
+  </define-assembly>
+
+</METASCHEMA>

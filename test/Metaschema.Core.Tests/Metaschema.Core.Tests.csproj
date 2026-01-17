@@ -4,4 +4,10 @@
     <ProjectReference Include="..\..\src\Metaschema.Core\Metaschema.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="TestData\**\*.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
