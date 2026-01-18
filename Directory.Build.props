@@ -17,6 +17,7 @@
     <PackageProjectUrl>https://github.com/damianh/metaschema-dotnet</PackageProjectUrl>
     <RepositoryUrl>https://github.com/damianh/metaschema-dotnet</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <PackageId>DamianH.$(MSBuildProjectName)</PackageId>
   </PropertyGroup>
 
   <PropertyGroup>
