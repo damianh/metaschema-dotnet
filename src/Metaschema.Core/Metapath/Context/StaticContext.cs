@@ -22,7 +22,7 @@ public sealed class StaticContext : IStaticContext
     /// </summary>
     public StaticContext()
     {
-        FunctionLibrary = Functions.FunctionLibrary.CreateWithBuiltIns();
+        FunctionLibrary = Functions.FunctionLibrary.Default;
     }
 
     /// <summary>

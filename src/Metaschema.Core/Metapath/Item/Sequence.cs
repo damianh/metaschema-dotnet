@@ -13,7 +13,13 @@ public sealed class Sequence : ISequence
     /// <summary>
     /// Gets an empty sequence.
     /// </summary>
-    public static readonly ISequence Empty = new Sequence([]);
+    public static readonly ISequence Empty = new EmptySequence();
+
+    // Cached singleton sequences for commonly used values
+    private static readonly ISequence TrueSequence = new SingletonSequence(BooleanItem.True);
+    private static readonly ISequence FalseSequence = new SingletonSequence(BooleanItem.False);
+    private static readonly ISequence ZeroSequence = new SingletonSequence(IntegerItem.Zero);
+    private static readonly ISequence OneSequence = new SingletonSequence(IntegerItem.One);
 
     private readonly List<IItem> _items;
 
@@ -32,7 +38,7 @@ public sealed class Sequence : ISequence
     public Sequence(IEnumerable<IItem> items)
     {
         ArgumentNullException.ThrowIfNull(items);
-        _items = items.ToList();
+        _items = items is List<IItem> list ? list : [.. items];
     }
 
     /// <summary>
@@ -43,7 +49,14 @@ public sealed class Sequence : ISequence
     public static ISequence Of(IItem item)
     {
         ArgumentNullException.ThrowIfNull(item);
-        return new Sequence([item]);
+
+        // Return cached sequences for common values
+        if (ReferenceEquals(item, BooleanItem.True)) return TrueSequence;
+        if (ReferenceEquals(item, BooleanItem.False)) return FalseSequence;
+        if (ReferenceEquals(item, IntegerItem.Zero)) return ZeroSequence;
+        if (ReferenceEquals(item, IntegerItem.One)) return OneSequence;
+
+        return new SingletonSequence(item);
     }
 
     /// <summary>
@@ -54,7 +67,12 @@ public sealed class Sequence : ISequence
     public static ISequence Of(params IItem[] items)
     {
         ArgumentNullException.ThrowIfNull(items);
-        return items.Length == 0 ? Empty : new Sequence(items);
+        return items.Length switch
+        {
+            0 => Empty,
+            1 => Of(items[0]),
+            _ => new Sequence(items)
+        };
     }
 
     /// <inheritdoc/>
@@ -114,5 +132,66 @@ public sealed class Sequence : ISequence
     public IEnumerator<IItem> GetEnumerator() => _items.GetEnumerator();
 
     /// <inheritdoc/>
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+}
+
+/// <summary>
+/// Optimized implementation for empty sequences.
+/// </summary>
+file sealed class EmptySequence : ISequence
+{
+    public int Count => 0;
+    public bool IsEmpty => true;
+    public IItem? FirstOrDefault => null;
+    public bool GetEffectiveBooleanValue() => false;
+    public ISequence Append(IItem item) => Sequence.Of(item);
+    public ISequence Concat(ISequence other) => other;
+    public IEnumerator<IItem> GetEnumerator() => Enumerable.Empty<IItem>().GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+}
+
+/// <summary>
+/// Optimized implementation for single-item sequences.
+/// </summary>
+file sealed class SingletonSequence : ISequence
+{
+    private readonly IItem _item;
+
+    public SingletonSequence(IItem item) => _item = item;
+
+    public int Count => 1;
+    public bool IsEmpty => false;
+    public IItem? FirstOrDefault => _item;
+
+    public bool GetEffectiveBooleanValue()
+    {
+        // A sequence starting with a node is true
+        if (_item is INodeItem)
+        {
+            return true;
+        }
+
+        // A single atomic value is converted to boolean
+        return _item.GetEffectiveBooleanValue();
+    }
+
+    public ISequence Append(IItem item)
+    {
+        ArgumentNullException.ThrowIfNull(item);
+        return new Sequence([_item, item]);
+    }
+
+    public ISequence Concat(ISequence other)
+    {
+        ArgumentNullException.ThrowIfNull(other);
+        if (other.IsEmpty) return this;
+        return new Sequence(Enumerable.Repeat(_item, 1).Concat(other));
+    }
+
+    public IEnumerator<IItem> GetEnumerator()
+    {
+        yield return _item;
+    }
+
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

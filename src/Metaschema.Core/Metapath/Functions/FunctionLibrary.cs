@@ -25,6 +25,12 @@ public sealed class FunctionLibrary : IFunctionLibrary
     /// </summary>
     public const string MetaschemaNamespace = "http://csrc.nist.gov/ns/metaschema";
 
+    /// <summary>
+    /// Gets a shared instance of the function library with all built-in functions.
+    /// This instance is thread-safe for read operations.
+    /// </summary>
+    public static FunctionLibrary Default { get; } = new(includeBuiltIn: true);
+
     private readonly Dictionary<FunctionKey, IMetapathFunction> _functions = [];
 
     /// <summary>
@@ -1869,8 +1875,9 @@ public sealed class FunctionLibrary : IFunctionLibrary
     /// <summary>
     /// Creates a function library with all built-in functions.
     /// </summary>
-    /// <returns>A new function library with built-in functions.</returns>
-    public static FunctionLibrary CreateWithBuiltIns() => new(includeBuiltIn: true);
+    /// <returns>The shared function library with built-in functions.</returns>
+    [Obsolete("Use FunctionLibrary.Default instead for better performance.")]
+    public static FunctionLibrary CreateWithBuiltIns() => Default;
 
     private readonly record struct FunctionKey(string? NamespaceUri, string LocalName, int Arity);
 }
