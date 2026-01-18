@@ -17,7 +17,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Include the analyzer assembly in the package -->
     <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+    
+    <!-- Include MSBuild props and targets files -->
+    <None Include="build\Metaschema.SourceGenerator.props" Pack="true" PackagePath="build" />
+    <None Include="build\Metaschema.SourceGenerator.targets" Pack="true" PackagePath="build" />
+    
+    <!-- Also include for buildTransitive for transitive package references -->
+    <None Include="build\Metaschema.SourceGenerator.props" Pack="true" PackagePath="buildTransitive" />
+    <None Include="build\Metaschema.SourceGenerator.targets" Pack="true" PackagePath="buildTransitive" />
   </ItemGroup>
 
 </Project>

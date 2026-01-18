@@ -39,8 +39,8 @@ public sealed class MetaschemaSourceGenerator : IIncrementalGenerator
                 options.GlobalOptions.TryGetValue("build_property.MetaschemaNamespace", out var ns);
                 options.GlobalOptions.TryGetValue("build_property.MetaschemaVisibility", out var visibility);
                 return new GeneratorOptions(
-                    Namespace: ns ?? "Generated",
-                    Visibility: visibility?.Equals("internal", StringComparison.OrdinalIgnoreCase) == true
+                    ns ?? "Generated",
+                    visibility?.Equals("internal", StringComparison.OrdinalIgnoreCase) == true
                         ? "internal"
                         : "public"
                 );

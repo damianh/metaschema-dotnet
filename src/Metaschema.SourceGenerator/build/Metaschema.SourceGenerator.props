@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--
+    MSBuild properties for Metaschema.SourceGenerator.
+    These properties configure the source generator behavior.
+  -->
+  
+  <PropertyGroup>
+    <!-- Default namespace for generated types. Can be overridden in consuming projects. -->
+    <MetaschemaNamespace Condition="'$(MetaschemaNamespace)' == ''">Generated</MetaschemaNamespace>
+    
+    <!-- Visibility of generated types: 'public' or 'internal'. Default is 'public'. -->
+    <MetaschemaVisibility Condition="'$(MetaschemaVisibility)' == ''">public</MetaschemaVisibility>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <!-- Define the MetaschemaFile item type for easy configuration -->
+    <AvailableItemName Include="MetaschemaFile" />
+  </ItemGroup>
+
+</Project>
