@@ -9,6 +9,7 @@
     
     <!-- Metapath Parser -->
     <PackageVersion Include="Antlr4.Runtime.Standard" Version="4.13.1" />
+    <PackageVersion Include="Antlr4BuildTasks" Version="12.14.0" />
     
     <!-- Markdown Processing -->
     <PackageVersion Include="Markdig" Version="0.40.0" />

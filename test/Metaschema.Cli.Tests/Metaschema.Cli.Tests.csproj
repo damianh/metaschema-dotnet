@@ -1,8 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Metaschema.Cli\Metaschema.Cli.csproj" />
-    <ProjectReference Include="..\..\src\Metaschema.Testing\Metaschema.Testing.csproj" />
-  </ItemGroup>
-
-</Project>

@@ -8,10 +8,6 @@
     <Project Path="src/Metaschema.Testing/Metaschema.Testing.csproj" />
   </Folder>
   <Folder Name="/test/">
-    <Project Path="test/Metaschema.Core.Tests/Metaschema.Core.Tests.csproj" />
-    <Project Path="test/Metaschema.Databind.Tests/Metaschema.Databind.Tests.csproj" />
-    <Project Path="test/Metaschema.Schemagen.Tests/Metaschema.Schemagen.Tests.csproj" />
-    <Project Path="test/Metaschema.Cli.Tests/Metaschema.Cli.Tests.csproj" />
-    <Project Path="test/Metaschema.SourceGenerator.Tests/Metaschema.SourceGenerator.Tests.csproj" />
+    <Project Path="test/Metaschema.Tests/Metaschema.Tests.csproj" />
   </Folder>
 </Solution>

@@ -78,7 +78,7 @@ public sealed class XmlModuleParser
 
         // Parse optional remarks
         var remarksElement = root.Element(Ns + "remarks");
-        MarkupMultiline? remarks = remarksElement is not null
+        var remarks = remarksElement is not null
             ? new MarkupMultiline(GetInnerXml(remarksElement))
             : (MarkupMultiline?)null;
 
