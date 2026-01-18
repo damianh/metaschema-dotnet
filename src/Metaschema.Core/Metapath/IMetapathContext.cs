@@ -70,6 +70,11 @@ public interface IStaticContext
     /// Gets the function library for resolving function calls.
     /// </summary>
     Functions.IFunctionLibrary FunctionLibrary { get; }
+
+    /// <summary>
+    /// Gets the static base URI.
+    /// </summary>
+    Uri? BaseUri { get; }
 }
 
 /// <summary>

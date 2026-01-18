@@ -959,4 +959,739 @@ public class FunctionCallTests
     }
 
     #endregion
+
+    #region Date/Time Functions
+
+    [Fact]
+    public void CurrentDateTimeFunction_ShouldReturnDateTimeItem()
+    {
+        // Act
+        var result = EvaluateSingle("current-dateTime()");
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<DateTimeItem>();
+    }
+
+    [Fact]
+    public void CurrentDateFunction_ShouldReturnDateItem()
+    {
+        // Act
+        var result = EvaluateSingle("current-date()");
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<DateItem>();
+    }
+
+    [Fact]
+    public void CurrentTimeFunction_ShouldReturnTimeItem()
+    {
+        // Act
+        var result = EvaluateSingle("current-time()");
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<TimeItem>();
+    }
+
+    [Fact]
+    public void ImplicitTimezoneFunction_ShouldReturnDuration()
+    {
+        // Act
+        var result = EvaluateSingle("implicit-timezone()");
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<DayTimeDurationItem>();
+    }
+
+    [Fact]
+    public void YearFromDateTimeFunction_ShouldExtractYear()
+    {
+        // Arrange - using DateTimeItem directly since we can't parse dateTime literals yet
+        var dt = new DateTimeItem(new DateTimeOffset(2024, 6, 15, 10, 30, 0, TimeSpan.Zero));
+        var dynamicContext = new DynamicContext().WithContextItem(dt);
+        var context = new MetapathContext(StaticContext.CreateDefault(), dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("year-from-dateTime(.)");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<IntegerItem>();
+        ((IntegerItem)result).Value.ShouldBe(2024);
+    }
+
+    [Fact]
+    public void MonthFromDateTimeFunction_ShouldExtractMonth()
+    {
+        // Arrange
+        var dt = new DateTimeItem(new DateTimeOffset(2024, 6, 15, 10, 30, 0, TimeSpan.Zero));
+        var dynamicContext = new DynamicContext().WithContextItem(dt);
+        var context = new MetapathContext(StaticContext.CreateDefault(), dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("month-from-dateTime(.)");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<IntegerItem>();
+        ((IntegerItem)result).Value.ShouldBe(6);
+    }
+
+    [Fact]
+    public void DayFromDateTimeFunction_ShouldExtractDay()
+    {
+        // Arrange
+        var dt = new DateTimeItem(new DateTimeOffset(2024, 6, 15, 10, 30, 0, TimeSpan.Zero));
+        var dynamicContext = new DynamicContext().WithContextItem(dt);
+        var context = new MetapathContext(StaticContext.CreateDefault(), dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("day-from-dateTime(.)");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<IntegerItem>();
+        ((IntegerItem)result).Value.ShouldBe(15);
+    }
+
+    [Fact]
+    public void HoursFromDateTimeFunction_ShouldExtractHours()
+    {
+        // Arrange
+        var dt = new DateTimeItem(new DateTimeOffset(2024, 6, 15, 10, 30, 45, TimeSpan.Zero));
+        var dynamicContext = new DynamicContext().WithContextItem(dt);
+        var context = new MetapathContext(StaticContext.CreateDefault(), dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("hours-from-dateTime(.)");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<IntegerItem>();
+        ((IntegerItem)result).Value.ShouldBe(10);
+    }
+
+    [Fact]
+    public void MinutesFromDateTimeFunction_ShouldExtractMinutes()
+    {
+        // Arrange
+        var dt = new DateTimeItem(new DateTimeOffset(2024, 6, 15, 10, 30, 45, TimeSpan.Zero));
+        var dynamicContext = new DynamicContext().WithContextItem(dt);
+        var context = new MetapathContext(StaticContext.CreateDefault(), dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("minutes-from-dateTime(.)");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<IntegerItem>();
+        ((IntegerItem)result).Value.ShouldBe(30);
+    }
+
+    [Fact]
+    public void SecondsFromDateTimeFunction_ShouldExtractSeconds()
+    {
+        // Arrange
+        var dt = new DateTimeItem(new DateTimeOffset(2024, 6, 15, 10, 30, 45, TimeSpan.Zero));
+        var dynamicContext = new DynamicContext().WithContextItem(dt);
+        var context = new MetapathContext(StaticContext.CreateDefault(), dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("seconds-from-dateTime(.)");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<DecimalItem>();
+        ((DecimalItem)result).Value.ShouldBe(45);
+    }
+
+    [Fact]
+    public void YearFromDateFunction_ShouldExtractYear()
+    {
+        // Arrange
+        var date = new DateItem(new DateOnly(2024, 6, 15));
+        var dynamicContext = new DynamicContext().WithContextItem(date);
+        var context = new MetapathContext(StaticContext.CreateDefault(), dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("year-from-date(.)");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<IntegerItem>();
+        ((IntegerItem)result).Value.ShouldBe(2024);
+    }
+
+    [Fact]
+    public void MonthFromDateFunction_ShouldExtractMonth()
+    {
+        // Arrange
+        var date = new DateItem(new DateOnly(2024, 6, 15));
+        var dynamicContext = new DynamicContext().WithContextItem(date);
+        var context = new MetapathContext(StaticContext.CreateDefault(), dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("month-from-date(.)");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<IntegerItem>();
+        ((IntegerItem)result).Value.ShouldBe(6);
+    }
+
+    [Fact]
+    public void DayFromDateFunction_ShouldExtractDay()
+    {
+        // Arrange
+        var date = new DateItem(new DateOnly(2024, 6, 15));
+        var dynamicContext = new DynamicContext().WithContextItem(date);
+        var context = new MetapathContext(StaticContext.CreateDefault(), dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("day-from-date(.)");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<IntegerItem>();
+        ((IntegerItem)result).Value.ShouldBe(15);
+    }
+
+    [Fact]
+    public void HoursFromTimeFunction_ShouldExtractHours()
+    {
+        // Arrange
+        var time = new TimeItem(new TimeOnly(14, 30, 45));
+        var dynamicContext = new DynamicContext().WithContextItem(time);
+        var context = new MetapathContext(StaticContext.CreateDefault(), dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("hours-from-time(.)");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<IntegerItem>();
+        ((IntegerItem)result).Value.ShouldBe(14);
+    }
+
+    [Fact]
+    public void MinutesFromTimeFunction_ShouldExtractMinutes()
+    {
+        // Arrange
+        var time = new TimeItem(new TimeOnly(14, 30, 45));
+        var dynamicContext = new DynamicContext().WithContextItem(time);
+        var context = new MetapathContext(StaticContext.CreateDefault(), dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("minutes-from-time(.)");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<IntegerItem>();
+        ((IntegerItem)result).Value.ShouldBe(30);
+    }
+
+    [Fact]
+    public void SecondsFromTimeFunction_ShouldExtractSeconds()
+    {
+        // Arrange
+        var time = new TimeItem(new TimeOnly(14, 30, 45));
+        var dynamicContext = new DynamicContext().WithContextItem(time);
+        var context = new MetapathContext(StaticContext.CreateDefault(), dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("seconds-from-time(.)");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<DecimalItem>();
+        ((DecimalItem)result).Value.ShouldBe(45);
+    }
+
+    [Fact]
+    public void YearsFromDurationFunction_ShouldExtractYears()
+    {
+        // Arrange - 2 years 3 months
+        var duration = DurationItem.YearMonth(2, 3);
+        var dynamicContext = new DynamicContext().WithContextItem(duration);
+        var context = new MetapathContext(StaticContext.CreateDefault(), dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("years-from-duration(.)");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<IntegerItem>();
+        ((IntegerItem)result).Value.ShouldBe(2);
+    }
+
+    [Fact]
+    public void MonthsFromDurationFunction_ShouldExtractMonths()
+    {
+        // Arrange - 2 years 3 months
+        var duration = DurationItem.YearMonth(2, 3);
+        var dynamicContext = new DynamicContext().WithContextItem(duration);
+        var context = new MetapathContext(StaticContext.CreateDefault(), dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("months-from-duration(.)");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<IntegerItem>();
+        ((IntegerItem)result).Value.ShouldBe(3);
+    }
+
+    [Fact]
+    public void DaysFromDurationFunction_ShouldExtractDays()
+    {
+        // Arrange - 5 days 3 hours
+        var duration = DurationItem.DayTime(TimeSpan.FromDays(5) + TimeSpan.FromHours(3));
+        var dynamicContext = new DynamicContext().WithContextItem(duration);
+        var context = new MetapathContext(StaticContext.CreateDefault(), dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("days-from-duration(.)");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<IntegerItem>();
+        ((IntegerItem)result).Value.ShouldBe(5);
+    }
+
+    [Fact]
+    public void HoursFromDurationFunction_ShouldExtractHours()
+    {
+        // Arrange - 5 days 3 hours
+        var duration = DurationItem.DayTime(TimeSpan.FromDays(5) + TimeSpan.FromHours(3));
+        var dynamicContext = new DynamicContext().WithContextItem(duration);
+        var context = new MetapathContext(StaticContext.CreateDefault(), dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("hours-from-duration(.)");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<IntegerItem>();
+        ((IntegerItem)result).Value.ShouldBe(3);
+    }
+
+    #endregion
+
+    #region Array Functions
+
+    [Fact]
+    public void ArraySizeFunction_ShouldReturnCount()
+    {
+        // Arrange - create an array with 3 members
+        var array = ArrayItem.Of([
+            Sequence.Of(IntegerItem.Of(1)),
+            Sequence.Of(IntegerItem.Of(2)),
+            Sequence.Of(IntegerItem.Of(3))
+        ]);
+        var dynamicContext = new DynamicContext().WithContextItem(array);
+        var context = new MetapathContext(StaticContext.CreateDefault(), dynamicContext);
+
+        // Act - using array namespace prefix
+        var staticContext = StaticContext.CreateDefault();
+        staticContext.RegisterNamespace("array", Functions.FunctionLibrary.ArrayNamespace);
+        var ctx = new MetapathContext(staticContext, dynamicContext);
+        var expr = MetapathExpression.Compile("array:size(.)");
+        var result = expr.EvaluateSingle(ctx);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<IntegerItem>();
+        ((IntegerItem)result).Value.ShouldBe(3);
+    }
+
+    [Fact]
+    public void ArrayGetFunction_ShouldReturnMemberAtIndex()
+    {
+        // Arrange
+        var array = ArrayItem.Of([
+            Sequence.Of(StringItem.Of("first")),
+            Sequence.Of(StringItem.Of("second")),
+            Sequence.Of(StringItem.Of("third"))
+        ]);
+        var dynamicContext = new DynamicContext().WithContextItem(array);
+        var staticContext = StaticContext.CreateDefault();
+        staticContext.RegisterNamespace("array", Functions.FunctionLibrary.ArrayNamespace);
+        var context = new MetapathContext(staticContext, dynamicContext);
+
+        // Act - get second element (1-based indexing)
+        var expr = MetapathExpression.Compile("array:get(., 2)");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<StringItem>();
+        ((StringItem)result).Value.ShouldBe("second");
+    }
+
+    [Fact]
+    public void ArrayHeadFunction_ShouldReturnFirstMember()
+    {
+        // Arrange
+        var array = ArrayItem.Of([
+            Sequence.Of(IntegerItem.Of(10)),
+            Sequence.Of(IntegerItem.Of(20)),
+            Sequence.Of(IntegerItem.Of(30))
+        ]);
+        var dynamicContext = new DynamicContext().WithContextItem(array);
+        var staticContext = StaticContext.CreateDefault();
+        staticContext.RegisterNamespace("array", Functions.FunctionLibrary.ArrayNamespace);
+        var context = new MetapathContext(staticContext, dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("array:head(.)");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<IntegerItem>();
+        ((IntegerItem)result).Value.ShouldBe(10);
+    }
+
+    [Fact]
+    public void ArrayTailFunction_ShouldReturnRemainingArray()
+    {
+        // Arrange
+        var array = ArrayItem.Of([
+            Sequence.Of(IntegerItem.Of(10)),
+            Sequence.Of(IntegerItem.Of(20)),
+            Sequence.Of(IntegerItem.Of(30))
+        ]);
+        var dynamicContext = new DynamicContext().WithContextItem(array);
+        var staticContext = StaticContext.CreateDefault();
+        staticContext.RegisterNamespace("array", Functions.FunctionLibrary.ArrayNamespace);
+        var context = new MetapathContext(staticContext, dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("array:tail(.)");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<ArrayItem>();
+        var tailArray = (ArrayItem)result;
+        tailArray.Size.ShouldBe(2);
+    }
+
+    [Fact]
+    public void ArrayReverseFunction_ShouldReverseOrder()
+    {
+        // Arrange
+        var array = ArrayItem.Of([
+            Sequence.Of(IntegerItem.Of(1)),
+            Sequence.Of(IntegerItem.Of(2)),
+            Sequence.Of(IntegerItem.Of(3))
+        ]);
+        var dynamicContext = new DynamicContext().WithContextItem(array);
+        var staticContext = StaticContext.CreateDefault();
+        staticContext.RegisterNamespace("array", Functions.FunctionLibrary.ArrayNamespace);
+        var context = new MetapathContext(staticContext, dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("array:reverse(.)");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<ArrayItem>();
+        var reversedArray = (ArrayItem)result;
+        reversedArray.Size.ShouldBe(3);
+        ((IntegerItem)reversedArray.Get(1).FirstOrDefault!).Value.ShouldBe(3);
+        ((IntegerItem)reversedArray.Get(2).FirstOrDefault!).Value.ShouldBe(2);
+        ((IntegerItem)reversedArray.Get(3).FirstOrDefault!).Value.ShouldBe(1);
+    }
+
+    #endregion
+
+    #region Map Functions
+
+    [Fact]
+    public void MapSizeFunction_ShouldReturnEntryCount()
+    {
+        // Arrange
+        var entries = new Dictionary<IAtomicItem, ISequence>
+        {
+            { StringItem.Of("a"), Sequence.Of(IntegerItem.Of(1)) },
+            { StringItem.Of("b"), Sequence.Of(IntegerItem.Of(2)) },
+            { StringItem.Of("c"), Sequence.Of(IntegerItem.Of(3)) }
+        };
+        var map = MapItem.Of(entries);
+        var dynamicContext = new DynamicContext().WithContextItem(map);
+        var staticContext = StaticContext.CreateDefault();
+        staticContext.RegisterNamespace("map", Functions.FunctionLibrary.MapNamespace);
+        var context = new MetapathContext(staticContext, dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("map:size(.)");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<IntegerItem>();
+        ((IntegerItem)result).Value.ShouldBe(3);
+    }
+
+    [Fact]
+    public void MapContainsFunction_ShouldCheckForKey()
+    {
+        // Arrange
+        var entries = new Dictionary<IAtomicItem, ISequence>
+        {
+            { StringItem.Of("name"), Sequence.Of(StringItem.Of("John")) },
+            { StringItem.Of("age"), Sequence.Of(IntegerItem.Of(30)) }
+        };
+        var map = MapItem.Of(entries);
+        var dynamicContext = new DynamicContext().WithContextItem(map);
+        var staticContext = StaticContext.CreateDefault();
+        staticContext.RegisterNamespace("map", Functions.FunctionLibrary.MapNamespace);
+        var context = new MetapathContext(staticContext, dynamicContext);
+
+        // Act - check for existing key
+        var expr = MetapathExpression.Compile("map:contains(., 'name')");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<BooleanItem>();
+        ((BooleanItem)result).Value.ShouldBeTrue();
+
+        // Act - check for non-existing key
+        var expr2 = MetapathExpression.Compile("map:contains(., 'missing')");
+        var result2 = expr2.EvaluateSingle(context);
+        ((BooleanItem)result2!).Value.ShouldBeFalse();
+    }
+
+    [Fact]
+    public void MapGetFunction_ShouldReturnValueForKey()
+    {
+        // Arrange
+        var entries = new Dictionary<IAtomicItem, ISequence>
+        {
+            { StringItem.Of("name"), Sequence.Of(StringItem.Of("John")) },
+            { StringItem.Of("age"), Sequence.Of(IntegerItem.Of(30)) }
+        };
+        var map = MapItem.Of(entries);
+        var dynamicContext = new DynamicContext().WithContextItem(map);
+        var staticContext = StaticContext.CreateDefault();
+        staticContext.RegisterNamespace("map", Functions.FunctionLibrary.MapNamespace);
+        var context = new MetapathContext(staticContext, dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("map:get(., 'name')");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<StringItem>();
+        ((StringItem)result).Value.ShouldBe("John");
+    }
+
+    [Fact]
+    public void MapKeysFunction_ShouldReturnAllKeys()
+    {
+        // Arrange
+        var entries = new Dictionary<IAtomicItem, ISequence>
+        {
+            { StringItem.Of("a"), Sequence.Of(IntegerItem.Of(1)) },
+            { StringItem.Of("b"), Sequence.Of(IntegerItem.Of(2)) }
+        };
+        var map = MapItem.Of(entries);
+        var dynamicContext = new DynamicContext().WithContextItem(map);
+        var staticContext = StaticContext.CreateDefault();
+        staticContext.RegisterNamespace("map", Functions.FunctionLibrary.MapNamespace);
+        var context = new MetapathContext(staticContext, dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("map:keys(.)");
+        var result = expr.Evaluate(context);
+
+        // Assert
+        result.Count.ShouldBe(2);
+        var keys = result.Select(i => ((StringItem)i).Value).ToHashSet();
+        keys.ShouldContain("a");
+        keys.ShouldContain("b");
+    }
+
+    #endregion
+
+    #region QName Functions
+
+    [Fact]
+    public void QNameFunction_ShouldConstructQName()
+    {
+        // Act
+        var result = EvaluateSingle("QName('http://example.com', 'ex:element')");
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<QNameItem>();
+        var qn = (QNameItem)result;
+        qn.LocalName.ShouldBe("element");
+        qn.Prefix.ShouldBe("ex");
+        qn.NamespaceUri.ShouldBe("http://example.com");
+    }
+
+    [Fact]
+    public void LocalNameFromQNameFunction_ShouldExtractLocalName()
+    {
+        // Arrange
+        var qname = QNameItem.Of("ex", "http://example.com", "element");
+        var dynamicContext = new DynamicContext().WithContextItem(qname);
+        var context = new MetapathContext(StaticContext.CreateDefault(), dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("local-name-from-QName(.)");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<StringItem>();
+        ((StringItem)result).Value.ShouldBe("element");
+    }
+
+    [Fact]
+    public void NamespaceUriFromQNameFunction_ShouldExtractNamespace()
+    {
+        // Arrange
+        var qname = QNameItem.Of("ex", "http://example.com", "element");
+        var dynamicContext = new DynamicContext().WithContextItem(qname);
+        var context = new MetapathContext(StaticContext.CreateDefault(), dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("namespace-uri-from-QName(.)");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<StringItem>();
+        ((StringItem)result).Value.ShouldBe("http://example.com");
+    }
+
+    [Fact]
+    public void PrefixFromQNameFunction_ShouldExtractPrefix()
+    {
+        // Arrange
+        var qname = QNameItem.Of("ex", "http://example.com", "element");
+        var dynamicContext = new DynamicContext().WithContextItem(qname);
+        var context = new MetapathContext(StaticContext.CreateDefault(), dynamicContext);
+
+        // Act
+        var expr = MetapathExpression.Compile("prefix-from-QName(.)");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<StringItem>();
+        ((StringItem)result).Value.ShouldBe("ex");
+    }
+
+    #endregion
+
+    #region URI Functions
+
+    [Fact]
+    public void EncodeForUriFunction_ShouldEscapeSpecialCharacters()
+    {
+        // Act
+        string? result = EvaluateString("encode-for-uri('hello world')");
+
+        // Assert
+        result.ShouldBe("hello%20world");
+    }
+
+    [Theory]
+    [InlineData("encode-for-uri('abc')", "abc")]
+    [InlineData("encode-for-uri('a b')", "a%20b")]
+    [InlineData("encode-for-uri('a&b')", "a%26b")]
+    public void EncodeForUriFunction_ShouldEncodeCorrectly(string expression, string expected)
+    {
+        // Act
+        string? result = EvaluateString(expression);
+
+        // Assert
+        result.ShouldBe(expected);
+    }
+
+    #endregion
+
+    #region Metaschema-Specific Functions
+
+    [Fact]
+    public void Base64EncodeFunction_ShouldEncodeString()
+    {
+        // Arrange
+        var staticContext = StaticContext.CreateDefault();
+        staticContext.RegisterNamespace("mp", Functions.FunctionLibrary.MetaschemaNamespace);
+        var context = new MetapathContext(staticContext, new DynamicContext());
+
+        // Act
+        var expr = MetapathExpression.Compile("mp:base64-encode('Hello')");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<StringItem>();
+        ((StringItem)result).Value.ShouldBe("SGVsbG8=");
+    }
+
+    [Fact]
+    public void Base64DecodeFunction_ShouldDecodeString()
+    {
+        // Arrange
+        var staticContext = StaticContext.CreateDefault();
+        staticContext.RegisterNamespace("mp", Functions.FunctionLibrary.MetaschemaNamespace);
+        var context = new MetapathContext(staticContext, new DynamicContext());
+
+        // Act
+        var expr = MetapathExpression.Compile("mp:base64-decode('SGVsbG8=')");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<StringItem>();
+        ((StringItem)result).Value.ShouldBe("Hello");
+    }
+
+    [Fact]
+    public void Base64RoundTrip_ShouldPreserveData()
+    {
+        // Arrange
+        var staticContext = StaticContext.CreateDefault();
+        staticContext.RegisterNamespace("mp", Functions.FunctionLibrary.MetaschemaNamespace);
+        var context = new MetapathContext(staticContext, new DynamicContext());
+
+        // Act - encode then decode
+        var expr = MetapathExpression.Compile("mp:base64-decode(mp:base64-encode('Test String 123!'))");
+        var result = expr.EvaluateSingle(context);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType<StringItem>();
+        ((StringItem)result).Value.ShouldBe("Test String 123!");
+    }
+
+    #endregion
 }

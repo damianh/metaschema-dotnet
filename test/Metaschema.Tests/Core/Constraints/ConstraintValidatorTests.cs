@@ -398,6 +398,7 @@ public class ConstraintValidatorTests
         public TestNodeItem? ParentNode { get; init; }
         public Uri? BaseUri => null;
         public Uri? DocumentUri => null;
+        public string? NamespaceUri => null;
         public object? Definition => null;
         public string? StringValue { get; init; }
         public List<TestNodeItem> ChildNodes { get; set; } = [];

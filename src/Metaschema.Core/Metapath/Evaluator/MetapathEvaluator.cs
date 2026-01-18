@@ -502,8 +502,24 @@ public sealed class MetapathEvaluator : Metapath10BaseVisitor<ISequence>
             evaluatedArgs.Add(Visit(arg.exprsingle()));
         }
 
+        // Parse namespace prefix from function name
+        string? namespaceUri = null;
+        string localName = name;
+
+        var colonIndex = name.IndexOf(':');
+        if (colonIndex > 0)
+        {
+            var prefix = name[..colonIndex];
+            localName = name[(colonIndex + 1)..];
+            namespaceUri = _context.StaticContext.GetNamespaceUri(prefix);
+            if (namespaceUri is null)
+            {
+                throw new MetapathException($"Unknown namespace prefix: {prefix}");
+            }
+        }
+
         // Look up function
-        var function = _context.StaticContext.FunctionLibrary.GetFunction(name, evaluatedArgs.Count);
+        var function = _context.StaticContext.FunctionLibrary.GetFunction(namespaceUri, localName, evaluatedArgs.Count);
         if (function is null)
         {
             throw new MetapathException($"Unknown function: {name} with {evaluatedArgs.Count} arguments");

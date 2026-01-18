@@ -58,6 +58,9 @@ public sealed class DocumentNodeAdapter : INodeItem
     public Uri? DocumentUri => null;
 
     /// <inheritdoc />
+    public string? NamespaceUri => null;
+
+    /// <inheritdoc />
     public object? Definition => _node switch
     {
         IDocumentRootNode root => root.Definition,

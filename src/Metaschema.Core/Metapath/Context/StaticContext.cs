@@ -44,6 +44,9 @@ public sealed class StaticContext : IStaticContext
     public IFunctionLibrary FunctionLibrary { get; }
 
     /// <inheritdoc/>
+    public Uri? BaseUri { get; set; }
+
+    /// <inheritdoc/>
     public string? GetNamespaceUri(string prefix)
     {
         ArgumentNullException.ThrowIfNull(prefix);

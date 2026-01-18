@@ -10,6 +10,21 @@ namespace Metaschema.Core.Metapath.Functions;
 /// </summary>
 public sealed class FunctionLibrary : IFunctionLibrary
 {
+    /// <summary>
+    /// XPath 3.1 array functions namespace.
+    /// </summary>
+    public const string ArrayNamespace = "http://www.w3.org/2005/xpath-functions/array";
+
+    /// <summary>
+    /// XPath 3.1 map functions namespace.
+    /// </summary>
+    public const string MapNamespace = "http://www.w3.org/2005/xpath-functions/map";
+
+    /// <summary>
+    /// Metaschema-specific functions namespace.
+    /// </summary>
+    public const string MetaschemaNamespace = "http://csrc.nist.gov/ns/metaschema";
+
     private readonly Dictionary<FunctionKey, IMetapathFunction> _functions = [];
 
     /// <summary>
@@ -148,6 +163,88 @@ public sealed class FunctionLibrary : IFunctionLibrary
 
         // Type/Number functions
         RegisterFunction(new BuiltInFunction("number", 0, 1, NumberFunction));
+
+        // Date/Time functions
+        RegisterFunction(new BuiltInFunction("current-date", 0, CurrentDateFunction));
+        RegisterFunction(new BuiltInFunction("current-dateTime", 0, CurrentDateTimeFunction));
+        RegisterFunction(new BuiltInFunction("current-time", 0, CurrentTimeFunction));
+        RegisterFunction(new BuiltInFunction("dateTime", 2, DateTimeConstructorFunction));
+        RegisterFunction(new BuiltInFunction("year-from-date", 1, YearFromDateFunction));
+        RegisterFunction(new BuiltInFunction("year-from-dateTime", 1, YearFromDateTimeFunction));
+        RegisterFunction(new BuiltInFunction("month-from-date", 1, MonthFromDateFunction));
+        RegisterFunction(new BuiltInFunction("month-from-dateTime", 1, MonthFromDateTimeFunction));
+        RegisterFunction(new BuiltInFunction("day-from-date", 1, DayFromDateFunction));
+        RegisterFunction(new BuiltInFunction("day-from-dateTime", 1, DayFromDateTimeFunction));
+        RegisterFunction(new BuiltInFunction("hours-from-dateTime", 1, HoursFromDateTimeFunction));
+        RegisterFunction(new BuiltInFunction("hours-from-time", 1, HoursFromTimeFunction));
+        RegisterFunction(new BuiltInFunction("minutes-from-dateTime", 1, MinutesFromDateTimeFunction));
+        RegisterFunction(new BuiltInFunction("minutes-from-time", 1, MinutesFromTimeFunction));
+        RegisterFunction(new BuiltInFunction("seconds-from-dateTime", 1, SecondsFromDateTimeFunction));
+        RegisterFunction(new BuiltInFunction("seconds-from-time", 1, SecondsFromTimeFunction));
+        RegisterFunction(new BuiltInFunction("timezone-from-date", 1, TimezoneFromDateFunction));
+        RegisterFunction(new BuiltInFunction("timezone-from-dateTime", 1, TimezoneFromDateTimeFunction));
+        RegisterFunction(new BuiltInFunction("timezone-from-time", 1, TimezoneFromTimeFunction));
+        RegisterFunction(new BuiltInFunction("years-from-duration", 1, YearsFromDurationFunction));
+        RegisterFunction(new BuiltInFunction("months-from-duration", 1, MonthsFromDurationFunction));
+        RegisterFunction(new BuiltInFunction("days-from-duration", 1, DaysFromDurationFunction));
+        RegisterFunction(new BuiltInFunction("hours-from-duration", 1, HoursFromDurationFunction));
+        RegisterFunction(new BuiltInFunction("minutes-from-duration", 1, MinutesFromDurationFunction));
+        RegisterFunction(new BuiltInFunction("seconds-from-duration", 1, SecondsFromDurationFunction));
+        RegisterFunction(new BuiltInFunction("implicit-timezone", 0, ImplicitTimezoneFunction));
+        RegisterFunction(new BuiltInFunction("adjust-dateTime-to-timezone", 1, 2, AdjustDateTimeToTimezoneFunction));
+        RegisterFunction(new BuiltInFunction("adjust-date-to-timezone", 1, 2, AdjustDateToTimezoneFunction));
+        RegisterFunction(new BuiltInFunction("adjust-time-to-timezone", 1, 2, AdjustTimeToTimezoneFunction));
+
+        // Array functions
+        RegisterFunction(new BuiltInFunction(ArrayNamespace, "size", 1, ArraySizeFunction));
+        RegisterFunction(new BuiltInFunction(ArrayNamespace, "get", 2, ArrayGetFunction));
+        RegisterFunction(new BuiltInFunction(ArrayNamespace, "put", 3, ArrayPutFunction));
+        RegisterFunction(new BuiltInFunction(ArrayNamespace, "append", 2, ArrayAppendFunction));
+        RegisterFunction(new BuiltInFunction(ArrayNamespace, "subarray", 2, 3, ArraySubarrayFunction));
+        RegisterFunction(new BuiltInFunction(ArrayNamespace, "remove", 2, ArrayRemoveFunction));
+        RegisterFunction(new BuiltInFunction(ArrayNamespace, "insert-before", 3, ArrayInsertBeforeFunction));
+        RegisterFunction(new BuiltInFunction(ArrayNamespace, "head", 1, ArrayHeadFunction));
+        RegisterFunction(new BuiltInFunction(ArrayNamespace, "tail", 1, ArrayTailFunction));
+        RegisterFunction(new BuiltInFunction(ArrayNamespace, "reverse", 1, ArrayReverseFunction));
+        RegisterFunction(new BuiltInFunction(ArrayNamespace, "join", 1, ArrayJoinFunction));
+        RegisterFunction(new BuiltInFunction(ArrayNamespace, "flatten", 1, ArrayFlattenFunction));
+
+        // Map functions
+        RegisterFunction(new BuiltInFunction(MapNamespace, "size", 1, MapSizeFunction));
+        RegisterFunction(new BuiltInFunction(MapNamespace, "keys", 1, MapKeysFunction));
+        RegisterFunction(new BuiltInFunction(MapNamespace, "contains", 2, MapContainsFunction));
+        RegisterFunction(new BuiltInFunction(MapNamespace, "get", 2, MapGetFunction));
+        RegisterFunction(new BuiltInFunction(MapNamespace, "put", 3, MapPutFunction));
+        RegisterFunction(new BuiltInFunction(MapNamespace, "entry", 2, MapEntryFunction));
+        RegisterFunction(new BuiltInFunction(MapNamespace, "remove", 2, MapRemoveFunction));
+        RegisterFunction(new BuiltInFunction(MapNamespace, "merge", 1, 2, MapMergeFunction));
+
+        // QName and node identity functions
+        RegisterFunction(new BuiltInFunction("local-name", 0, 1, LocalNameFunction));
+        RegisterFunction(new BuiltInFunction("name", 0, 1, NameFunction));
+        RegisterFunction(new BuiltInFunction("namespace-uri", 0, 1, NamespaceUriFunction));
+        RegisterFunction(new BuiltInFunction("QName", 2, QNameConstructorFunction));
+        RegisterFunction(new BuiltInFunction("local-name-from-QName", 1, LocalNameFromQNameFunction));
+        RegisterFunction(new BuiltInFunction("namespace-uri-from-QName", 1, NamespaceUriFromQNameFunction));
+        RegisterFunction(new BuiltInFunction("prefix-from-QName", 1, PrefixFromQNameFunction));
+
+        // URI functions
+        RegisterFunction(new BuiltInFunction("resolve-uri", 1, 2, ResolveUriFunction));
+        RegisterFunction(new BuiltInFunction("static-base-uri", 0, StaticBaseUriFunction));
+        RegisterFunction(new BuiltInFunction("encode-for-uri", 1, EncodeForUriFunction));
+
+        // Document functions
+        RegisterFunction(new BuiltInFunction("doc", 1, DocFunction));
+        RegisterFunction(new BuiltInFunction("doc-available", 1, DocAvailableFunction));
+
+        // Node set functions
+        RegisterFunction(new BuiltInFunction("innermost", 1, InnermostFunction));
+        RegisterFunction(new BuiltInFunction("outermost", 1, OutermostFunction));
+
+        // Metaschema-specific functions
+        RegisterFunction(new BuiltInFunction(MetaschemaNamespace, "base64-encode", 1, Base64EncodeFunction));
+        RegisterFunction(new BuiltInFunction(MetaschemaNamespace, "base64-decode", 1, Base64DecodeFunction));
+        RegisterFunction(new BuiltInFunction(MetaschemaNamespace, "recurse-depth", 0, 1, RecurseDepthFunction));
     }
 
     // Built-in function implementations
@@ -918,6 +1015,857 @@ public sealed class FunctionLibrary : IFunctionLibrary
         return Sequence.Of(DoubleItem.Of(double.NaN));
     }
 
+    // Date/Time functions
+    private static ISequence CurrentDateFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var now = DateTimeOffset.Now;
+        return Sequence.Of(DateItem.Of(DateOnly.FromDateTime(now.DateTime), now.Offset));
+    }
+
+    private static ISequence CurrentDateTimeFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        return Sequence.Of(DateTimeItem.Of(DateTimeOffset.Now));
+    }
+
+    private static ISequence CurrentTimeFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var now = DateTimeOffset.Now;
+        return Sequence.Of(TimeItem.Of(TimeOnly.FromDateTime(now.DateTime), now.Offset));
+    }
+
+    private static ISequence DateTimeConstructorFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var dateArg = args[0].FirstOrDefault;
+        var timeArg = args[1].FirstOrDefault;
+
+        if (dateArg is DateItem date && timeArg is TimeItem time)
+        {
+            var tz = date.Timezone ?? time.Timezone ?? TimeSpan.Zero;
+            var dt = new DateTimeOffset(
+                date.Value.Year, date.Value.Month, date.Value.Day,
+                time.Value.Hour, time.Value.Minute, time.Value.Second,
+                tz);
+            return Sequence.Of(DateTimeItem.Of(dt));
+        }
+        return Sequence.Empty;
+    }
+
+    private static ISequence YearFromDateFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        return item switch
+        {
+            DateItem d => Sequence.Of(IntegerItem.Of(d.Value.Year)),
+            _ => Sequence.Empty
+        };
+    }
+
+    private static ISequence YearFromDateTimeFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        return item switch
+        {
+            DateTimeItem dt => Sequence.Of(IntegerItem.Of(dt.Value.Year)),
+            _ => Sequence.Empty
+        };
+    }
+
+    private static ISequence MonthFromDateFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        return item switch
+        {
+            DateItem d => Sequence.Of(IntegerItem.Of(d.Value.Month)),
+            _ => Sequence.Empty
+        };
+    }
+
+    private static ISequence MonthFromDateTimeFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        return item switch
+        {
+            DateTimeItem dt => Sequence.Of(IntegerItem.Of(dt.Value.Month)),
+            _ => Sequence.Empty
+        };
+    }
+
+    private static ISequence DayFromDateFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        return item switch
+        {
+            DateItem d => Sequence.Of(IntegerItem.Of(d.Value.Day)),
+            _ => Sequence.Empty
+        };
+    }
+
+    private static ISequence DayFromDateTimeFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        return item switch
+        {
+            DateTimeItem dt => Sequence.Of(IntegerItem.Of(dt.Value.Day)),
+            _ => Sequence.Empty
+        };
+    }
+
+    private static ISequence HoursFromDateTimeFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        return item switch
+        {
+            DateTimeItem dt => Sequence.Of(IntegerItem.Of(dt.Value.Hour)),
+            _ => Sequence.Empty
+        };
+    }
+
+    private static ISequence HoursFromTimeFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        return item switch
+        {
+            TimeItem t => Sequence.Of(IntegerItem.Of(t.Value.Hour)),
+            _ => Sequence.Empty
+        };
+    }
+
+    private static ISequence MinutesFromDateTimeFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        return item switch
+        {
+            DateTimeItem dt => Sequence.Of(IntegerItem.Of(dt.Value.Minute)),
+            _ => Sequence.Empty
+        };
+    }
+
+    private static ISequence MinutesFromTimeFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        return item switch
+        {
+            TimeItem t => Sequence.Of(IntegerItem.Of(t.Value.Minute)),
+            _ => Sequence.Empty
+        };
+    }
+
+    private static ISequence SecondsFromDateTimeFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        return item switch
+        {
+            DateTimeItem dt => Sequence.Of(DecimalItem.Of(dt.Value.Second + dt.Value.Millisecond / 1000m)),
+            _ => Sequence.Empty
+        };
+    }
+
+    private static ISequence SecondsFromTimeFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        return item switch
+        {
+            TimeItem t => Sequence.Of(DecimalItem.Of(t.Value.Second + t.Value.Millisecond / 1000m)),
+            _ => Sequence.Empty
+        };
+    }
+
+    private static ISequence TimezoneFromDateFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        if (item is DateItem d && d.Timezone.HasValue)
+        {
+            return Sequence.Of(DayTimeDurationItem.Of(d.Timezone.Value));
+        }
+        return Sequence.Empty;
+    }
+
+    private static ISequence TimezoneFromDateTimeFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        if (item is DateTimeItem dt)
+        {
+            return Sequence.Of(DayTimeDurationItem.Of(dt.Value.Offset));
+        }
+        return Sequence.Empty;
+    }
+
+    private static ISequence TimezoneFromTimeFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        if (item is TimeItem t && t.Timezone.HasValue)
+        {
+            return Sequence.Of(DayTimeDurationItem.Of(t.Timezone.Value));
+        }
+        return Sequence.Empty;
+    }
+
+    private static ISequence YearsFromDurationFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        return item switch
+        {
+            DurationItem d => Sequence.Of(IntegerItem.Of(d.Months / 12)),
+            _ => Sequence.Empty
+        };
+    }
+
+    private static ISequence MonthsFromDurationFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        return item switch
+        {
+            DurationItem d => Sequence.Of(IntegerItem.Of(d.Months % 12)),
+            _ => Sequence.Empty
+        };
+    }
+
+    private static ISequence DaysFromDurationFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        return item switch
+        {
+            DurationItem d => Sequence.Of(IntegerItem.Of(d.Value.Days)),
+            DayTimeDurationItem d => Sequence.Of(IntegerItem.Of(d.Value.Days)),
+            _ => Sequence.Empty
+        };
+    }
+
+    private static ISequence HoursFromDurationFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        return item switch
+        {
+            DurationItem d => Sequence.Of(IntegerItem.Of(d.Value.Hours)),
+            DayTimeDurationItem d => Sequence.Of(IntegerItem.Of(d.Value.Hours)),
+            _ => Sequence.Empty
+        };
+    }
+
+    private static ISequence MinutesFromDurationFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        return item switch
+        {
+            DurationItem d => Sequence.Of(IntegerItem.Of(d.Value.Minutes)),
+            DayTimeDurationItem d => Sequence.Of(IntegerItem.Of(d.Value.Minutes)),
+            _ => Sequence.Empty
+        };
+    }
+
+    private static ISequence SecondsFromDurationFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        return item switch
+        {
+            DurationItem d => Sequence.Of(DecimalItem.Of(d.Value.Seconds + d.Value.Milliseconds / 1000m)),
+            DayTimeDurationItem d => Sequence.Of(DecimalItem.Of(d.Value.Seconds + d.Value.Milliseconds / 1000m)),
+            _ => Sequence.Empty
+        };
+    }
+
+    private static ISequence ImplicitTimezoneFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        return Sequence.Of(DayTimeDurationItem.Of(DateTimeOffset.Now.Offset));
+    }
+
+    private static ISequence AdjustDateTimeToTimezoneFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        if (item is not DateTimeItem dt) return Sequence.Empty;
+
+        TimeSpan? tz;
+        if (args.Count > 1 && !args[1].IsEmpty)
+        {
+            var tzItem = args[1].FirstOrDefault;
+            tz = tzItem switch
+            {
+                DayTimeDurationItem d => d.Value,
+                DurationItem d => d.Value,
+                _ => null
+            };
+        }
+        else
+        {
+            tz = DateTimeOffset.Now.Offset;
+        }
+
+        if (!tz.HasValue) return Sequence.Of(dt);
+
+        var adjusted = dt.Value.ToOffset(tz.Value);
+        return Sequence.Of(DateTimeItem.Of(adjusted));
+    }
+
+    private static ISequence AdjustDateToTimezoneFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        if (item is not DateItem d) return Sequence.Empty;
+
+        TimeSpan? tz;
+        if (args.Count > 1 && !args[1].IsEmpty)
+        {
+            var tzItem = args[1].FirstOrDefault;
+            tz = tzItem switch
+            {
+                DayTimeDurationItem dur => dur.Value,
+                DurationItem dur => dur.Value,
+                _ => null
+            };
+        }
+        else
+        {
+            tz = DateTimeOffset.Now.Offset;
+        }
+
+        return Sequence.Of(DateItem.Of(d.Value, tz));
+    }
+
+    private static ISequence AdjustTimeToTimezoneFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        if (item is not TimeItem t) return Sequence.Empty;
+
+        TimeSpan? tz;
+        if (args.Count > 1 && !args[1].IsEmpty)
+        {
+            var tzItem = args[1].FirstOrDefault;
+            tz = tzItem switch
+            {
+                DayTimeDurationItem d => d.Value,
+                DurationItem d => d.Value,
+                _ => null
+            };
+        }
+        else
+        {
+            tz = DateTimeOffset.Now.Offset;
+        }
+
+        return Sequence.Of(TimeItem.Of(t.Value, tz));
+    }
+
+    // Array functions
+    private static ISequence ArraySizeFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        return item is ArrayItem arr ? Sequence.Of(IntegerItem.Of(arr.Size)) : Sequence.Empty;
+    }
+
+    private static ISequence ArrayGetFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var arrItem = args[0].FirstOrDefault;
+        var posItem = args[1].FirstOrDefault;
+        if (arrItem is ArrayItem arr && posItem is IntegerItem pos)
+        {
+            return arr.Get((int)pos.Value);
+        }
+        return Sequence.Empty;
+    }
+
+#pragma warning disable CA1859
+    private static ISequence ArrayPutFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var arrItem = args[0].FirstOrDefault;
+        var posItem = args[1].FirstOrDefault;
+        var value = args[2];
+        if (arrItem is ArrayItem arr && posItem is IntegerItem pos)
+        {
+            var index = (int)pos.Value - 1;
+            if (index >= 0 && index < arr.Size)
+            {
+                var newMembers = arr.Members.ToList();
+                newMembers[index] = value;
+                return Sequence.Of(ArrayItem.Of(newMembers));
+            }
+        }
+        return Sequence.Empty;
+    }
+
+    private static ISequence ArrayAppendFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var arrItem = args[0].FirstOrDefault;
+        var value = args[1];
+        if (arrItem is ArrayItem arr)
+        {
+            var newMembers = arr.Members.ToList();
+            newMembers.Add(value);
+            return Sequence.Of(ArrayItem.Of(newMembers));
+        }
+        return Sequence.Empty;
+    }
+
+    private static ISequence ArraySubarrayFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var arrItem = args[0].FirstOrDefault;
+        var startItem = args[1].FirstOrDefault;
+        if (arrItem is not ArrayItem arr || startItem is not IntegerItem start) return Sequence.Empty;
+
+        var startIndex = (int)start.Value - 1;
+        var length = args.Count > 2 && args[2].FirstOrDefault is IntegerItem len
+            ? (int)len.Value
+            : arr.Size - startIndex;
+
+        if (startIndex < 0 || startIndex >= arr.Size) return Sequence.Of(ArrayItem.Empty);
+
+        length = Math.Min(length, arr.Size - startIndex);
+        var newMembers = arr.Members.Skip(startIndex).Take(length).ToList();
+        return Sequence.Of(ArrayItem.Of(newMembers));
+    }
+
+    private static ISequence ArrayRemoveFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var arrItem = args[0].FirstOrDefault;
+        var posItem = args[1].FirstOrDefault;
+        if (arrItem is ArrayItem arr && posItem is IntegerItem pos)
+        {
+            var index = (int)pos.Value - 1;
+            if (index >= 0 && index < arr.Size)
+            {
+                var newMembers = arr.Members.Where((_, i) => i != index).ToList();
+                return Sequence.Of(ArrayItem.Of(newMembers));
+            }
+            return Sequence.Of(arr);
+        }
+        return Sequence.Empty;
+    }
+
+    private static ISequence ArrayInsertBeforeFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var arrItem = args[0].FirstOrDefault;
+        var posItem = args[1].FirstOrDefault;
+        var value = args[2];
+        if (arrItem is ArrayItem arr && posItem is IntegerItem pos)
+        {
+            var index = Math.Max(0, Math.Min((int)pos.Value - 1, arr.Size));
+            var newMembers = arr.Members.ToList();
+            newMembers.Insert(index, value);
+            return Sequence.Of(ArrayItem.Of(newMembers));
+        }
+        return Sequence.Empty;
+    }
+#pragma warning restore CA1859
+
+    private static ISequence ArrayHeadFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        return item is ArrayItem arr && arr.Size > 0 ? arr.Get(1) : Sequence.Empty;
+    }
+
+#pragma warning disable CA1859
+    private static ISequence ArrayTailFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        if (item is ArrayItem arr && arr.Size > 1)
+        {
+            return Sequence.Of(ArrayItem.Of(arr.Members.Skip(1).ToList()));
+        }
+        return Sequence.Of(ArrayItem.Empty);
+    }
+
+    private static ISequence ArrayReverseFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        if (item is ArrayItem arr)
+        {
+            return Sequence.Of(ArrayItem.Of(arr.Members.Reverse().ToList()));
+        }
+        return Sequence.Empty;
+    }
+
+    private static ISequence ArrayJoinFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var arrays = args[0]
+            .Where(item => item is ArrayItem)
+            .Cast<ArrayItem>()
+            .SelectMany(a => a.Members)
+            .ToList();
+        return Sequence.Of(ArrayItem.Of(arrays));
+    }
+
+    private static ISequence ArrayFlattenFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        static IEnumerable<IItem> Flatten(ISequence seq)
+        {
+            foreach (var item in seq)
+            {
+                if (item is ArrayItem arr)
+                {
+                    foreach (var member in arr.Members)
+                    {
+                        foreach (var flattened in Flatten(member))
+                        {
+                            yield return flattened;
+                        }
+                    }
+                }
+                else
+                {
+                    yield return item;
+                }
+            }
+        }
+
+        var items = Flatten(args[0]).ToList();
+        return new Sequence(items);
+    }
+#pragma warning restore CA1859
+
+    // Map functions
+    private static ISequence MapSizeFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        return item is MapItem map ? Sequence.Of(IntegerItem.Of(map.Size)) : Sequence.Empty;
+    }
+
+#pragma warning disable CA1859
+    private static ISequence MapKeysFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        if (item is MapItem map)
+        {
+            return new Sequence(map.Keys.Cast<IItem>());
+        }
+        return Sequence.Empty;
+    }
+#pragma warning restore CA1859
+
+    private static ISequence MapContainsFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var mapItem = args[0].FirstOrDefault;
+        var keyItem = args[1].FirstOrDefault as IAtomicItem;
+        if (mapItem is MapItem map && keyItem is not null)
+        {
+            return Sequence.Of(BooleanItem.Of(map.ContainsKey(keyItem)));
+        }
+        return Sequence.Of(BooleanItem.False);
+    }
+
+    private static ISequence MapGetFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var mapItem = args[0].FirstOrDefault;
+        var keyItem = args[1].FirstOrDefault as IAtomicItem;
+        if (mapItem is MapItem map && keyItem is not null)
+        {
+            return map.Get(keyItem);
+        }
+        return Sequence.Empty;
+    }
+
+#pragma warning disable CA1859
+    private static ISequence MapPutFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var mapItem = args[0].FirstOrDefault;
+        var keyItem = args[1].FirstOrDefault as IAtomicItem;
+        var value = args[2];
+        if (mapItem is MapItem map && keyItem is not null)
+        {
+            return Sequence.Of(map.Put(keyItem, value));
+        }
+        return Sequence.Empty;
+    }
+
+    private static ISequence MapEntryFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var keyItem = args[0].FirstOrDefault as IAtomicItem;
+        var value = args[1];
+        if (keyItem is not null)
+        {
+            var entries = new Dictionary<IAtomicItem, ISequence>(new AtomicItemComparer()) { [keyItem] = value };
+            return Sequence.Of(MapItem.Of(entries));
+        }
+        return Sequence.Empty;
+    }
+
+    private static ISequence MapRemoveFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var mapItem = args[0].FirstOrDefault;
+        var keyItem = args[1].FirstOrDefault as IAtomicItem;
+        if (mapItem is MapItem map && keyItem is not null)
+        {
+            return Sequence.Of(map.Remove(keyItem));
+        }
+        return Sequence.Of(mapItem ?? MapItem.Empty);
+    }
+
+    private static ISequence MapMergeFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var entries = new Dictionary<IAtomicItem, ISequence>(new AtomicItemComparer());
+        foreach (var item in args[0])
+        {
+            if (item is MapItem map)
+            {
+                foreach (var kvp in map.Entries)
+                {
+                    entries[kvp.Key] = kvp.Value;
+                }
+            }
+        }
+        return Sequence.Of(MapItem.Of(entries));
+    }
+#pragma warning restore CA1859
+
+    // QName and node identity functions
+    private static ISequence LocalNameFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        INodeItem? node;
+        if (args.Count == 0 || args[0].IsEmpty)
+        {
+            node = ctx.DynamicContext.ContextItem as INodeItem;
+        }
+        else
+        {
+            node = args[0].FirstOrDefault as INodeItem;
+        }
+
+        if (node is null) return Sequence.Of(StringItem.Of(string.Empty));
+
+        var name = node.Name ?? string.Empty;
+        var localName = name.Contains(':') ? name[(name.IndexOf(':') + 1)..] : name;
+        return Sequence.Of(StringItem.Of(localName));
+    }
+
+    private static ISequence NameFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        INodeItem? node;
+        if (args.Count == 0 || args[0].IsEmpty)
+        {
+            node = ctx.DynamicContext.ContextItem as INodeItem;
+        }
+        else
+        {
+            node = args[0].FirstOrDefault as INodeItem;
+        }
+
+        return Sequence.Of(StringItem.Of(node?.Name ?? string.Empty));
+    }
+
+    private static ISequence NamespaceUriFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        INodeItem? node;
+        if (args.Count == 0 || args[0].IsEmpty)
+        {
+            node = ctx.DynamicContext.ContextItem as INodeItem;
+        }
+        else
+        {
+            node = args[0].FirstOrDefault as INodeItem;
+        }
+
+        return Sequence.Of(StringItem.Of(node?.NamespaceUri ?? string.Empty));
+    }
+
+    private static ISequence QNameConstructorFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var nsUri = args[0].FirstOrDefault?.GetStringValue();
+        var localName = args[1].FirstOrDefault?.GetStringValue() ?? string.Empty;
+
+        // Parse prefix from local name if present
+        string? prefix = null;
+        if (localName.Contains(':'))
+        {
+            var parts = localName.Split(':');
+            prefix = parts[0];
+            localName = parts[1];
+        }
+
+        return Sequence.Of(QNameItem.Of(prefix, nsUri, localName));
+    }
+
+    private static ISequence LocalNameFromQNameFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        if (item is QNameItem qn)
+        {
+            return Sequence.Of(StringItem.Of(qn.LocalName));
+        }
+        return Sequence.Empty;
+    }
+
+    private static ISequence NamespaceUriFromQNameFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        if (item is QNameItem qn)
+        {
+            return Sequence.Of(StringItem.Of(qn.NamespaceUri ?? string.Empty));
+        }
+        return Sequence.Empty;
+    }
+
+    private static ISequence PrefixFromQNameFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var item = args[0].FirstOrDefault;
+        if (item is QNameItem qn && !string.IsNullOrEmpty(qn.Prefix))
+        {
+            return Sequence.Of(StringItem.Of(qn.Prefix));
+        }
+        return Sequence.Empty;
+    }
+
+    // URI functions
+    private static ISequence ResolveUriFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var relative = args[0].FirstOrDefault?.GetStringValue();
+        if (string.IsNullOrEmpty(relative)) return Sequence.Empty;
+
+        Uri? baseUri;
+        if (args.Count > 1 && !args[1].IsEmpty)
+        {
+            var baseStr = args[1].FirstOrDefault?.GetStringValue();
+            if (string.IsNullOrEmpty(baseStr) || !Uri.TryCreate(baseStr, UriKind.Absolute, out baseUri))
+            {
+                return Sequence.Empty;
+            }
+        }
+        else
+        {
+            baseUri = ctx.StaticContext.BaseUri;
+        }
+
+        if (baseUri is null)
+        {
+            if (Uri.TryCreate(relative, UriKind.Absolute, out var absUri))
+            {
+                return Sequence.Of(UriItem.Of(absUri));
+            }
+            return Sequence.Empty;
+        }
+
+        if (Uri.TryCreate(baseUri, relative, out var resolved))
+        {
+            return Sequence.Of(UriItem.Of(resolved));
+        }
+        return Sequence.Empty;
+    }
+
+    private static ISequence StaticBaseUriFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var baseUri = ctx.StaticContext.BaseUri;
+        return baseUri is not null ? Sequence.Of(UriItem.Of(baseUri)) : Sequence.Empty;
+    }
+
+    private static ISequence EncodeForUriFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var str = args[0].FirstOrDefault?.GetStringValue() ?? string.Empty;
+        return Sequence.Of(StringItem.Of(Uri.EscapeDataString(str)));
+    }
+
+    // Document functions
+    private static ISequence DocFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        // This is a placeholder - actual implementation would require document loading infrastructure
+        var uri = args[0].FirstOrDefault?.GetStringValue();
+        if (string.IsNullOrEmpty(uri)) return Sequence.Empty;
+
+        // For now, return empty - full implementation would load and parse the document
+        return Sequence.Empty;
+    }
+
+    private static ISequence DocAvailableFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        // This is a placeholder - actual implementation would check if document is accessible
+        var uri = args[0].FirstOrDefault?.GetStringValue();
+        if (string.IsNullOrEmpty(uri)) return Sequence.Of(BooleanItem.False);
+
+        // For now, return false - full implementation would check document availability
+        return Sequence.Of(BooleanItem.False);
+    }
+
+    // Node set functions
+#pragma warning disable CA1859
+    private static ISequence InnermostFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var nodes = args[0].OfType<INodeItem>().ToList();
+        if (nodes.Count == 0) return Sequence.Empty;
+
+        // Remove any node that is an ancestor of another node in the set
+        var result = nodes.Where(n =>
+            !nodes.Any(other => other != n && IsDescendant(other, n))).ToList();
+
+        return new Sequence(result.Cast<IItem>());
+    }
+
+    private static ISequence OutermostFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var nodes = args[0].OfType<INodeItem>().ToList();
+        if (nodes.Count == 0) return Sequence.Empty;
+
+        // Remove any node that is a descendant of another node in the set
+        var result = nodes.Where(n =>
+            !nodes.Any(other => other != n && IsDescendant(n, other))).ToList();
+
+        return new Sequence(result.Cast<IItem>());
+    }
+#pragma warning restore CA1859
+
+    private static bool IsDescendant(INodeItem node, INodeItem ancestor)
+    {
+        var current = node.Parent;
+        while (current is not null)
+        {
+            if (ReferenceEquals(current, ancestor)) return true;
+            current = current.Parent;
+        }
+        return false;
+    }
+
+    // Metaschema-specific functions
+    private static ISequence Base64EncodeFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var str = args[0].FirstOrDefault?.GetStringValue() ?? string.Empty;
+        var bytes = System.Text.Encoding.UTF8.GetBytes(str);
+        return Sequence.Of(StringItem.Of(Convert.ToBase64String(bytes)));
+    }
+
+    private static ISequence Base64DecodeFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        var str = args[0].FirstOrDefault?.GetStringValue() ?? string.Empty;
+        try
+        {
+            var bytes = Convert.FromBase64String(str);
+            return Sequence.Of(StringItem.Of(System.Text.Encoding.UTF8.GetString(bytes)));
+        }
+        catch (FormatException)
+        {
+            throw new MetapathException($"Invalid base64 string: {str}");
+        }
+    }
+
+    private static ISequence RecurseDepthFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
+    {
+        INodeItem? node;
+        if (args.Count == 0 || args[0].IsEmpty)
+        {
+            node = ctx.DynamicContext.ContextItem as INodeItem;
+        }
+        else
+        {
+            node = args[0].FirstOrDefault as INodeItem;
+        }
+
+        if (node is null) return Sequence.Of(IntegerItem.Zero);
+
+        var depth = 0;
+        var current = node;
+        while (current.Parent is not null)
+        {
+            depth++;
+            current = current.Parent;
+        }
+        return Sequence.Of(IntegerItem.Of(depth));
+    }
+
+    private sealed class AtomicItemComparer : IEqualityComparer<IAtomicItem>
+    {
+        public bool Equals(IAtomicItem? x, IAtomicItem? y)
+        {
+            if (x is null && y is null) return true;
+            if (x is null || y is null) return false;
+            return string.Equals(x.GetStringValue(), y.GetStringValue(), StringComparison.Ordinal);
+        }
+
+        public int GetHashCode(IAtomicItem obj) => obj.GetStringValue().GetHashCode(StringComparison.Ordinal);
+    }
+
     /// <summary>
     /// Creates a function library with all built-in functions.
     /// </summary>
@@ -938,7 +1886,7 @@ internal sealed class BuiltInFunction : IMetapathFunction
     /// Creates a function with fixed arity.
     /// </summary>
     public BuiltInFunction(string name, int arity, Func<IMetapathContext, IReadOnlyList<ISequence>, ISequence> implementation)
-        : this(name, arity, arity, implementation)
+        : this(null, name, arity, arity, implementation)
     {
     }
 
@@ -946,7 +1894,24 @@ internal sealed class BuiltInFunction : IMetapathFunction
     /// Creates a function with variable arity.
     /// </summary>
     public BuiltInFunction(string name, int minArity, int maxArity, Func<IMetapathContext, IReadOnlyList<ISequence>, ISequence> implementation)
+        : this(null, name, minArity, maxArity, implementation)
     {
+    }
+
+    /// <summary>
+    /// Creates a function with namespace and fixed arity.
+    /// </summary>
+    public BuiltInFunction(string? namespaceUri, string name, int arity, Func<IMetapathContext, IReadOnlyList<ISequence>, ISequence> implementation)
+        : this(namespaceUri, name, arity, arity, implementation)
+    {
+    }
+
+    /// <summary>
+    /// Creates a function with namespace and variable arity.
+    /// </summary>
+    public BuiltInFunction(string? namespaceUri, string name, int minArity, int maxArity, Func<IMetapathContext, IReadOnlyList<ISequence>, ISequence> implementation)
+    {
+        NamespaceUri = namespaceUri;
         Name = name;
         MinArity = minArity;
         MaxArity = maxArity;
@@ -955,7 +1920,7 @@ internal sealed class BuiltInFunction : IMetapathFunction
     }
 
     public string Name { get; }
-    public string? NamespaceUri => null;
+    public string? NamespaceUri { get; }
     public int Arity { get; }
     public int MinArity { get; }
     public int MaxArity { get; }

@@ -60,6 +60,11 @@ public interface INodeItem : IItem
     Uri? DocumentUri { get; }
 
     /// <summary>
+    /// Gets the namespace URI of this node, if any.
+    /// </summary>
+    string? NamespaceUri { get; }
+
+    /// <summary>
     /// Gets the path to this node from the document root.
     /// </summary>
     /// <returns>The path as a Metapath expression string.</returns>
