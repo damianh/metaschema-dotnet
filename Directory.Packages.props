@@ -2,31 +2,18 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
-
   <ItemGroup Label="Production Dependencies">
-    <!-- XML/JSON/YAML Processing -->
-    <PackageVersion Include="YamlDotNet" Version="16.3.0" />
-    
-    <!-- Metapath Parser -->
     <PackageVersion Include="Antlr4.Runtime.Standard" Version="4.13.1" />
     <PackageVersion Include="Antlr4BuildTasks" Version="12.14.0" />
-    
-    <!-- Markdown Processing -->
-    <PackageVersion Include="Markdig" Version="0.40.0" />
-    
-    <!-- CLI Framework -->
-    <PackageVersion Include="System.CommandLine" Version="2.0.0-beta5.25277.114" />
-    
-    <!-- Logging -->
-    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
-    
-    <!-- Source Generation -->
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0" />
+    <PackageVersion Include="Markdig" Version="0.44.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.2" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />
+    <PackageVersion Include="System.CommandLine" Version="2.0.2" />
+    <PackageVersion Include="YamlDotNet" Version="16.3.0" />
   </ItemGroup>
-
   <ItemGroup Label="Test Dependencies">
     <PackageVersion Include="xunit.v3.core.mtp-v2" Version="3.2.2" />
     <PackageVersion Include="xunit.v3.extensibility.core" Version="3.2.2" />
-    <PackageVersion Include="Shouldly" Version="4.2.1" />
+    <PackageVersion Include="Shouldly" Version="4.3.0" />
   </ItemGroup>
 </Project>
