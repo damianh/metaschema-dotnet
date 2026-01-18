@@ -1,5 +1,6 @@
 // Licensed under the MIT License.
 
+using Metaschema.Core.Constraints;
 using Metaschema.Core.Markup;
 
 namespace Metaschema.Core.Model;
@@ -79,4 +80,9 @@ public sealed class AssemblyDefinition
     /// Gets the model containing child field and assembly instances.
     /// </summary>
     public ModelContainer? Model { get; init; }
+
+    /// <summary>
+    /// Gets the constraints defined on this assembly.
+    /// </summary>
+    public IReadOnlyList<IConstraint> Constraints { get; init; } = [];
 }

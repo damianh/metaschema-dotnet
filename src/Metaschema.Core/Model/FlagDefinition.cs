@@ -1,5 +1,6 @@
 // Licensed under the MIT License.
 
+using Metaschema.Core.Constraints;
 using Metaschema.Core.Markup;
 
 namespace Metaschema.Core.Model;
@@ -64,4 +65,9 @@ public sealed class FlagDefinition
     /// Gets the default value when the flag is omitted.
     /// </summary>
     public string? DefaultValue { get; init; }
+
+    /// <summary>
+    /// Gets the constraints defined on this flag.
+    /// </summary>
+    public IReadOnlyList<IConstraint> Constraints { get; init; } = [];
 }

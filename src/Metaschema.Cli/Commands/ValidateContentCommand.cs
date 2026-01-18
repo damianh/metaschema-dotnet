@@ -1,8 +1,12 @@
 // Licensed under the MIT License.
 
 using System.CommandLine;
+using Metaschema.Core.Constraints;
 using Metaschema.Core.Loading;
+using Metaschema.Core.Model;
 using Metaschema.Databind;
+using Metaschema.Databind.Nodes;
+using Metaschema.Databind.Validation;
 
 namespace Metaschema.Cli.Commands;
 
@@ -114,8 +118,29 @@ public sealed class ValidateContentCommand : Command
                 result.Valid = true;
                 result.RootElementName = rootNode.Name;
 
-                // Note: Full constraint validation would be implemented in Phase 5
-                // For now, we validate that the document can be parsed according to the schema
+                // Perform constraint validation
+                var constraintResults = ValidateConstraints(rootNode, module);
+                foreach (var finding in constraintResults.Findings)
+                {
+                    var prefix = finding.Severity switch
+                    {
+                        ConstraintLevel.Critical => "[CRITICAL]",
+                        ConstraintLevel.Error => "[ERROR]",
+                        ConstraintLevel.Warning => "[WARNING]",
+                        ConstraintLevel.Informational => "[INFO]",
+                        _ => "[INFO]"
+                    };
+                    result.Findings.Add($"{prefix} {finding.Location}: {finding.Message}");
+                }
+
+                result.ConstraintErrorCount = constraintResults.CriticalCount + constraintResults.ErrorCount;
+                result.ConstraintWarningCount = constraintResults.WarningCount;
+
+                // Only mark invalid if there are constraint errors (not just warnings)
+                if (!constraintResults.IsValid)
+                {
+                    result.Valid = false;
+                }
             }
             else
             {
@@ -176,6 +201,10 @@ public sealed class ValidateContentCommand : Command
                 {
                     Console.WriteLine($"Valid: {result.ContentFile}");
                     Console.WriteLine($"  Root element: {result.RootElementName}");
+                    if (result.ConstraintWarningCount > 0)
+                    {
+                        Console.WriteLine($"  Warnings: {result.ConstraintWarningCount}");
+                    }
                 }
                 else
                 {
@@ -184,6 +213,16 @@ public sealed class ValidateContentCommand : Command
                     {
                         Console.WriteLine($"  {error}");
                     }
+                    if (result.ConstraintErrorCount > 0)
+                    {
+                        Console.WriteLine($"  Constraint errors: {result.ConstraintErrorCount}");
+                    }
+                }
+
+                // Show all findings
+                foreach (var finding in result.Findings)
+                {
+                    Console.WriteLine($"  {finding}");
                 }
                 break;
         }
@@ -196,5 +235,42 @@ public sealed class ValidateContentCommand : Command
         public bool Valid { get; set; }
         public string? RootElementName { get; set; }
         public List<string> Errors { get; set; } = [];
+        public List<string> Findings { get; set; } = [];
+        public int ConstraintErrorCount { get; set; }
+        public int ConstraintWarningCount { get; set; }
+    }
+
+    private static ValidationResults ValidateConstraints(DocumentNode rootNode, MetaschemaModule module)
+    {
+        // Collect all constraints from the module
+        var constraints = new List<IConstraint>();
+
+        foreach (var flag in module.FlagDefinitions)
+        {
+            constraints.AddRange(flag.Constraints);
+        }
+
+        foreach (var field in module.FieldDefinitions)
+        {
+            constraints.AddRange(field.Constraints);
+        }
+
+        foreach (var assembly in module.AssemblyDefinitions)
+        {
+            constraints.AddRange(assembly.Constraints);
+        }
+
+        // If no constraints, return empty results
+        if (constraints.Count == 0)
+        {
+            return ValidationResults.Empty;
+        }
+
+        // Adapt the document node to INodeItem for constraint validation
+        var nodeItem = DocumentNodeAdapter.Adapt(rootNode);
+
+        // Run constraint validation
+        var validator = ConstraintValidator.Create();
+        return validator.ValidateAll(nodeItem, constraints);
     }
 }

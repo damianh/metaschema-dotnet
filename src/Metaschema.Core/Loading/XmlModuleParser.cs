@@ -2,6 +2,7 @@
 
 using System.Xml;
 using System.Xml.Linq;
+using Metaschema.Core.Constraints;
 using Metaschema.Core.Markup;
 using Metaschema.Core.Model;
 
@@ -138,6 +139,10 @@ public sealed class XmlModuleParser
     private static FlagDefinition ParseFlagDefinition(XElement element, MetaschemaModule module, Uri location)
     {
         var name = GetRequiredAttribute(element, "name", location);
+        var constraintElement = element.Element(Ns + "constraint");
+        var constraints = constraintElement is not null
+            ? ParseConstraints(constraintElement)
+            : [];
 
         return new FlagDefinition
         {
@@ -150,7 +155,8 @@ public sealed class XmlModuleParser
             Remarks = ParseMarkupMultiline(element.Element(Ns + "remarks")),
             ContainingModule = module,
             DataTypeName = element.Attribute("as-type")?.Value ?? "string",
-            DefaultValue = element.Attribute("default")?.Value
+            DefaultValue = element.Attribute("default")?.Value,
+            Constraints = constraints
         };
     }
 
@@ -158,6 +164,10 @@ public sealed class XmlModuleParser
     {
         var name = GetRequiredAttribute(element, "name", location);
         var flagInstances = ParseFlagInstances(element);
+        var constraintElement = element.Element(Ns + "constraint");
+        var constraints = constraintElement is not null
+            ? ParseConstraints(constraintElement)
+            : [];
 
         return new FieldDefinition
         {
@@ -174,7 +184,8 @@ public sealed class XmlModuleParser
             IsCollapsible = element.Attribute("collapsible")?.Value == "yes",
             JsonValueKeyName = element.Element(Ns + "json-value-key")?.Value,
             JsonKeyFlagRef = element.Element(Ns + "json-key")?.Attribute("flag-ref")?.Value,
-            FlagInstances = flagInstances
+            FlagInstances = flagInstances,
+            Constraints = constraints
         };
     }
 
@@ -193,6 +204,12 @@ public sealed class XmlModuleParser
             ? ParseModelContainer(modelElement)
             : null;
 
+        // Parse constraints
+        var constraintElement = element.Element(Ns + "constraint");
+        var constraints = constraintElement is not null
+            ? ParseConstraints(constraintElement)
+            : [];
+
         return new AssemblyDefinition
         {
             Name = name,
@@ -206,7 +223,8 @@ public sealed class XmlModuleParser
             RootName = rootName,
             JsonKeyFlagRef = element.Element(Ns + "json-key")?.Attribute("flag-ref")?.Value,
             FlagInstances = flagInstances,
-            Model = model
+            Model = model,
+            Constraints = constraints
         };
     }
 
@@ -487,4 +505,183 @@ public sealed class XmlModuleParser
             }
         }
     }
+
+    #region Constraint Parsing
+
+    private static List<IConstraint> ParseConstraints(XElement constraintElement)
+    {
+        var constraints = new List<IConstraint>();
+
+        foreach (var child in constraintElement.Elements())
+        {
+            var localName = child.Name.LocalName;
+            IConstraint? constraint = localName switch
+            {
+                "allowed-values" => ParseAllowedValuesConstraint(child),
+                "matches" => ParseMatchesConstraint(child),
+                "expect" => ParseExpectConstraint(child),
+                "index" => ParseIndexConstraint(child),
+                "index-has-key" => ParseIndexHasKeyConstraint(child),
+                "is-unique" => ParseUniqueConstraint(child),
+                "has-cardinality" => ParseCardinalityConstraint(child),
+                _ => null
+            };
+
+            if (constraint is not null)
+            {
+                constraints.Add(constraint);
+            }
+        }
+
+        return constraints;
+    }
+
+    private static AllowedValuesConstraint ParseAllowedValuesConstraint(XElement element)
+    {
+        var allowedValues = new List<AllowedValue>();
+
+        foreach (var enumElement in element.Elements(Ns + "enum"))
+        {
+            var value = enumElement.Attribute("value")?.Value ?? string.Empty;
+            var description = enumElement.Value;
+            var deprecated = enumElement.Attribute("deprecated")?.Value;
+
+            allowedValues.Add(new AllowedValue(value, description, deprecated));
+        }
+
+        return new AllowedValuesConstraint
+        {
+            Id = element.Attribute("id")?.Value,
+            Level = ParseConstraintLevel(element.Attribute("level")?.Value),
+            Target = element.Attribute("target")?.Value,
+            Message = element.Element(Ns + "message")?.Value,
+            Remarks = element.Element(Ns + "remarks")?.Value,
+            AllowedValues = allowedValues,
+            AllowOther = element.Attribute("allow-other")?.Value == "yes",
+            Extensible = element.Attribute("extensible")?.Value != "none"
+        };
+    }
+
+    private static MatchesConstraint ParseMatchesConstraint(XElement element)
+    {
+        return new MatchesConstraint
+        {
+            Id = element.Attribute("id")?.Value,
+            Level = ParseConstraintLevel(element.Attribute("level")?.Value),
+            Target = element.Attribute("target")?.Value,
+            Message = element.Element(Ns + "message")?.Value,
+            Remarks = element.Element(Ns + "remarks")?.Value,
+            Pattern = element.Attribute("regex")?.Value,
+            DataType = element.Attribute("datatype")?.Value
+        };
+    }
+
+    private static ExpectConstraint ParseExpectConstraint(XElement element)
+    {
+        var test = element.Attribute("test")?.Value ?? "true()";
+
+        return new ExpectConstraint
+        {
+            Id = element.Attribute("id")?.Value,
+            Level = ParseConstraintLevel(element.Attribute("level")?.Value),
+            Target = element.Attribute("target")?.Value,
+            Message = element.Element(Ns + "message")?.Value,
+            Remarks = element.Element(Ns + "remarks")?.Value,
+            Test = test
+        };
+    }
+
+    private static IndexConstraint ParseIndexConstraint(XElement element)
+    {
+        var name = element.Attribute("name")?.Value ?? string.Empty;
+        var keyFields = ParseKeyFields(element);
+
+        return new IndexConstraint
+        {
+            Id = element.Attribute("id")?.Value,
+            Level = ParseConstraintLevel(element.Attribute("level")?.Value),
+            Target = element.Attribute("target")?.Value,
+            Message = element.Element(Ns + "message")?.Value,
+            Remarks = element.Element(Ns + "remarks")?.Value,
+            Name = name,
+            KeyFields = keyFields
+        };
+    }
+
+    private static IndexHasKeyConstraint ParseIndexHasKeyConstraint(XElement element)
+    {
+        var indexName = element.Attribute("name")?.Value ?? string.Empty;
+        var keyFields = ParseKeyFields(element);
+
+        return new IndexHasKeyConstraint
+        {
+            Id = element.Attribute("id")?.Value,
+            Level = ParseConstraintLevel(element.Attribute("level")?.Value),
+            Target = element.Attribute("target")?.Value,
+            Message = element.Element(Ns + "message")?.Value,
+            Remarks = element.Element(Ns + "remarks")?.Value,
+            IndexName = indexName,
+            KeyFields = keyFields
+        };
+    }
+
+    private static UniqueConstraint ParseUniqueConstraint(XElement element)
+    {
+        var keyFields = ParseKeyFields(element);
+
+        return new UniqueConstraint
+        {
+            Id = element.Attribute("id")?.Value,
+            Level = ParseConstraintLevel(element.Attribute("level")?.Value),
+            Target = element.Attribute("target")?.Value,
+            Message = element.Element(Ns + "message")?.Value,
+            Remarks = element.Element(Ns + "remarks")?.Value,
+            KeyFields = keyFields
+        };
+    }
+
+    private static CardinalityConstraint ParseCardinalityConstraint(XElement element)
+    {
+        var minOccursStr = element.Attribute("min-occurs")?.Value;
+        var maxOccursStr = element.Attribute("max-occurs")?.Value;
+
+        return new CardinalityConstraint
+        {
+            Id = element.Attribute("id")?.Value,
+            Level = ParseConstraintLevel(element.Attribute("level")?.Value),
+            Target = element.Attribute("target")?.Value,
+            Message = element.Element(Ns + "message")?.Value,
+            Remarks = element.Element(Ns + "remarks")?.Value,
+            MinOccurs = !string.IsNullOrEmpty(minOccursStr) && int.TryParse(minOccursStr, out var min) ? min : null,
+            MaxOccurs = !string.IsNullOrEmpty(maxOccursStr) && int.TryParse(maxOccursStr, out var max) ? max : null
+        };
+    }
+
+    private static List<KeyField> ParseKeyFields(XElement element)
+    {
+        var keyFields = new List<KeyField>();
+
+        foreach (var keyFieldElement in element.Elements(Ns + "key-field"))
+        {
+            var target = keyFieldElement.Attribute("target")?.Value ?? ".";
+            var pattern = keyFieldElement.Attribute("pattern")?.Value;
+            var remarks = keyFieldElement.Element(Ns + "remarks")?.Value;
+
+            keyFields.Add(new KeyField(target, pattern, remarks));
+        }
+
+        return keyFields;
+    }
+
+    private static ConstraintLevel ParseConstraintLevel(string? value) =>
+        value switch
+        {
+            "CRITICAL" => ConstraintLevel.Critical,
+            "ERROR" => ConstraintLevel.Error,
+            "WARNING" => ConstraintLevel.Warning,
+            "INFORMATIONAL" => ConstraintLevel.Informational,
+            _ => ConstraintLevel.Error
+        };
+
+    #endregion
 }

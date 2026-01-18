@@ -1,5 +1,6 @@
 // Licensed under the MIT License.
 
+using Metaschema.Core.Constraints;
 using Metaschema.Core.Markup;
 
 namespace Metaschema.Core.Model;
@@ -84,4 +85,9 @@ public sealed class FieldDefinition
     /// Gets the flag instances declared on this field.
     /// </summary>
     public IReadOnlyList<FlagInstance> FlagInstances { get; init; } = [];
+
+    /// <summary>
+    /// Gets the constraints defined on this field.
+    /// </summary>
+    public IReadOnlyList<IConstraint> Constraints { get; init; } = [];
 }
