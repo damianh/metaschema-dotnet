@@ -273,23 +273,6 @@ dotnet build metaschema-dotnet.slnx
 dotnet test metaschema-dotnet.slnx
 ```
 
-## Project Status
-
-All core features are implemented. See the [Roadmap](docs/ROADMAP.md) for details.
-
-| Phase | Status | Description |
-|-------|--------|-------------|
-| Phase 1 | Complete | Module Loading |
-| Phase 2 | Complete | Data Types |
-| Phase 3 | Complete | Metapath |
-| Phase 4 | Complete | Serialization |
-| Phase 5 | Complete | Constraints |
-| Phase 6 | Complete | Code Generation |
-| Phase 7 | Complete | Schema Generation |
-| Phase 8 | Complete | CLI Tool |
-| Phase 9 | Complete | Source Generator |
-| Phase 10 | Complete | Function Parity |
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
