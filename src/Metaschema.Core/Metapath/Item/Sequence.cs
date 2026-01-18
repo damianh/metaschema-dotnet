@@ -3,8 +3,6 @@
 
 using System.Collections;
 
-using Metaschema.Core.Metapath;
-
 namespace Metaschema.Core.Metapath.Item;
 
 /// <summary>

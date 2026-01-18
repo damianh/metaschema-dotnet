@@ -9,7 +9,7 @@ public sealed class FileSystemResourceResolver : IResourceResolver
 {
     /// <inheritdoc />
     public bool CanResolve(Uri uri) =>
-        uri.IsFile || uri.IsAbsoluteUri == false;
+        uri.IsFile || !uri.IsAbsoluteUri;
 
     /// <inheritdoc />
     public Stream Open(Uri uri)

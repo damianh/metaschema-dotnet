@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Globalization;
-
-using Metaschema.Core.Metapath.Functions;
 using Metaschema.Core.Metapath.Item;
 
 namespace Metaschema.Core.Metapath.Evaluator;

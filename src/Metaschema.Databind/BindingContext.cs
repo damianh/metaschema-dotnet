@@ -1,7 +1,6 @@
 // Licensed under the MIT License.
 
 using Metaschema.Core.Model;
-using Metaschema.Databind.Nodes;
 using Metaschema.Databind.Serialization;
 
 namespace Metaschema.Databind;

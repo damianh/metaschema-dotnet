@@ -1,6 +1,5 @@
 // Licensed under the MIT License.
 
-using Metaschema.Core.Constraints;
 using Metaschema.Core.Metapath.Item;
 using Shouldly;
 using Xunit;
