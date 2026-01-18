@@ -17,11 +17,12 @@ public static class Program
     /// <returns>Exit code.</returns>
     public static async Task<int> Main(string[] args)
     {
-        var rootCommand = new RootCommand("Metaschema CLI tool for validation, schema generation, and format conversion")
+        var rootCommand = new RootCommand("Metaschema CLI tool for validation, schema generation, code generation, and format conversion")
         {
             new ValidateModuleCommand(),
             new ValidateContentCommand(),
             new GenerateSchemaCommand(),
+            new GenerateCodeCommand(),
             new ConvertCommand()
         };
 

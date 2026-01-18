@@ -3,6 +3,7 @@
     <Project Path="src/Metaschema.Core/Metaschema.Core.csproj" />
     <Project Path="src/Metaschema.Databind/Metaschema.Databind.csproj" />
     <Project Path="src/Metaschema.Schemagen/Metaschema.Schemagen.csproj" />
+    <File Path="Directory.Build.props" />
     <Project Path="src/Metaschema.Cli/Metaschema.Cli.csproj" />
     <Project Path="src/Metaschema.SourceGenerator/Metaschema.SourceGenerator.csproj" />
     <Project Path="src/Metaschema.Testing/Metaschema.Testing.csproj" />
