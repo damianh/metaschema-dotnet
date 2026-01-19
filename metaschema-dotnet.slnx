@@ -12,7 +12,12 @@
     <Project Path="test/Metaschema.Tests/Metaschema.Tests.csproj" />
   </Folder>
   <Folder Name="/samples/">
-    <Project Path="samples/Oscal.Sample.Dynamic/Oscal.Sample.Dynamic.csproj" />
-    <Project Path="samples/Oscal.Sample.Typed/Oscal.Sample.Typed.csproj" />
+    <Project Path="samples/Oscal.Dynamic.LoadCatalog/Oscal.Dynamic.LoadCatalog.csproj" />
+    <Project Path="samples/Oscal.Dynamic.ValidateContent/Oscal.Dynamic.ValidateContent.csproj" />
+    <Project Path="samples/Oscal.Dynamic.MetapathQuery/Oscal.Dynamic.MetapathQuery.csproj" />
+    <Project Path="samples/Oscal.Dynamic.ConvertFormat/Oscal.Dynamic.ConvertFormat.csproj" />
+    <Project Path="samples/Oscal.Dynamic.GenerateSchema/Oscal.Dynamic.GenerateSchema.csproj" />
+    <Project Path="samples/Oscal.Typed.HandCrafted/Oscal.Typed.HandCrafted.csproj" />
+    <Project Path="samples/Oscal.Typed.CodeGenCli/Oscal.Typed.CodeGenCli.csproj" />
   </Folder>
 </Solution>
