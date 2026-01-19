@@ -19,5 +19,6 @@
     <Project Path="samples/Oscal.Dynamic.GenerateSchema/Oscal.Dynamic.GenerateSchema.csproj" />
     <Project Path="samples/Oscal.Typed.HandCrafted/Oscal.Typed.HandCrafted.csproj" />
     <Project Path="samples/Oscal.Typed.CodeGenCli/Oscal.Typed.CodeGenCli.csproj" />
+    <Project Path="samples/Oscal.Typed.SourceGen/Oscal.Typed.SourceGen.csproj" />
   </Folder>
 </Solution>

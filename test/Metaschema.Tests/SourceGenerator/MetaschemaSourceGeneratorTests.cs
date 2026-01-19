@@ -175,7 +175,8 @@ public class MetaschemaSourceGeneratorTests
         output.ShouldNotBeEmpty();
 
         var source = output[0].SourceText.ToString();
-        source.ShouldContain("public SingleItem SingleItem { get; set; }");
+        // Reference types are always nullable since we don't generate constructors
+        source.ShouldContain("public SingleItem? SingleItem { get; set; }");
         source.ShouldNotContain("List<SingleItem>");
     }
 
@@ -307,6 +308,278 @@ public class MetaschemaSourceGeneratorTests
         var source = output[0].SourceText.ToString();
         source.ShouldContain("public static implicit operator ConvertibleFlag(Guid value)");
         source.ShouldContain("public static implicit operator Guid(ConvertibleFlag flag)");
+    }
+
+    [Fact]
+    public void Generator_ShouldResolveImportsBetweenFiles()
+    {
+        // Main metaschema that imports common definitions
+        var mainMetaschema = @"<?xml version=""1.0"" encoding=""UTF-8""?>
+<METASCHEMA xmlns=""http://csrc.nist.gov/ns/oscal/metaschema/1.0"">
+  <schema-name>Main Schema</schema-name>
+  <schema-version>1.0.0</schema-version>
+  <short-name>main</short-name>
+  <namespace>http://example.com/ns/main</namespace>
+  <import href=""common.xml""/>
+
+  <define-assembly name=""document"">
+    <formal-name>Document</formal-name>
+    <root-name>document</root-name>
+    <flag ref=""doc-id""/>
+    <model>
+      <assembly ref=""metadata"" min-occurs=""1""/>
+      <field ref=""title"" min-occurs=""1""/>
+    </model>
+  </define-assembly>
+</METASCHEMA>";
+
+        // Common metaschema with shared definitions
+        var commonMetaschema = @"<?xml version=""1.0"" encoding=""UTF-8""?>
+<METASCHEMA xmlns=""http://csrc.nist.gov/ns/oscal/metaschema/1.0"">
+  <schema-name>Common Schema</schema-name>
+  <schema-version>1.0.0</schema-version>
+  <short-name>common</short-name>
+  <namespace>http://example.com/ns/common</namespace>
+
+  <define-flag name=""doc-id"" as-type=""uuid"">
+    <formal-name>Document ID</formal-name>
+  </define-flag>
+
+  <define-field name=""title"" as-type=""string"">
+    <formal-name>Title</formal-name>
+  </define-field>
+
+  <define-assembly name=""metadata"">
+    <formal-name>Metadata</formal-name>
+    <flag ref=""doc-id""/>
+  </define-assembly>
+</METASCHEMA>";
+
+        var (diagnostics, output) = RunGeneratorWithMultipleFiles(
+            ("main.xml", mainMetaschema),
+            ("common.xml", commonMetaschema));
+
+        diagnostics.ShouldBeEmpty("Generator should not produce any diagnostics");
+        output.ShouldNotBeEmpty("Generator should produce output");
+
+        // Should only produce one output file for the root module
+        output.Length.ShouldBe(1);
+
+        var generatedSource = output[0].SourceText.ToString();
+
+        // Verify the root module is processed
+        generatedSource.ShouldContain("public partial class Document");
+
+        // Verify imported definitions are included
+        generatedSource.ShouldContain("public readonly partial struct DocId");
+        generatedSource.ShouldContain("public partial class Title");
+        generatedSource.ShouldContain("public partial class Metadata");
+
+        // Verify flag reference uses the correct type from registry
+        generatedSource.ShouldContain("public Guid");
+    }
+
+    [Fact]
+    public void Generator_ShouldHandleChoiceGroups()
+    {
+        var metaschemaXml = @"<?xml version=""1.0"" encoding=""UTF-8""?>
+<METASCHEMA xmlns=""http://csrc.nist.gov/ns/oscal/metaschema/1.0"">
+  <schema-name>Choice Test</schema-name>
+  <schema-version>1.0.0</schema-version>
+  <short-name>choice-test</short-name>
+  <namespace>http://example.com/ns/choice</namespace>
+
+  <define-field name=""option-a"" as-type=""string"">
+    <formal-name>Option A</formal-name>
+  </define-field>
+
+  <define-field name=""option-b"" as-type=""string"">
+    <formal-name>Option B</formal-name>
+  </define-field>
+
+  <define-assembly name=""container"">
+    <formal-name>Container</formal-name>
+    <root-name>container</root-name>
+    <model>
+      <choice>
+        <field ref=""option-a"" max-occurs=""unbounded""/>
+        <field ref=""option-b"" max-occurs=""unbounded""/>
+      </choice>
+    </model>
+  </define-assembly>
+</METASCHEMA>";
+
+        var (diagnostics, output) = RunGenerator(metaschemaXml, "choice-test.xml");
+
+        diagnostics.ShouldBeEmpty();
+        output.ShouldNotBeEmpty();
+
+        var source = output[0].SourceText.ToString();
+
+        // Both options from the choice group should be generated as properties
+        source.ShouldContain("public List<OptionA> OptionA { get; set; }");
+        source.ShouldContain("public List<OptionB> OptionB { get; set; }");
+    }
+
+    [Fact]
+    public void Generator_ShouldUseGroupAsForPropertyName()
+    {
+        var metaschemaXml = @"<?xml version=""1.0"" encoding=""UTF-8""?>
+<METASCHEMA xmlns=""http://csrc.nist.gov/ns/oscal/metaschema/1.0"">
+  <schema-name>GroupAs Test</schema-name>
+  <schema-version>1.0.0</schema-version>
+  <short-name>groupas-test</short-name>
+  <namespace>http://example.com/ns/groupas</namespace>
+
+  <define-assembly name=""item"">
+    <formal-name>Item</formal-name>
+  </define-assembly>
+
+  <define-assembly name=""container"">
+    <formal-name>Container</formal-name>
+    <root-name>container</root-name>
+    <model>
+      <assembly ref=""item"" max-occurs=""unbounded"">
+        <group-as name=""items"" in-json=""ARRAY""/>
+      </assembly>
+    </model>
+  </define-assembly>
+</METASCHEMA>";
+
+        var (diagnostics, output) = RunGenerator(metaschemaXml, "groupas-test.xml");
+
+        diagnostics.ShouldBeEmpty();
+        output.ShouldNotBeEmpty();
+
+        var source = output[0].SourceText.ToString();
+
+        // Property should use group-as name "items" instead of "item"
+        source.ShouldContain("public List<Item> Items { get; set; }");
+    }
+
+    [Fact]
+    public void Generator_ShouldNotDuplicateDefinitionsFromMultipleImports()
+    {
+        // Root imports both A and B
+        var rootMetaschema = @"<?xml version=""1.0"" encoding=""UTF-8""?>
+<METASCHEMA xmlns=""http://csrc.nist.gov/ns/oscal/metaschema/1.0"">
+  <schema-name>Root</schema-name>
+  <schema-version>1.0.0</schema-version>
+  <short-name>root</short-name>
+  <namespace>http://example.com/ns/root</namespace>
+  <import href=""module-a.xml""/>
+  <import href=""module-b.xml""/>
+
+  <define-assembly name=""root-doc"">
+    <formal-name>Root Document</formal-name>
+    <root-name>root-doc</root-name>
+    <model>
+      <assembly ref=""type-from-a""/>
+      <assembly ref=""type-from-b""/>
+    </model>
+  </define-assembly>
+</METASCHEMA>";
+
+        // Module A imports common
+        var moduleA = @"<?xml version=""1.0"" encoding=""UTF-8""?>
+<METASCHEMA xmlns=""http://csrc.nist.gov/ns/oscal/metaschema/1.0"">
+  <schema-name>Module A</schema-name>
+  <schema-version>1.0.0</schema-version>
+  <short-name>module-a</short-name>
+  <namespace>http://example.com/ns/a</namespace>
+  <import href=""common.xml""/>
+
+  <define-assembly name=""type-from-a"">
+    <formal-name>Type from A</formal-name>
+    <flag ref=""shared-id""/>
+  </define-assembly>
+</METASCHEMA>";
+
+        // Module B also imports common
+        var moduleB = @"<?xml version=""1.0"" encoding=""UTF-8""?>
+<METASCHEMA xmlns=""http://csrc.nist.gov/ns/oscal/metaschema/1.0"">
+  <schema-name>Module B</schema-name>
+  <schema-version>1.0.0</schema-version>
+  <short-name>module-b</short-name>
+  <namespace>http://example.com/ns/b</namespace>
+  <import href=""common.xml""/>
+
+  <define-assembly name=""type-from-b"">
+    <formal-name>Type from B</formal-name>
+    <flag ref=""shared-id""/>
+  </define-assembly>
+</METASCHEMA>";
+
+        // Common module shared by both A and B
+        var common = @"<?xml version=""1.0"" encoding=""UTF-8""?>
+<METASCHEMA xmlns=""http://csrc.nist.gov/ns/oscal/metaschema/1.0"">
+  <schema-name>Common</schema-name>
+  <schema-version>1.0.0</schema-version>
+  <short-name>common</short-name>
+  <namespace>http://example.com/ns/common</namespace>
+
+  <define-flag name=""shared-id"" as-type=""uuid"">
+    <formal-name>Shared ID</formal-name>
+  </define-flag>
+</METASCHEMA>";
+
+        var (diagnostics, output) = RunGeneratorWithMultipleFiles(
+            ("root.xml", rootMetaschema),
+            ("module-a.xml", moduleA),
+            ("module-b.xml", moduleB),
+            ("common.xml", common));
+
+        diagnostics.ShouldBeEmpty();
+        output.ShouldNotBeEmpty();
+
+        var generatedSource = output[0].SourceText.ToString();
+
+        // Count occurrences of SharedId struct - should only appear once
+        var sharedIdCount = CountOccurrences(generatedSource, "public readonly partial struct SharedId");
+        sharedIdCount.ShouldBe(1, "SharedId should only be generated once despite being imported by multiple modules");
+    }
+
+    private static int CountOccurrences(string text, string pattern)
+    {
+        var count = 0;
+        var index = 0;
+        while ((index = text.IndexOf(pattern, index, StringComparison.Ordinal)) != -1)
+        {
+            count++;
+            index += pattern.Length;
+        }
+        return count;
+    }
+
+    private static (ImmutableArray<Diagnostic> Diagnostics, ImmutableArray<GeneratedSourceResult> Output)
+        RunGeneratorWithMultipleFiles(params (string FileName, string Content)[] files)
+    {
+        var compilation = CSharpCompilation.Create(
+            "TestAssembly",
+            references: new[]
+            {
+                MetadataReference.CreateFromFile(typeof(object).Assembly.Location)
+            },
+            options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+
+        var generator = new MetaschemaSourceGenerator();
+
+        var additionalTexts = files
+            .Select(f => (AdditionalText)new InMemoryAdditionalText(f.FileName, f.Content))
+            .ToImmutableArray();
+
+        var driver = CSharpGeneratorDriver.Create(generator)
+            .AddAdditionalTexts(additionalTexts);
+
+        driver = (CSharpGeneratorDriver)driver.RunGeneratorsAndUpdateCompilation(
+            compilation,
+            out var outputCompilation,
+            out var diagnostics);
+
+        var runResult = driver.GetRunResult();
+        var generatorResult = runResult.Results[0];
+
+        return (generatorResult.Diagnostics, generatorResult.GeneratedSources);
     }
 
     private static (ImmutableArray<Diagnostic> Diagnostics, ImmutableArray<GeneratedSourceResult> Output) 
