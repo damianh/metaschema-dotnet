@@ -13,5 +13,6 @@
   </Folder>
   <Folder Name="/samples/">
     <Project Path="samples/Oscal.Sample.Dynamic/Oscal.Sample.Dynamic.csproj" />
+    <Project Path="samples/Oscal.Sample.Typed/Oscal.Sample.Typed.csproj" />
   </Folder>
 </Solution>
