@@ -26,11 +26,24 @@
                       ReferenceOutputAssembly="false" />
   </ItemGroup>
 
-  <!-- Include the OSCAL Catalog metaschema and its imports as additional files -->
+  <!-- Include all OSCAL metaschema files -->
+  <!-- Root modules (each generates types in its own sub-namespace) -->
   <ItemGroup>
     <AdditionalFiles Include="..\oscal-metaschema\oscal_catalog_metaschema.xml" />
-    <AdditionalFiles Include="..\oscal-metaschema\oscal_control-common_metaschema.xml" />
+    <AdditionalFiles Include="..\oscal-metaschema\oscal_profile_metaschema.xml" />
+    <AdditionalFiles Include="..\oscal-metaschema\oscal_component_metaschema.xml" />
+    <AdditionalFiles Include="..\oscal-metaschema\oscal_ssp_metaschema.xml" />
+    <AdditionalFiles Include="..\oscal-metaschema\oscal_assessment-plan_metaschema.xml" />
+    <AdditionalFiles Include="..\oscal-metaschema\oscal_assessment-results_metaschema.xml" />
+    <AdditionalFiles Include="..\oscal-metaschema\oscal_poam_metaschema.xml" />
+  </ItemGroup>
+  
+  <!-- Shared modules (types go into base namespace, imported by multiple root modules) -->
+  <ItemGroup>
     <AdditionalFiles Include="..\oscal-metaschema\oscal_metadata_metaschema.xml" />
+    <AdditionalFiles Include="..\oscal-metaschema\oscal_control-common_metaschema.xml" />
+    <AdditionalFiles Include="..\oscal-metaschema\oscal_implementation-common_metaschema.xml" />
+    <AdditionalFiles Include="..\oscal-metaschema\oscal_assessment-common_metaschema.xml" />
   </ItemGroup>
 
 </Project>
