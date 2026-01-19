@@ -20,11 +20,10 @@ while (true)
 {
     Console.WriteLine("Available Examples:");
     Console.WriteLine("  1. Hand-Crafted Typed API Demo");
-    Console.WriteLine("  2. Compare Dynamic vs Typed APIs");
-    Console.WriteLine("  3. CLI Code Generation Demo");
+    Console.WriteLine("  2. CLI Code Generation Demo");
     Console.WriteLine("  0. Exit");
     Console.WriteLine();
-    Console.Write("Select an example (0-3): ");
+    Console.Write("Select an example (0-2): ");
 
     var input = Console.ReadLine();
     if (!int.TryParse(input, out var choice))
@@ -51,9 +50,6 @@ void RunExample(int number)
             TypedApiDemoExample.Run();
             break;
         case 2:
-            CompareDynamicVsTypedExample.Run();
-            break;
-        case 3:
             CliCodeGenExample.Run();
             break;
         default:
