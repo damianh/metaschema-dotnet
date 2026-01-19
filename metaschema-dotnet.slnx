@@ -11,4 +11,7 @@
   <Folder Name="/test/">
     <Project Path="test/Metaschema.Tests/Metaschema.Tests.csproj" />
   </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/Oscal.Sample.Dynamic/Oscal.Sample.Dynamic.csproj" />
+  </Folder>
 </Solution>

@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <Description>Sample project demonstrating OSCAL document loading, validation, querying, and format conversion using the dynamic document API.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Metaschema.Core\Metaschema.Core.csproj" />
+    <ProjectReference Include="..\..\src\Metaschema.Databind\Metaschema.Databind.csproj" />
+    <ProjectReference Include="..\..\src\Metaschema.Schemagen\Metaschema.Schemagen.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Content\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\oscal-metaschema\*.xml" Link="Metaschema\%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>
