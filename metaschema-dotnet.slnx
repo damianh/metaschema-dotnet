@@ -5,7 +5,6 @@
     <Project Path="src/Metaschema.Schemagen/Metaschema.Schemagen.csproj" />
     <File Path="Directory.Build.props" />
     <Project Path="src/Metaschema.Cli/Metaschema.Cli.csproj" />
-    <Project Path="src/Metaschema.SourceGenerator/Metaschema.SourceGenerator.csproj" />
     <Project Path="src/Metaschema.Testing/Metaschema.Testing.csproj" />
   </Folder>
   <Folder Name="/test/">
@@ -17,8 +16,6 @@
     <Project Path="samples/Oscal.Dynamic.MetapathQuery/Oscal.Dynamic.MetapathQuery.csproj" />
     <Project Path="samples/Oscal.Dynamic.ConvertFormat/Oscal.Dynamic.ConvertFormat.csproj" />
     <Project Path="samples/Oscal.Dynamic.GenerateSchema/Oscal.Dynamic.GenerateSchema.csproj" />
-
     <Project Path="samples/Oscal.Typed.CodeGenCli/Oscal.Typed.CodeGenCli.csproj" />
-    <Project Path="samples/Oscal.Typed.SourceGen/Oscal.Typed.SourceGen.csproj" />
   </Folder>
 </Solution>

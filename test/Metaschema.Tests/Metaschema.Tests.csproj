@@ -9,12 +9,7 @@
     <ProjectReference Include="..\..\src\Metaschema.Databind\Metaschema.Databind.csproj" />
     <ProjectReference Include="..\..\src\Metaschema.Schemagen\Metaschema.Schemagen.csproj" />
     <ProjectReference Include="..\..\src\Metaschema.Cli\Metaschema.Cli.csproj" />
-    <ProjectReference Include="..\..\src\Metaschema.SourceGenerator\Metaschema.SourceGenerator.csproj" />
     <ProjectReference Include="..\..\src\Metaschema.Testing\Metaschema.Testing.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
   </ItemGroup>
 
   <ItemGroup>

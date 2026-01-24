@@ -94,7 +94,7 @@ public sealed class ValidateContentCommand : Command
         {
             // Load the Metaschema module
             var loader = new ModuleLoader();
-            using var moduleStream = metaschemaFile.OpenRead();
+            await using var moduleStream = metaschemaFile.OpenRead();
             var moduleUri = new Uri(metaschemaFile.FullName);
             var module = loader.Load(moduleStream, moduleUri);
 
@@ -109,42 +109,35 @@ public sealed class ValidateContentCommand : Command
 
             // Load and validate content
             var boundLoader = bindingContext.NewBoundLoader();
-            using var contentStream = contentFile.OpenRead();
+            await using var contentStream = contentFile.OpenRead();
 
             var rootNode = boundLoader.Load(contentStream, format);
 
-            if (rootNode is not null)
+            result.Valid = true;
+            result.RootElementName = rootNode.Name;
+
+            // Perform constraint validation
+            var constraintResults = ValidateConstraints(rootNode, module);
+            foreach (var finding in constraintResults.Findings)
             {
-                result.Valid = true;
-                result.RootElementName = rootNode.Name;
-
-                // Perform constraint validation
-                var constraintResults = ValidateConstraints(rootNode, module);
-                foreach (var finding in constraintResults.Findings)
+                var prefix = finding.Severity switch
                 {
-                    var prefix = finding.Severity switch
-                    {
-                        ConstraintLevel.Critical => "[CRITICAL]",
-                        ConstraintLevel.Error => "[ERROR]",
-                        ConstraintLevel.Warning => "[WARNING]",
-                        ConstraintLevel.Informational => "[INFO]",
-                        _ => "[INFO]"
-                    };
-                    result.Findings.Add($"{prefix} {finding.Location}: {finding.Message}");
-                }
-
-                result.ConstraintErrorCount = constraintResults.CriticalCount + constraintResults.ErrorCount;
-                result.ConstraintWarningCount = constraintResults.WarningCount;
-
-                // Only mark invalid if there are constraint errors (not just warnings)
-                if (!constraintResults.IsValid)
-                {
-                    result.Valid = false;
-                }
+                    ConstraintLevel.Critical => "[CRITICAL]",
+                    ConstraintLevel.Error => "[ERROR]",
+                    ConstraintLevel.Warning => "[WARNING]",
+                    ConstraintLevel.Informational => "[INFO]",
+                    _ => "[INFO]"
+                };
+                result.Findings.Add($"{prefix} {finding.Location}: {finding.Message}");
             }
-            else
+
+            result.ConstraintErrorCount = constraintResults.CriticalCount + constraintResults.ErrorCount;
+            result.ConstraintWarningCount = constraintResults.WarningCount;
+
+            // Only mark invalid if there are constraint errors (not just warnings)
+            if (!constraintResults.IsValid)
             {
-                result.Errors.Add("Failed to load content: no root element found");
+                result.Valid = false;
             }
         }
         catch (ModuleLoadException ex)

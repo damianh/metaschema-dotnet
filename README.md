@@ -19,7 +19,6 @@ Metaschema is a framework for defining information models that can be used to ge
 - **Code Generation** - Generate C# classes from Metaschema modules
 - **Schema Generation** - Generate XSD and JSON Schema from Metaschema modules
 - **CLI Tool** - Command-line interface for all operations
-- **Source Generator** - MSBuild integration for build-time code generation
 
 ## Packages
 
@@ -29,7 +28,6 @@ Metaschema is a framework for defining information models that can be used to ge
 | `DamianH.Metaschema.Databind` | Serialization and code generation |
 | `DamianH.Metaschema.Schemagen` | XSD and JSON Schema generation |
 | `DamianH.Metaschema.Cli` | Command-line tool |
-| `DamianH.Metaschema.SourceGenerator` | MSBuild source generator |
 | `DamianH.Metaschema.Testing` | Test utilities and fixtures |
 
 ## Requirements
@@ -203,28 +201,6 @@ metaschema generate-code path/to/metaschema.xml --namespace MyApp.Models --outpu
 # Convert between formats
 metaschema convert document.xml --to json --output document.json
 metaschema convert document.json --to yaml --output document.yaml
-```
-
-## Source Generator
-
-Add build-time code generation to your project:
-
-```xml
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="DamianH.Metaschema.SourceGenerator" Version="1.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Include="schemas/my-metaschema.xml">
-      <MetaschemaNamespace>MyApp.Models</MetaschemaNamespace>
-    </AdditionalFiles>
-  </ItemGroup>
-</Project>
 ```
 
 ## Metapath Functions
