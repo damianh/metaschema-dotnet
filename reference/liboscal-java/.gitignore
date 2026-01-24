@@ -1,0 +1,11 @@
+.classpath
+.project
+.settings
+.checkstyle
+.factorypath
+.pmd
+.pmdruleset.xml
+target/
+pom.xml.releaseBackup
+release.properties
+.fbExcludeFilterFile
