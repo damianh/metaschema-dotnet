@@ -1,8 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <OutputType>library</OutputType>
-    <Description>Demonstrates using the CLI tool to generate C# code from Metaschema modules.</Description>
-    <ImplicitUsings>true</ImplicitUsings>
-  </PropertyGroup>
-</Project>

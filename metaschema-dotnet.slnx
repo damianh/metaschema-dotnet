@@ -16,6 +16,6 @@
     <Project Path="samples/Oscal.Dynamic.MetapathQuery/Oscal.Dynamic.MetapathQuery.csproj" />
     <Project Path="samples/Oscal.Dynamic.ConvertFormat/Oscal.Dynamic.ConvertFormat.csproj" />
     <Project Path="samples/Oscal.Dynamic.GenerateSchema/Oscal.Dynamic.GenerateSchema.csproj" />
-    <Project Path="samples/Oscal.Typed.CodeGenCli/Oscal.Typed.CodeGenCli.csproj" />
+    <Project Path="samples/Oscal/Oscal.csproj" />
   </Folder>
 </Solution>
