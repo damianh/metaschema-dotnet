@@ -413,4 +413,142 @@ public class XmlModuleParserTests
     }
 
     #endregion
+
+    #region Inline Flag Definition Tests
+
+    [Fact]
+    public void Parse_FieldWithInlineFlag_ShouldParseFlagInstance()
+    {
+        // Arrange
+        var xml = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <METASCHEMA xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0">
+              <schema-name>Test</schema-name>
+              <short-name>test</short-name>
+              <schema-version>1.0.0</schema-version>
+              <namespace>http://example.com/ns/test</namespace>
+              <json-base-uri>http://example.com/schema/test</json-base-uri>
+              <define-field name="hash">
+                <formal-name>Hash</formal-name>
+                <description>A cryptographic hash</description>
+                <define-flag name="algorithm" as-type="string" required="yes">
+                  <formal-name>Hash Algorithm</formal-name>
+                  <description>The algorithm used</description>
+                </define-flag>
+              </define-field>
+            </METASCHEMA>
+            """;
+        var doc = XDocument.Parse(xml);
+        var parser = new XmlModuleParser(_ => throw new NotSupportedException());
+        var uri = new Uri("file:///test.xml");
+
+        // Act
+        var module = parser.Parse(doc, uri);
+
+        // Assert
+        var field = module.GetFieldDefinition("hash");
+        field.ShouldNotBeNull();
+        field.FlagInstances.Count.ShouldBe(1);
+        
+        var flagInstance = field.FlagInstances[0];
+        flagInstance.Ref.ShouldBe("algorithm");
+        flagInstance.IsRequired.ShouldBeTrue();
+        
+        // The inline flag should have its definition attached
+        flagInstance.ResolvedDefinition.ShouldNotBeNull();
+        flagInstance.ResolvedDefinition!.Name.ShouldBe("algorithm");
+        flagInstance.ResolvedDefinition.FormalName.ShouldBe("Hash Algorithm");
+        flagInstance.ResolvedDefinition.Description!.ToString().ShouldBe("The algorithm used");
+        flagInstance.ResolvedDefinition.DataTypeName.ShouldBe("string");
+    }
+
+    [Fact]
+    public void Parse_AssemblyWithInlineFlag_ShouldParseFlagInstance()
+    {
+        // Arrange
+        var xml = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <METASCHEMA xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0">
+              <schema-name>Test</schema-name>
+              <short-name>test</short-name>
+              <schema-version>1.0.0</schema-version>
+              <namespace>http://example.com/ns/test</namespace>
+              <json-base-uri>http://example.com/schema/test</json-base-uri>
+              <define-assembly name="item">
+                <define-flag name="id" as-type="token" required="yes">
+                  <formal-name>Item ID</formal-name>
+                  <description>Unique identifier</description>
+                </define-flag>
+                <model>
+                  <define-field name="value"/>
+                </model>
+              </define-assembly>
+            </METASCHEMA>
+            """;
+        var doc = XDocument.Parse(xml);
+        var parser = new XmlModuleParser(_ => throw new NotSupportedException());
+        var uri = new Uri("file:///test.xml");
+
+        // Act
+        var module = parser.Parse(doc, uri);
+
+        // Assert
+        var assembly = module.GetAssemblyDefinition("item");
+        assembly.ShouldNotBeNull();
+        assembly.FlagInstances.Count.ShouldBe(1);
+        
+        var flagInstance = assembly.FlagInstances[0];
+        flagInstance.Ref.ShouldBe("id");
+        flagInstance.IsRequired.ShouldBeTrue();
+        flagInstance.ResolvedDefinition.ShouldNotBeNull();
+        flagInstance.ResolvedDefinition!.Name.ShouldBe("id");
+        flagInstance.ResolvedDefinition.DataTypeName.ShouldBe("token");
+    }
+
+    [Fact]
+    public void Parse_FieldWithBothReferencedAndInlineFlags_ShouldParseBoth()
+    {
+        // Arrange
+        var xml = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <METASCHEMA xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0">
+              <schema-name>Test</schema-name>
+              <short-name>test</short-name>
+              <schema-version>1.0.0</schema-version>
+              <namespace>http://example.com/ns/test</namespace>
+              <json-base-uri>http://example.com/schema/test</json-base-uri>
+              <define-flag name="global-flag">
+                <formal-name>Global Flag</formal-name>
+              </define-flag>
+              <define-field name="mixed">
+                <flag ref="global-flag"/>
+                <define-flag name="local-flag" required="yes">
+                  <formal-name>Local Flag</formal-name>
+                </define-flag>
+              </define-field>
+            </METASCHEMA>
+            """;
+        var doc = XDocument.Parse(xml);
+        var parser = new XmlModuleParser(_ => throw new NotSupportedException());
+        var uri = new Uri("file:///test.xml");
+
+        // Act
+        var module = parser.Parse(doc, uri);
+
+        // Assert
+        var field = module.GetFieldDefinition("mixed");
+        field.ShouldNotBeNull();
+        field.FlagInstances.Count.ShouldBe(2);
+        
+        // First flag is a reference
+        field.FlagInstances[0].Ref.ShouldBe("global-flag");
+        field.FlagInstances[0].IsRequired.ShouldBeFalse();
+        
+        // Second flag is inline
+        field.FlagInstances[1].Ref.ShouldBe("local-flag");
+        field.FlagInstances[1].IsRequired.ShouldBeTrue();
+        field.FlagInstances[1].ResolvedDefinition.ShouldNotBeNull();
+    }
+
+    #endregion
 }

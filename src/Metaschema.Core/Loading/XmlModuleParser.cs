@@ -232,6 +232,7 @@ public sealed class XmlModuleParser
     {
         var instances = new List<FlagInstance>();
 
+        // Parse <flag ref="..."> elements (references to global flags)
         foreach (var flagElement in parentElement.Elements(Ns + "flag"))
         {
             var refAttr = flagElement.Attribute("ref")?.Value;
@@ -249,6 +250,50 @@ public sealed class XmlModuleParser
                 UseName = flagElement.Element(Ns + "use-name")?.Value,
                 Remarks = ParseMarkupMultiline(flagElement.Element(Ns + "remarks")),
                 DeprecatedVersion = flagElement.Attribute("deprecated")?.Value
+            });
+        }
+
+        // Parse <define-flag> elements (inline flag definitions)
+        foreach (var defineFlagElement in parentElement.Elements(Ns + "define-flag"))
+        {
+            var name = defineFlagElement.Attribute("name")?.Value;
+            if (string.IsNullOrEmpty(name))
+            {
+                continue;
+            }
+
+            // Parse the inline flag definition
+            var constraintElement = defineFlagElement.Element(Ns + "constraint");
+            var constraints = constraintElement is not null
+                ? ParseConstraints(constraintElement)
+                : [];
+
+            var inlineDefinition = new FlagDefinition
+            {
+                Name = name,
+                UseName = defineFlagElement.Attribute("use-name")?.Value,
+                FormalName = defineFlagElement.Element(Ns + "formal-name")?.Value,
+                Description = ParseMarkupLine(defineFlagElement.Element(Ns + "description")),
+                Scope = Scope.Local, // Inline definitions are always local
+                DeprecatedVersion = defineFlagElement.Attribute("deprecated")?.Value,
+                Remarks = ParseMarkupMultiline(defineFlagElement.Element(Ns + "remarks")),
+                ContainingModule = null!, // Will be set by caller if needed
+                DataTypeName = defineFlagElement.Attribute("as-type")?.Value ?? "string",
+                DefaultValue = defineFlagElement.Attribute("default")?.Value,
+                Constraints = constraints
+            };
+
+            // Create flag instance with the inline definition attached
+            instances.Add(new FlagInstance
+            {
+                Ref = name,
+                IsRequired = defineFlagElement.Attribute("required")?.Value == "yes",
+                FormalName = defineFlagElement.Element(Ns + "formal-name")?.Value,
+                Description = ParseMarkupLine(defineFlagElement.Element(Ns + "description")),
+                UseName = defineFlagElement.Element(Ns + "use-name")?.Value,
+                Remarks = ParseMarkupMultiline(defineFlagElement.Element(Ns + "remarks")),
+                DeprecatedVersion = defineFlagElement.Attribute("deprecated")?.Value,
+                ResolvedDefinition = inlineDefinition
             });
         }
 
@@ -457,7 +502,7 @@ public sealed class XmlModuleParser
     }
 
     /// <summary>
-    /// Resolves definition references in all instances.
+    /// Resolves all references (flag-refs, field-refs, assembly-refs) to their definitions.
     /// </summary>
     private static void ResolveReferences(MetaschemaModule module)
     {
@@ -466,7 +511,11 @@ public sealed class XmlModuleParser
         {
             foreach (var flagInstance in field.FlagInstances)
             {
-                flagInstance.ResolvedDefinition = module.GetFlagDefinition(flagInstance.Ref);
+                // Skip if already resolved (inline definitions)
+                if (flagInstance.ResolvedDefinition is null)
+                {
+                    flagInstance.ResolvedDefinition = module.GetFlagDefinition(flagInstance.Ref);
+                }
             }
         }
 
@@ -475,7 +524,11 @@ public sealed class XmlModuleParser
         {
             foreach (var flagInstance in assembly.FlagInstances)
             {
-                flagInstance.ResolvedDefinition = module.GetFlagDefinition(flagInstance.Ref);
+                // Skip if already resolved (inline definitions)
+                if (flagInstance.ResolvedDefinition is null)
+                {
+                    flagInstance.ResolvedDefinition = module.GetFlagDefinition(flagInstance.Ref);
+                }
             }
 
             if (assembly.Model is not null)

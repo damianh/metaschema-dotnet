@@ -1,10 +1,11 @@
 // Licensed under the MIT License.
 
+using Metaschema.Core.Loading;
 using Oscal.V1_2_0;
 using Shouldly;
 using Xunit;
 
-namespace Oscal.Integration;
+namespace Oscal;
 
 /// <summary>
 /// Smoke tests for OSCAL library code generation.
@@ -12,6 +13,34 @@ namespace Oscal.Integration;
 /// </summary>
 public class OscalSmokeTests
 {
+    [Fact]
+    public void OscalMetaschema_HashField_ShouldHaveAlgorithmFlag()
+    {
+        // Arrange - Load the OSCAL metadata metaschema
+        var loader = new ModuleLoader();
+        var metaschemaPath = Path.Combine(
+            AppContext.BaseDirectory, 
+            "..", "..", "..", "..", "..", 
+            "samples", "oscal-metaschema-v1.2.0", "oscal_metadata_metaschema.xml");
+
+        // Act
+        var module = loader.Load(metaschemaPath);
+
+        // Assert
+        var hashField = module.GetFieldDefinition("hash");
+        hashField.ShouldNotBeNull("Hash field should be defined in OSCAL metadata metaschema");
+        
+        hashField.FlagInstances.Count.ShouldBeGreaterThan(0, "Hash field should have flag instances");
+        
+        var algorithmFlag = hashField.FlagInstances.FirstOrDefault(f => f.EffectiveName == "algorithm");
+        algorithmFlag.ShouldNotBeNull("Hash field should have 'algorithm' flag");
+        algorithmFlag.IsRequired.ShouldBeTrue("Algorithm flag should be required");
+        
+        // Verify the inline flag definition is attached
+        algorithmFlag.ResolvedDefinition.ShouldNotBeNull("Inline flag should have definition attached");
+        algorithmFlag.ResolvedDefinition!.DataTypeName.ShouldBe("string");
+    }
+
     [Fact]
     public void CatalogType_ShouldBeGenerated()
     {
