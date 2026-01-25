@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Oscal.Catalog;
+namespace Oscal;
 
 /// <summary>
 /// Catalog - A structured, &lt;a href="https://pages.nist.gov/OSCAL/concepts/terminology/#catalog" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;organized collection&lt;/a&gt; of control information.

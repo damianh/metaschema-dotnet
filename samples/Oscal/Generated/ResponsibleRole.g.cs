@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Oscal.Catalog;
+namespace Oscal;
 
 /// <summary>
 /// Responsible Role - A reference to a role with responsibility for performing a function relative to the containing object, optionally associated with a set of persons and/or organizations that perform that role.

@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Oscal.Catalog;
+namespace Oscal;
 
 /// <summary>
 /// OSCAL Version - The OSCAL model version the document was authored against and will conform to as valid.

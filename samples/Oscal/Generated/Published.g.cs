@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Oscal.Catalog;
+namespace Oscal;
 
 /// <summary>
 /// Publication Timestamp - The date and time the document was last made available.

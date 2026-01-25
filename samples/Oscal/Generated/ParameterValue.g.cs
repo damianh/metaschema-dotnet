@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Oscal.Catalog;
+namespace Oscal;
 
 /// <summary>
 /// Parameter Value - A parameter value or set of values.

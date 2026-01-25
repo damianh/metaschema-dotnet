@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Oscal.Catalog;
+namespace Oscal;
 
 /// <summary>
 /// Responsible Party - A reference to a set of persons and/or organizations that have responsibility for performing the referenced role in the context of the containing object.

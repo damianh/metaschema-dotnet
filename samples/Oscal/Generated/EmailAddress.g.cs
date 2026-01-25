@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Oscal.Catalog;
+namespace Oscal;
 
 /// <summary>
 /// Email Address - An email address as defined by &lt;a href="https://tools.ietf.org/html/rfc5322#section-3.4.1" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;RFC 5322 Section 3.4.1&lt;/a&gt;.

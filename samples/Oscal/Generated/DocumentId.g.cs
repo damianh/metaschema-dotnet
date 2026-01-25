@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Oscal.Catalog;
+namespace Oscal;
 
 /// <summary>
 /// Document Identifier - A document identifier qualified by an identifier &lt;code xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;scheme&lt;/code&gt;.

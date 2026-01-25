@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Oscal.Catalog;
+namespace Oscal;
 
 /// <summary>
 /// Control - A &lt;a href="https://pages.nist.gov/OSCAL/concepts/terminology/#control" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;structured object&lt;/a&gt; representing a requirement or guideline, which when implemented will reduce an aspect of risk related to an information system and its information.

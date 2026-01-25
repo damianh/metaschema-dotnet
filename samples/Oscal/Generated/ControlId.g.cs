@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Oscal.Catalog;
+namespace Oscal;
 
 /// <summary>
 /// Control Identifier Reference - A reference to a control with a corresponding &lt;code xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;id&lt;/code&gt; value. When referencing an externally defined &lt;code xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;control&lt;/code&gt;, the &lt;code xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;Control Identifier Reference&lt;/code&gt; must be used in the context of the external / imported OSCAL instance (e.g., uri-reference).

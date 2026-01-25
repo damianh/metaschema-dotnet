@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Oscal.Catalog;
+namespace Oscal;
 
 /// <summary>
 /// Telephone Number - A telephone service number as defined by &lt;a href="https://www.itu.int/rec/T-REC-E.164-201011-I/en" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;ITU-T E.164&lt;/a&gt;.
