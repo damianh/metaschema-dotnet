@@ -28,14 +28,24 @@ public sealed class CodeGenerationOptions
     public bool NullableAnnotations { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets whether to generate immutable types.
+    /// Gets or sets whether to generate records instead of classes.
     /// </summary>
-    public bool GenerateImmutableTypes { get; set; }
+    public bool UseRecords { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets whether to generate builder classes for immutable types.
+    /// Gets or sets whether to generate System.Text.Json serialization context.
     /// </summary>
-    public bool GenerateBuilders { get; set; }
+    public bool GenerateJsonContext { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets the name of the generated JsonSerializerContext class.
+    /// </summary>
+    public string? JsonContextName { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether to generate extension methods for load/save operations.
+    /// </summary>
+    public bool GenerateExtensionMethods { get; set; } = true;
 
     /// <summary>
     /// Gets or sets whether to generate a separate file per type.

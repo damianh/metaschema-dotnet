@@ -11,13 +11,8 @@ using System.Text.Json.Serialization;
 namespace Oscal.Catalog;
 
 /// <summary>
-/// Remarks - Additional commentary about the containing object.
+/// Include All - Include all controls from the imported catalog or profile resources.
 /// </summary>
-public sealed record Remarks
+public sealed record IncludeAll
 {
-    /// <summary>
-    /// Gets the field value.
-    /// </summary>
-    [JsonPropertyName("value")]
-    public string? Value { get; init; }
 }

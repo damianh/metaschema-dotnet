@@ -11,9 +11,9 @@ using System.Text.Json.Serialization;
 namespace Oscal.Catalog;
 
 /// <summary>
-/// Remarks - Additional commentary about the containing object.
+/// Email Address - An email address as defined by &lt;a href="https://tools.ietf.org/html/rfc5322#section-3.4.1" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;RFC 5322 Section 3.4.1&lt;/a&gt;.
 /// </summary>
-public sealed record Remarks
+public sealed record EmailAddress
 {
     /// <summary>
     /// Gets the field value.

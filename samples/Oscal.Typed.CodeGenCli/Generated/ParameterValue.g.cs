@@ -11,9 +11,9 @@ using System.Text.Json.Serialization;
 namespace Oscal.Catalog;
 
 /// <summary>
-/// Remarks - Additional commentary about the containing object.
+/// Parameter Value - A parameter value or set of values.
 /// </summary>
-public sealed record Remarks
+public sealed record ParameterValue
 {
     /// <summary>
     /// Gets the field value.

@@ -11,9 +11,9 @@ using System.Text.Json.Serialization;
 namespace Oscal.Catalog;
 
 /// <summary>
-/// Action - An action applied by a role within a given party to the content.
+/// Parameter - Parameters provide a mechanism for the dynamic assignment of value(s) in a control.
 /// </summary>
-public sealed record Action
+public sealed record Parameter
 {
     /// <summary>
     /// Property - An attribute, characteristic, or quality of the containing object expressed as a namespace qualified name/value pair.
@@ -28,10 +28,28 @@ public sealed record Action
     public IReadOnlyList<Link> Links { get; init; } = [];
 
     /// <summary>
-    /// Responsible Party - A reference to a set of persons and/or organizations that have responsibility for performing the referenced role in the context of the containing object.
+    /// Constraint - A formal or informal expression of a constraint or test.
     /// </summary>
-    [JsonPropertyName("responsible-parties")]
-    public IReadOnlyList<ResponsibleParty> ResponsibleParties { get; init; } = [];
+    [JsonPropertyName("constraints")]
+    public IReadOnlyList<ParameterConstraint> Constraints { get; init; } = [];
+
+    /// <summary>
+    /// Guideline - A prose statement that provides a recommendation for the use of a parameter.
+    /// </summary>
+    [JsonPropertyName("guidelines")]
+    public IReadOnlyList<ParameterGuideline> Guidelines { get; init; } = [];
+
+    /// <summary>
+    /// Parameter Value - A parameter value or set of values.
+    /// </summary>
+    [JsonPropertyName("values")]
+    public IReadOnlyList<ParameterValue> Values { get; init; } = [];
+
+    /// <summary>
+    /// Selection - Presenting a choice among alternatives.
+    /// </summary>
+    [JsonPropertyName("parameter-selection")]
+    public ParameterSelection? ParameterSelection { get; init; }
 
     /// <summary>
     /// Remarks - Additional commentary about the containing object.

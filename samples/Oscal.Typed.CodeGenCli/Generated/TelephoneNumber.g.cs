@@ -11,13 +11,13 @@ using System.Text.Json.Serialization;
 namespace Oscal.Catalog;
 
 /// <summary>
-/// Remarks - Additional commentary about the containing object.
+/// Telephone Number - A telephone service number as defined by &lt;a href="https://www.itu.int/rec/T-REC-E.164-201011-I/en" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;ITU-T E.164&lt;/a&gt;.
 /// </summary>
-public sealed record Remarks
+public sealed record TelephoneNumber
 {
     /// <summary>
     /// Gets the field value.
     /// </summary>
-    [JsonPropertyName("value")]
+    [JsonPropertyName("number")]
     public string? Value { get; init; }
 }

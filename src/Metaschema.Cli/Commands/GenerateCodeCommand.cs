@@ -69,6 +69,23 @@ public sealed class GenerateCodeCommand : Command
             DefaultValueFactory = _ => false
         };
 
+        var useRecordsOption = new Option<bool>("--use-records")
+        {
+            Description = "Generate records instead of classes (recommended)",
+            DefaultValueFactory = _ => true
+        };
+
+        var jsonContextOption = new Option<string?>("--json-context")
+        {
+            Description = "Name for the JsonSerializerContext class (only with --use-records)"
+        };
+
+        var noExtensionsOption = new Option<bool>("--no-extensions")
+        {
+            Description = "Don't generate extension methods",
+            DefaultValueFactory = _ => false
+        };
+
         Arguments.Add(fileArgument);
         Options.Add(namespaceOption);
         Options.Add(outputOption);
@@ -78,6 +95,9 @@ public sealed class GenerateCodeCommand : Command
         Options.Add(suffixOption);
         Options.Add(noDocsOption);
         Options.Add(noNullableOption);
+        Options.Add(useRecordsOption);
+        Options.Add(jsonContextOption);
+        Options.Add(noExtensionsOption);
 
         this.SetAction(async (parseResult, cancellationToken) =>
         {
@@ -90,8 +110,11 @@ public sealed class GenerateCodeCommand : Command
             var suffix = parseResult.GetValue(suffixOption);
             var noDocs = parseResult.GetValue(noDocsOption);
             var noNullable = parseResult.GetValue(noNullableOption);
+            var useRecords = parseResult.GetValue(useRecordsOption);
+            var jsonContext = parseResult.GetValue(jsonContextOption);
+            var noExtensions = parseResult.GetValue(noExtensionsOption);
 
-            return await ExecuteAsync(file, ns, output, visibility, filePerType, prefix, suffix, noDocs, noNullable);
+            return await ExecuteAsync(file, ns, output, visibility, filePerType, prefix, suffix, noDocs, noNullable, useRecords, jsonContext, noExtensions);
         });
     }
 
@@ -104,7 +127,10 @@ public sealed class GenerateCodeCommand : Command
         string? prefix,
         string? suffix,
         bool noDocs,
-        bool noNullable)
+        bool noNullable,
+        bool useRecords,
+        string? jsonContext,
+        bool noExtensions)
     {
         if (!file.Exists)
         {
@@ -130,12 +156,27 @@ public sealed class GenerateCodeCommand : Command
                 ClassPrefix = prefix,
                 ClassSuffix = suffix,
                 IncludeDocumentation = !noDocs,
-                NullableAnnotations = !noNullable
+                NullableAnnotations = !noNullable,
+                UseRecords = useRecords,
+                GenerateJsonContext = useRecords,
+                JsonContextName = jsonContext,
+                GenerateExtensionMethods = !noExtensions
             };
 
-            // Generate code
-            var generator = new CSharpCodeGenerator(options);
-            var files = generator.Generate(module);
+            // Generate code using appropriate generator
+            Dictionary<string, string> files;
+            if (useRecords)
+            {
+                Console.WriteLine("Generating C# records with System.Text.Json support...");
+                var generator = new RecordCodeGenerator(options);
+                files = generator.Generate(module);
+            }
+            else
+            {
+                Console.WriteLine("Generating C# classes...");
+                var generator = new CSharpCodeGenerator(options);
+                files = generator.Generate(module);
+            }
 
             // Determine output directory
             var outputDir = output?.FullName ?? Environment.CurrentDirectory;
@@ -146,10 +187,30 @@ public sealed class GenerateCodeCommand : Command
             {
                 var filePath = Path.Combine(outputDir, fileName);
                 await File.WriteAllTextAsync(filePath, content);
-                Console.WriteLine($"Generated: {filePath}");
+                Console.WriteLine($"  Generated: {fileName}");
             }
 
-            Console.WriteLine($"Code generation complete. {files.Count} file(s) generated.");
+            Console.WriteLine();
+            Console.WriteLine($"✓ Code generation complete. {files.Count} file(s) generated.");
+            
+            if (useRecords)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Next steps:");
+                Console.WriteLine("  1. Add generated files to your .csproj:");
+                Console.WriteLine($"     <Compile Include=\"{Path.GetFileName(outputDir)}\\**\\*.g.cs\" />");
+                Console.WriteLine("  2. Build your project - the STJ source generator will complete the JsonContext");
+                Console.WriteLine("  3. Use the generated types:");
+                
+                var rootAssembly = module.AssemblyDefinitions.FirstOrDefault(a => a.RootName is not null);
+                if (rootAssembly is not null)
+                {
+                    var typeName = ToPascalCase(rootAssembly.Name);
+                    Console.WriteLine($"     var data = Extensions.LoadFromJson(\"file.json\");");
+                    Console.WriteLine($"     Console.WriteLine(data.{GetFirstProperty(rootAssembly)});");
+                }
+            }
+            
             return 0;
         }
         catch (ModuleLoadException ex)
@@ -160,7 +221,33 @@ public sealed class GenerateCodeCommand : Command
         catch (Exception ex)
         {
             await Console.Error.WriteLineAsync($"Error generating code: {ex.Message}");
+            await Console.Error.WriteLineAsync(ex.StackTrace);
             return 1;
         }
+    }
+
+    private static string ToPascalCase(string name)
+    {
+        if (string.IsNullOrEmpty(name)) return name;
+        
+        var parts = name.Split('-', '_', '.');
+        return string.Concat(parts.Select(p => 
+            p.Length > 0 ? char.ToUpperInvariant(p[0]) + p[1..] : p));
+    }
+
+    private static string GetFirstProperty(Metaschema.Core.Model.AssemblyDefinition assembly)
+    {
+        var firstField = assembly.Model?.Elements.OfType<Metaschema.Core.Model.FieldInstance>().FirstOrDefault();
+        var firstAssembly = assembly.Model?.Elements.OfType<Metaschema.Core.Model.AssemblyInstance>().FirstOrDefault();
+        
+        if (firstField is not null)
+        {
+            return ToPascalCase(firstField.EffectiveName);
+        }
+        if (firstAssembly is not null)
+        {
+            return ToPascalCase(firstAssembly.EffectiveName);
+        }
+        return "Property";
     }
 }

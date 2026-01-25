@@ -11,9 +11,9 @@ using System.Text.Json.Serialization;
 namespace Oscal.Catalog;
 
 /// <summary>
-/// Remarks - Additional commentary about the containing object.
+/// Address line - A single line of an address.
 /// </summary>
-public sealed record Remarks
+public sealed record AddrLine
 {
     /// <summary>
     /// Gets the field value.

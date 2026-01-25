@@ -11,13 +11,10 @@ using System.Text.Json.Serialization;
 namespace Oscal.Catalog;
 
 /// <summary>
-/// Remarks - Additional commentary about the containing object.
+/// Address Type - Indicates the type of address.
 /// </summary>
-public sealed record Remarks
-{
+public readonly record struct LocationType(
     /// <summary>
-    /// Gets the field value.
+    /// The underlying value.
     /// </summary>
-    [JsonPropertyName("value")]
-    public string? Value { get; init; }
-}
+    string Value);

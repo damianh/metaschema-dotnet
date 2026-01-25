@@ -11,13 +11,8 @@ using System.Text.Json.Serialization;
 namespace Oscal.Catalog;
 
 /// <summary>
-/// Remarks - Additional commentary about the containing object.
+/// Guideline - A prose statement that provides a recommendation for the use of a parameter.
 /// </summary>
-public sealed record Remarks
+public sealed record ParameterGuideline
 {
-    /// <summary>
-    /// Gets the field value.
-    /// </summary>
-    [JsonPropertyName("value")]
-    public string? Value { get; init; }
 }

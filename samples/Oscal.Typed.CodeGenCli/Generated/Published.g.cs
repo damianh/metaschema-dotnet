@@ -11,13 +11,13 @@ using System.Text.Json.Serialization;
 namespace Oscal.Catalog;
 
 /// <summary>
-/// Remarks - Additional commentary about the containing object.
+/// Publication Timestamp - The date and time the document was last made available.
 /// </summary>
-public sealed record Remarks
+public sealed record Published
 {
     /// <summary>
     /// Gets the field value.
     /// </summary>
     [JsonPropertyName("value")]
-    public string? Value { get; init; }
+    public DateTimeOffset? Value { get; init; }
 }

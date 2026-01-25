@@ -317,13 +317,14 @@ public class CodeGenerationOptionsTests
         options.OutputPath.ShouldBeNull();
         options.Visibility.ShouldBe(TypeVisibility.Public);
         options.NullableAnnotations.ShouldBeTrue();
-        options.GenerateImmutableTypes.ShouldBeFalse();
-        options.GenerateBuilders.ShouldBeFalse();
         options.FilePerType.ShouldBeFalse();
         options.IncludeDocumentation.ShouldBeTrue();
         options.ClassPrefix.ShouldBeNull();
         options.ClassSuffix.ShouldBeNull();
         options.FileScopedNamespaces.ShouldBeTrue();
+        options.UseRecords.ShouldBeTrue();
+        options.GenerateJsonContext.ShouldBeTrue();
+        options.GenerateExtensionMethods.ShouldBeTrue();
     }
 
     [Fact]

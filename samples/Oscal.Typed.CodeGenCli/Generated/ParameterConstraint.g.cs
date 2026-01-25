@@ -11,13 +11,8 @@ using System.Text.Json.Serialization;
 namespace Oscal.Catalog;
 
 /// <summary>
-/// Remarks - Additional commentary about the containing object.
+/// Constraint - A formal or informal expression of a constraint or test.
 /// </summary>
-public sealed record Remarks
+public sealed record ParameterConstraint
 {
-    /// <summary>
-    /// Gets the field value.
-    /// </summary>
-    [JsonPropertyName("value")]
-    public string? Value { get; init; }
 }

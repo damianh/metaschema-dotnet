@@ -11,9 +11,9 @@ using System.Text.Json.Serialization;
 namespace Oscal.Catalog;
 
 /// <summary>
-/// Remarks - Additional commentary about the containing object.
+/// OSCAL Version - The OSCAL model version the document was authored against and will conform to as valid.
 /// </summary>
-public sealed record Remarks
+public sealed record OscalVersion
 {
     /// <summary>
     /// Gets the field value.

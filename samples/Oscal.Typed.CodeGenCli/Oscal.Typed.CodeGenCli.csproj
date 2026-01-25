@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>library</OutputType>
     <Description>Demonstrates using the CLI tool to generate C# code from Metaschema modules.</Description>
     <ImplicitUsings>true</ImplicitUsings>
   </PropertyGroup>

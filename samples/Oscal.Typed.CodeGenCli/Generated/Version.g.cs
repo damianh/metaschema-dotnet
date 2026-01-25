@@ -11,9 +11,9 @@ using System.Text.Json.Serialization;
 namespace Oscal.Catalog;
 
 /// <summary>
-/// Remarks - Additional commentary about the containing object.
+/// Document Version - Used to distinguish a specific revision of an OSCAL document from other previous and future versions.
 /// </summary>
-public sealed record Remarks
+public sealed record Version
 {
     /// <summary>
     /// Gets the field value.

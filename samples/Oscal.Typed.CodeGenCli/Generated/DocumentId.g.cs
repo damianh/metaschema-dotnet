@@ -11,13 +11,13 @@ using System.Text.Json.Serialization;
 namespace Oscal.Catalog;
 
 /// <summary>
-/// Remarks - Additional commentary about the containing object.
+/// Document Identifier - A document identifier qualified by an identifier &lt;code xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;scheme&lt;/code&gt;.
 /// </summary>
-public sealed record Remarks
+public sealed record DocumentId
 {
     /// <summary>
     /// Gets the field value.
     /// </summary>
-    [JsonPropertyName("value")]
+    [JsonPropertyName("identifier")]
     public string? Value { get; init; }
 }

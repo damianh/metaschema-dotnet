@@ -11,13 +11,8 @@ using System.Text.Json.Serialization;
 namespace Oscal.Catalog;
 
 /// <summary>
-/// Remarks - Additional commentary about the containing object.
+/// Selection - Presenting a choice among alternatives.
 /// </summary>
-public sealed record Remarks
+public sealed record ParameterSelection
 {
-    /// <summary>
-    /// Gets the field value.
-    /// </summary>
-    [JsonPropertyName("value")]
-    public string? Value { get; init; }
 }
