@@ -4,7 +4,7 @@ using System.CommandLine;
 using Metaschema.Core.Loading;
 using Metaschema.Databind;
 
-namespace Metaschema.Cli.Commands;
+namespace Metaschema.Tool.Commands;
 
 /// <summary>
 /// Command to convert content between XML, JSON, and YAML formats.

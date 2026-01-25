@@ -4,7 +4,7 @@ using System.CommandLine;
 using Metaschema.Core.Loading;
 using Metaschema.Databind.CodeGeneration;
 
-namespace Metaschema.Cli.Commands;
+namespace Metaschema.Tool.Commands;
 
 /// <summary>
 /// Command to generate C# code from a Metaschema module.

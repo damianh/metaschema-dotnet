@@ -27,7 +27,7 @@ Metaschema is a framework for defining information models that can be used to ge
 | `DamianH.Metaschema.Core` | Core library with model, Metapath, data types, and constraints |
 | `DamianH.Metaschema.Databind` | Serialization and code generation |
 | `DamianH.Metaschema.Schemagen` | XSD and JSON Schema generation |
-| `DamianH.Metaschema.Cli` | Command-line tool |
+| `DamianH.Metaschema.Tool` | Command-line tool |
 | `DamianH.Metaschema.Testing` | Test utilities and fixtures |
 
 ## Requirements
@@ -38,7 +38,7 @@ Metaschema is a framework for defining information models that can be used to ge
 
 ```bash
 # Install the CLI tool globally
-dotnet tool install -g DamianH.Metaschema.Cli
+dotnet tool install -g DamianH.Metaschema.Tool
 
 # Add the core library to your project
 dotnet add package DamianH.Metaschema.Core

@@ -3,7 +3,7 @@
 using System.CommandLine;
 using Metaschema.Core.Loading;
 
-namespace Metaschema.Cli.Commands;
+namespace Metaschema.Tool.Commands;
 
 /// <summary>
 /// Command to validate a Metaschema module definition.

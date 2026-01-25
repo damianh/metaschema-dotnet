@@ -8,7 +8,7 @@ using Metaschema.Databind;
 using Metaschema.Databind.Nodes;
 using Metaschema.Databind.Validation;
 
-namespace Metaschema.Cli.Commands;
+namespace Metaschema.Tool.Commands;
 
 /// <summary>
 /// Command to validate content against a Metaschema definition.

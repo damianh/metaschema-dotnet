@@ -7,7 +7,7 @@ using Metaschema.Schemagen;
 using Metaschema.Schemagen.JsonSchema;
 using Metaschema.Schemagen.Xsd;
 
-namespace Metaschema.Cli.Commands;
+namespace Metaschema.Tool.Commands;
 
 /// <summary>
 /// Command to generate XSD or JSON Schema from a Metaschema module.

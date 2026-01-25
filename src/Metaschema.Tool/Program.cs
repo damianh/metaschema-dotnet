@@ -1,9 +1,9 @@
 // Licensed under the MIT License.
 
 using System.CommandLine;
-using Metaschema.Cli.Commands;
+using Metaschema.Tool.Commands;
 
-namespace Metaschema.Cli;
+namespace Metaschema.Tool;
 
 /// <summary>
 /// Entry point for the Metaschema CLI tool.

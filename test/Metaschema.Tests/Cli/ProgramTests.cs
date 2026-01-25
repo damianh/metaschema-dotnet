@@ -3,7 +3,7 @@
 using Shouldly;
 using Xunit;
 
-namespace Metaschema.Cli;
+namespace Metaschema.Tool;
 
 public class ProgramTests
 {

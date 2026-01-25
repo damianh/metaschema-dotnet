@@ -2,7 +2,7 @@
 
 using System.Text.Json;
 
-namespace Metaschema.Cli.Commands;
+namespace Metaschema.Tool.Commands;
 
 /// <summary>
 /// Shared utilities for CLI commands.

@@ -1,6 +1,6 @@
 // Licensed under the MIT License.
 
-namespace Metaschema.Cli.Commands;
+namespace Metaschema.Tool.Commands;
 
 /// <summary>
 /// Content format for input/output files.
