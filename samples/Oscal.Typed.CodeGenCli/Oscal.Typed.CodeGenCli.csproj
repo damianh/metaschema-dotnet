@@ -1,24 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <Description>Demonstrates using the CLI tool to generate C# code from Metaschema modules.</Description>
     <ImplicitUsings>true</ImplicitUsings>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Content Include="..\oscal-metaschema\oscal_catalog_metaschema.xml" Link="Metaschema\%(Filename)%(Extension)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\oscal-metaschema\oscal_control-common_metaschema.xml" Link="Metaschema\%(Filename)%(Extension)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\oscal-metaschema\oscal_metadata_metaschema.xml" Link="Metaschema\%(Filename)%(Extension)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\oscal-metaschema\oscal_complete_metaschema.xml" Link="Metaschema\%(Filename)%(Extension)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
 </Project>

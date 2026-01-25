@@ -126,7 +126,7 @@ public sealed class ValidateContentCommand : Command
                     ConstraintLevel.Error => "[ERROR]",
                     ConstraintLevel.Warning => "[WARNING]",
                     ConstraintLevel.Informational => "[INFO]",
-                    _ => "[INFO]"
+                    _ => throw new NotImplementedException(),
                 };
                 result.Findings.Add($"{prefix} {finding.Location}: {finding.Message}");
             }
@@ -189,6 +189,7 @@ public sealed class ValidateContentCommand : Command
                 break;
 
             case OutputFormat.Text:
+            case OutputFormat.Sarif:
             default:
                 if (result.Valid)
                 {
