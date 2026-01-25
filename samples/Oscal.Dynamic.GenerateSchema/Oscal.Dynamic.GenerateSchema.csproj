@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\oscal-metaschema\*.xml" Link="Metaschema\%(Filename)%(Extension)">
+    <Content Include="..\oscal-metaschema-v1.2.0\*.xml" Link="Metaschema\%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

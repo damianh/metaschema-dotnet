@@ -2,7 +2,17 @@
 
   <PropertyGroup>
     <OutputType>library</OutputType>
-    <Description>Demonstrates using the CLI tool to generate C# code from Metaschema modules.</Description>
+    <Description>OSCAL (Open Security Controls Assessment Language) library with versioned type-safe C# models generated from NIST Metaschema definitions.</Description>
     <ImplicitUsings>true</ImplicitUsings>
+    <!-- Disable default compile includes since we explicitly specify versioned folders -->
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Include all versioned generated files -->
+    <Compile Include="V1_2_0\Generated\**\*.g.cs" />
+    <!-- Future versions: -->
+    <!-- <Compile Include="V1_3_0\Generated\**\*.g.cs" /> -->
+  </ItemGroup>
+
 </Project>
