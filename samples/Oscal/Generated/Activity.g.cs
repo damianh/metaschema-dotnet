@@ -30,8 +30,8 @@ public sealed record Activity
     /// <summary>
     /// Reviewed Controls and Control Objectives - Identifies the controls being assessed and their control objectives.
     /// </summary>
-    [JsonPropertyName("reviewed-controls")]
-    public ReviewedControls? ReviewedControls { get; init; }
+    [JsonPropertyName("related-controls")]
+    public ReviewedControls? RelatedControls { get; init; }
 
     /// <summary>
     /// ResponsibleRoles

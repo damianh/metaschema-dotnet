@@ -36,8 +36,8 @@ public sealed record Finding
     /// <summary>
     /// Objective Status - Captures an assessor's conclusions regarding the degree to which an objective is satisfied.
     /// </summary>
-    [JsonPropertyName("finding-target")]
-    public required FindingTarget FindingTarget { get; init; }
+    [JsonPropertyName("target")]
+    public required FindingTarget Target { get; init; }
 
     /// <summary>
     /// Remarks

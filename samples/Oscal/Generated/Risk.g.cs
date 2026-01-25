@@ -30,8 +30,8 @@ public sealed record Risk
     /// <summary>
     /// Risk Status - Describes the status of the associated risk.
     /// </summary>
-    [JsonPropertyName("risk-status")]
-    public required RiskStatus RiskStatus { get; init; }
+    [JsonPropertyName("status")]
+    public required RiskStatus Status { get; init; }
 
     /// <summary>
     /// Origin - Identifies the source of the finding, such as a tool, interviewed person, or activity.

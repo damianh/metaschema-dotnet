@@ -246,7 +246,7 @@ public sealed class XmlModuleParser
                 IsRequired = flagElement.Attribute("required")?.Value == "yes",
                 FormalName = flagElement.Element(Ns + "formal-name")?.Value,
                 Description = ParseMarkupLine(flagElement.Element(Ns + "description")),
-                UseName = flagElement.Attribute("use-name")?.Value,
+                UseName = flagElement.Element(Ns + "use-name")?.Value,
                 Remarks = ParseMarkupMultiline(flagElement.Element(Ns + "remarks")),
                 DeprecatedVersion = flagElement.Attribute("deprecated")?.Value
             });
@@ -291,7 +291,7 @@ public sealed class XmlModuleParser
             Ref = refAttr,
             FormalName = element.Element(Ns + "formal-name")?.Value,
             Description = ParseMarkupLine(element.Element(Ns + "description")),
-            UseName = element.Attribute("use-name")?.Value,
+            UseName = element.Element(Ns + "use-name")?.Value,
             Remarks = ParseMarkupMultiline(element.Element(Ns + "remarks")),
             DeprecatedVersion = element.Attribute("deprecated")?.Value,
             MinOccurs = ParseOccurs(element.Attribute("min-occurs")?.Value, 0),
@@ -310,7 +310,7 @@ public sealed class XmlModuleParser
             Ref = refAttr,
             FormalName = element.Element(Ns + "formal-name")?.Value,
             Description = ParseMarkupLine(element.Element(Ns + "description")),
-            UseName = element.Attribute("use-name")?.Value,
+            UseName = element.Element(Ns + "use-name")?.Value,
             Remarks = ParseMarkupMultiline(element.Element(Ns + "remarks")),
             DeprecatedVersion = element.Attribute("deprecated")?.Value,
             MinOccurs = ParseOccurs(element.Attribute("min-occurs")?.Value, 0),

@@ -18,8 +18,8 @@ public sealed record Address
     /// <summary>
     /// Address Type - Indicates the type of address.
     /// </summary>
-    [JsonPropertyName("location-type")]
-    public string? LocationType { get; init; }
+    [JsonPropertyName("type")]
+    public string? Type { get; init; }
 
     /// <summary>
     /// Address line - A single line of an address.

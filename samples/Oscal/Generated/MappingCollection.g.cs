@@ -24,8 +24,8 @@ public sealed record MappingCollection
     /// <summary>
     /// Mapping Provenance - Describes requirements, incompatibilities and gaps that are identified between a target and source in a mapping item.
     /// </summary>
-    [JsonPropertyName("mapping-provenance")]
-    public required MappingProvenance MappingProvenance { get; init; }
+    [JsonPropertyName("provenance")]
+    public required MappingProvenance Provenance { get; init; }
 
     /// <summary>
     /// Control Mapping - A mapping between two target resources.

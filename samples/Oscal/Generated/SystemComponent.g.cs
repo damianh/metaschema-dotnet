@@ -18,8 +18,8 @@ public sealed record SystemComponent
     /// <summary>
     /// Component Type - A category describing the purpose of the component.
     /// </summary>
-    [JsonPropertyName("system-component-type")]
-    public required string SystemComponentType { get; init; }
+    [JsonPropertyName("type")]
+    public required string Type { get; init; }
 
     /// <summary>
     /// Property - An attribute, characteristic, or quality of the containing object expressed as a namespace qualified name/value pair.

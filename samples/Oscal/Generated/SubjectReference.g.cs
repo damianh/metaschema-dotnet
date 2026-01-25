@@ -24,8 +24,8 @@ public sealed record SubjectReference
     /// <summary>
     /// Subject Universally Unique Identifier Reference Type - Used to indicate the type of object pointed to by the &lt;code xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;uuid-ref&lt;/code&gt; within a subject.
     /// </summary>
-    [JsonPropertyName("subject-type")]
-    public required string SubjectType { get; init; }
+    [JsonPropertyName("type")]
+    public required string Type { get; init; }
 
     /// <summary>
     /// Props

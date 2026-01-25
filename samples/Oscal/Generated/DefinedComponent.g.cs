@@ -18,8 +18,8 @@ public sealed record DefinedComponent
     /// <summary>
     /// Component Type - A category describing the purpose of the component.
     /// </summary>
-    [JsonPropertyName("defined-component-type")]
-    public required string DefinedComponentType { get; init; }
+    [JsonPropertyName("type")]
+    public required string Type { get; init; }
 
     /// <summary>
     /// Props

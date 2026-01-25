@@ -48,8 +48,8 @@ public sealed record Parameter
     /// <summary>
     /// Selection - Presenting a choice among alternatives.
     /// </summary>
-    [JsonPropertyName("parameter-selection")]
-    public ParameterSelection? ParameterSelection { get; init; }
+    [JsonPropertyName("select")]
+    public ParameterSelection? Select { get; init; }
 
     /// <summary>
     /// Remarks - Additional commentary about the containing object.
