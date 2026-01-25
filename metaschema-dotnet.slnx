@@ -9,6 +9,7 @@
   </Folder>
   <Folder Name="/test/">
     <Project Path="test/Metaschema.Tests/Metaschema.Tests.csproj" />
+    <Project Path="test/Oscal.Tests/Oscal.Tests.csproj" />
   </Folder>
   <Folder Name="/samples/">
     <Project Path="samples/Oscal.Dynamic.LoadCatalog/Oscal.Dynamic.LoadCatalog.csproj" />
