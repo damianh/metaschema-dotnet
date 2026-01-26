@@ -78,7 +78,7 @@ Target(GenerateOscal, dependsOn: [DebugBuild], async () =>
 
     // Find all version directories (v1.0.0, v1.1.0, etc.)
     var versionDirs = Directory.GetDirectories(oscalReferenceDir)
-        .Where(d => Path.GetFileName(d).StartsWith("v"))
+        .Where(d => Path.GetFileName(d).StartsWith('v'))
         .OrderByDescending(d => d)
         .ToList();
 

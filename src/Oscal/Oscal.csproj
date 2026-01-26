@@ -7,19 +7,10 @@
     <PackageTags>oscal;nist;security;compliance;metaschema;sbom;ssp;poam</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <ImplicitUsings>true</ImplicitUsings>
-    <!-- Disable default compile includes since we explicitly specify versioned folders -->
-    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <!-- Include all versioned generated files -->
-    <Compile Include="V1_2_0\Generated\**\*.g.cs" />
-    <!-- Future versions: -->
-    <!-- <Compile Include="V1_3_0\Generated\**\*.g.cs" /> -->
   </ItemGroup>
 
 </Project>
