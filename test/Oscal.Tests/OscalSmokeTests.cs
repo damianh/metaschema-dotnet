@@ -22,7 +22,7 @@ public class OscalSmokeTests
         var metaschemaPath = Path.Combine(
             AppContext.BaseDirectory, 
             "..", "..", "..", "..", "..", 
-            "samples", "oscal-metaschema-v1.2.0", "oscal_metadata_metaschema.xml");
+            "reference", "oscal", "v1.2.0", "oscal_metadata_metaschema.xml");
 
         // Act
         var module = loader.Load(metaschemaPath);
