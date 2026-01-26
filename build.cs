@@ -41,6 +41,7 @@ const string DebugBuild = "debug-build";
 const string Default = "default";
 const string ReleaseBuild = "release-build";
 const string Restore = "restore";
+const string Test = "test";
 const string UpdateOscal = "update-oscal";
 const string SolutionFile = "metaschema-dotnet.slnx";
 
@@ -56,7 +57,13 @@ Target(DebugBuild, dependsOn: [Restore], () =>
 Target(ReleaseBuild, dependsOn: [Restore], () =>
     RunAsync("dotnet", $"build {SolutionFile} --no-restore -c Release", workingDirectory: repoRoot));
 
-Target(Default, [Clean, ReleaseBuild]);
+Target(Test, dependsOn: [ReleaseBuild], async () =>
+{
+    await RunAsync("dotnet", "run --project test/Metaschema.Tests --no-build -c Release", workingDirectory: repoRoot);
+    await RunAsync("dotnet", "run --project test/Oscal.Tests --no-build -c Release", workingDirectory: repoRoot);
+});
+
+Target(Default, [Clean, ReleaseBuild, Test]);
 
 Target(UpdateOscal, async () =>
 {
@@ -70,7 +77,7 @@ Target(UpdateOscal, async () =>
     }
 
     var versions = await GetOscalVersionsToFetch(oscalVersion);
-    
+
     foreach (var version in versions)
     {
         await FetchOscalVersion(version, repoRoot);
@@ -87,14 +94,16 @@ async Task<List<string>> GetOscalVersionsToFetch(string versionArg)
     {
         // Validate semver format
         if (!Regex.IsMatch(versionArg, @"^\d+\.\d+\.\d+$"))
+        {
             throw new InvalidOperationException($"Invalid version format: {versionArg}. Expected X.Y.Z");
+        }
         return [versionArg];
     }
 
     // Fetch all non-prerelease tags from OSCAL repo
     Console.WriteLine("Fetching available OSCAL versions...");
     var (output, _) = await ReadAsync("git", "ls-remote --tags https://github.com/usnistgov/OSCAL.git");
-    
+
     var releasePattern = new Regex(@"refs/tags/v(\d+\.\d+\.\d+)$");
     var versions = output
         .Split('\n', StringSplitOptions.RemoveEmptyEntries)
@@ -118,7 +127,7 @@ async Task FetchOscalVersion(string version, string repoRoot)
     var manifestPath = Path.Combine(referenceDir, "versions.json");
     var tempDir = Path.Combine(Path.GetTempPath(), $"oscal-fetch-{Guid.NewGuid()}");
 
-    Console.WriteLine($"=== Fetching OSCAL {version} ===");
+    Console.WriteLine($"Fetching OSCAL {version}");
 
     // Remove existing version directory if present (always overwrite)
     if (Directory.Exists(versionDir))
