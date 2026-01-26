@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,6 +16,18 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record MappingItem
 {
+    /// <summary>
+    /// Subject Type - The semantic type of the subject.
+    /// </summary>
+    [JsonPropertyName("type")]
+    public required string Type { get; init; }
+
+    /// <summary>
+    /// Subject Identifier Reference - A reference to an identified subject that is of the specified &lt;code xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;type&lt;/code&gt; .
+    /// </summary>
+    [JsonPropertyName("id-ref")]
+    public required string IdRef { get; init; }
+
     /// <summary>
     /// Property - An attribute, characteristic, or quality of the containing object expressed as a namespace qualified name/value pair.
     /// </summary>

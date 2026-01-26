@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -20,4 +21,10 @@ public sealed record SystemId
     /// </summary>
     [JsonPropertyName("id")]
     public string? Value { get; init; }
+
+    /// <summary>
+    /// Identification System Type - Identifies the identification system from which the provided identifier was assigned.
+    /// </summary>
+    [JsonPropertyName("identifier-type")]
+    public Uri? IdentifierType { get; init; }
 }

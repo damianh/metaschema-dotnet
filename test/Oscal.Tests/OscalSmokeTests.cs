@@ -1,5 +1,6 @@
 // Licensed under the MIT License.
 
+using System.Text.Json;
 using Metaschema.Core.Loading;
 using Oscal.V1_2_0;
 using Shouldly;
@@ -173,5 +174,109 @@ public class OscalSmokeTests
         
         var oscalVersion = metadata.GetProperty("OscalVersion");
         oscalVersion.ShouldNotBeNull();
+    }
+
+    [Fact]
+    public void SimpleField_LastModified_ShouldDeserializeFromJsonPrimitive()
+    {
+        // Arrange - JSON with primitive value (not wrapped in object)
+        var json = """
+            {
+              "last-modified": "2023-10-12T00:00:00.000000-04:00",
+              "version": "1.1",
+              "oscal-version": "1.1.1"
+            }
+            """;
+
+        // Act
+        var result = JsonSerializer.Deserialize<Metadata>(json, V1_2_0JsonContext.Default.Metadata);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.LastModified.ShouldNotBeNull();
+        result.LastModified.Value.ShouldNotBeNull();
+        result.LastModified.Value.Value.Year.ShouldBe(2023);
+    }
+
+    [Fact]
+    public void SimpleField_Version_ShouldDeserializeFromJsonPrimitive()
+    {
+        // Arrange - JSON with primitive string (not wrapped in object)
+        var json = """
+            {
+              "last-modified": "2023-10-12T00:00:00.000000-04:00",
+              "version": "1.1",
+              "oscal-version": "1.1.1"
+            }
+            """;
+
+        // Act
+        var result = JsonSerializer.Deserialize<Metadata>(json, V1_2_0JsonContext.Default.Metadata);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.Version.ShouldNotBeNull();
+        result.Version.Value.ShouldBe("1.1");
+    }
+
+    [Fact]
+    public void SimpleField_ShouldSerializeToJsonPrimitive()
+    {
+        // Arrange
+        var metadata = new Metadata
+        {
+            LastModified = new LastModified { Value = new DateTimeOffset(2023, 10, 12, 0, 0, 0, TimeSpan.FromHours(-4)) },
+            Version = new V1_2_0.Version { Value = "1.1" },
+            OscalVersion = new OscalVersion { Value = "1.1.1" }
+        };
+
+        // Act
+        var json = JsonSerializer.Serialize(metadata, V1_2_0JsonContext.Default.Metadata);
+
+        // Assert
+        json.ShouldContain("\"last-modified\":");
+        json.ShouldContain("\"2023-10-12T00:00:00"); // Should have direct timestamp, not {"value": "..."}
+        json.ShouldContain("\"version\":"); 
+        json.ShouldContain("\"1.1\""); // Should have direct string, not {"value": "1.1"}
+        
+        // Should NOT contain the nested "value" property structure
+        json.ShouldNotContain("\"last-modified\":{\"value\":");
+        json.ShouldNotContain("\"version\":{\"value\":");
+    }
+
+    [Fact]
+    public void RealOscalFile_Metadata_ShouldDeserialize()
+    {
+        // Arrange - Load real NIST OSCAL SSP example and extract metadata
+        var jsonPath = Path.Combine(
+            AppContext.BaseDirectory,
+            "..", "..", "..", "..", "..",
+            "samples", "oscal-content", "ssp-example.json");
+
+        if (!File.Exists(jsonPath))
+        {
+            // Skip if file doesn't exist
+            return;
+        }
+
+        var json = File.ReadAllText(jsonPath);
+        
+        // Parse and extract just the metadata
+        using var doc = JsonDocument.Parse(json);
+        var metadataElement = doc.RootElement.GetProperty("system-security-plan").GetProperty("metadata");
+        var metadataJson = metadataElement.GetRawText();
+
+        // Act - Deserialize the metadata
+        var metadata = JsonSerializer.Deserialize<Metadata>(metadataJson, V1_2_0JsonContext.Default.Metadata);
+
+        // Assert - Verify simple fields deserialized correctly from JSON primitives
+        metadata.ShouldNotBeNull("Metadata should deserialize successfully");
+        metadata.LastModified.ShouldNotBeNull("Metadata should have last-modified");
+        metadata.LastModified.Value.ShouldNotBeNull("LastModified should have value");
+        metadata.LastModified.Value.Value.Year.ShouldBe(2023);
+        metadata.Version.ShouldNotBeNull("Metadata should have version");
+        metadata.Version.Value.ShouldBe("1.1");
+        metadata.OscalVersion.ShouldNotBeNull("Metadata should have oscal-version");
+        metadata.OscalVersion.Value.ShouldBe("1.1.1");
     }
 }

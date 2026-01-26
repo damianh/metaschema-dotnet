@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,6 +16,12 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record ImportSsp
 {
+    /// <summary>
+    /// System Security Plan Reference - A resolvable URL reference to the system security plan for the system being assessed.
+    /// </summary>
+    [JsonPropertyName("href")]
+    public required Uri Href { get; init; }
+
     /// <summary>
     /// Remarks
     /// </summary>

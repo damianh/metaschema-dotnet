@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -13,6 +14,7 @@ namespace Oscal.V1_2_0;
 /// <summary>
 /// Mapping Description - Description of the context and intended use of the mapping set.
 /// </summary>
+[JsonConverter(typeof(MappingDescriptionJsonConverter))]
 public sealed record MappingDescription
 {
     /// <summary>
@@ -20,4 +22,33 @@ public sealed record MappingDescription
     /// </summary>
     [JsonPropertyName("value")]
     public string? Value { get; init; }
+}
+
+/// <summary>
+/// JSON converter for MappingDescription that handles direct primitive values.
+/// </summary>
+public sealed class MappingDescriptionJsonConverter : JsonConverter<MappingDescription>
+{
+    public override MappingDescription? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.Null)
+        {
+            return null;
+        }
+
+        var value = reader.GetString();
+        return new MappingDescription { Value = value };
+    }
+
+    public override void Write(Utf8JsonWriter writer, MappingDescription value, JsonSerializerOptions options)
+    {
+        if (value.Value is null)
+        {
+            writer.WriteNullValue();
+        }
+        else
+        {
+            writer.WriteStringValue(value.Value);
+        }
+    }
 }

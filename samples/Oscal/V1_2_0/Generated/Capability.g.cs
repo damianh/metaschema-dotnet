@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,6 +16,18 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record Capability
 {
+    /// <summary>
+    /// Capability Identifier - Provides a globally unique means to identify a given capability.
+    /// </summary>
+    [JsonPropertyName("uuid")]
+    public required Guid Uuid { get; init; }
+
+    /// <summary>
+    /// Capability Name - The capability's human-readable name.
+    /// </summary>
+    [JsonPropertyName("name")]
+    public required string Name { get; init; }
+
     /// <summary>
     /// Props
     /// </summary>

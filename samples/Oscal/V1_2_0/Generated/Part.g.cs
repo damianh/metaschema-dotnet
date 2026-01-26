@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,6 +16,30 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record Part
 {
+    /// <summary>
+    /// Part Identifier - A unique identifier for the part.
+    /// </summary>
+    [JsonPropertyName("id")]
+    public string? Id { get; init; }
+
+    /// <summary>
+    /// Part Name - A textual label that uniquely identifies the part's semantic type, which exists in a value space qualified by the &lt;code xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;ns&lt;/code&gt;.
+    /// </summary>
+    [JsonPropertyName("name")]
+    public required string Name { get; init; }
+
+    /// <summary>
+    /// Part Namespace - An optional namespace qualifying the part's &lt;code xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;name&lt;/code&gt;. This allows different organizations to associate distinct semantics with the same name.
+    /// </summary>
+    [JsonPropertyName("ns")]
+    public Uri? Ns { get; init; }
+
+    /// <summary>
+    /// Part Class - An optional textual providing a sub-type or characterization of the part's &lt;code xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;name&lt;/code&gt;, or a category to which the part belongs.
+    /// </summary>
+    [JsonPropertyName("class")]
+    public string? Class { get; init; }
+
     /// <summary>
     /// Property - An attribute, characteristic, or quality of the containing object expressed as a namespace qualified name/value pair.
     /// </summary>

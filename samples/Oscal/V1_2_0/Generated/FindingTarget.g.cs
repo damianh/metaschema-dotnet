@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,6 +16,18 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record FindingTarget
 {
+    /// <summary>
+    /// Finding Target Type - Identifies the type of the target.
+    /// </summary>
+    [JsonPropertyName("type")]
+    public required string Type { get; init; }
+
+    /// <summary>
+    /// Finding Target Identifier Reference - A &lt;a href="https://pages.nist.gov/OSCAL/concepts/identifier-use/#machine-oriented" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;machine-oriented&lt;/a&gt; identifier reference for a specific target qualified by the &lt;code xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;type&lt;/code&gt;.
+    /// </summary>
+    [JsonPropertyName("target-id")]
+    public required string TargetId { get; init; }
+
     /// <summary>
     /// Props
     /// </summary>

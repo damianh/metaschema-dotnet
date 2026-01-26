@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,6 +16,12 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record AssessmentSubject
 {
+    /// <summary>
+    /// Subject Type - Indicates the type of assessment subject, such as a component, inventory, item, location, or party represented by this selection statement.
+    /// </summary>
+    [JsonPropertyName("type")]
+    public required string Type { get; init; }
+
     /// <summary>
     /// Props
     /// </summary>

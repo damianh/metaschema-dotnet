@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,4 +16,10 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record ImportComponentDefinition
 {
+    /// <summary>
+    /// Hyperlink Reference - A link to a resource that defines a set of components and/or capabilities to import into this collection.
+    /// </summary>
+    [JsonPropertyName("href")]
+    public required Uri Href { get; init; }
+
 }

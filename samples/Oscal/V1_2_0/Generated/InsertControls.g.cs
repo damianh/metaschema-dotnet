@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,6 +16,12 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record InsertControls
 {
+    /// <summary>
+    /// Order - A designation of how a selection of controls in a profile is to be ordered.
+    /// </summary>
+    [JsonPropertyName("order")]
+    public string? Order { get; init; }
+
     /// <summary>
     /// Include All - Include all controls from the imported catalog or profile resources.
     /// </summary>

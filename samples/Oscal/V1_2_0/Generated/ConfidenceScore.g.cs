@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -20,4 +21,16 @@ public sealed record ConfidenceScore
     /// </summary>
     [JsonPropertyName("value")]
     public string? Value { get; init; }
+
+    /// <summary>
+    /// Category
+    /// </summary>
+    [JsonPropertyName("category")]
+    public string? Category { get; init; }
+
+    /// <summary>
+    /// Percentage
+    /// </summary>
+    [JsonPropertyName("percentage")]
+    public decimal? Percentage { get; init; }
 }

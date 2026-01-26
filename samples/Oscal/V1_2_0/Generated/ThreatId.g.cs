@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -20,4 +21,16 @@ public sealed record ThreatId
     /// </summary>
     [JsonPropertyName("id")]
     public Uri? Value { get; init; }
+
+    /// <summary>
+    /// Threat Type Identification System - Specifies the source of the threat information.
+    /// </summary>
+    [JsonPropertyName("system")]
+    public required Uri System { get; init; }
+
+    /// <summary>
+    /// Threat Information Resource Reference - An optional location for the threat data, from which this ID originates.
+    /// </summary>
+    [JsonPropertyName("href")]
+    public Uri? Href { get; init; }
 }

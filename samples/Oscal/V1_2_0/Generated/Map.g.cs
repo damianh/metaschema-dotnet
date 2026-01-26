@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -20,6 +21,18 @@ public sealed record Map
     /// </summary>
     [JsonPropertyName("matching-rationale")]
     public string? MatchingRationale { get; init; }
+
+    /// <summary>
+    /// Mapping Entry Identifier - The unique identifier for the mapping entry.
+    /// </summary>
+    [JsonPropertyName("uuid")]
+    public required Guid Uuid { get; init; }
+
+    /// <summary>
+    /// Relationship Value Namespace - A namespace qualifying the relationship's value. This allows different organizations to associate distinct semantics for relationships with the same name.
+    /// </summary>
+    [JsonPropertyName("ns")]
+    public Uri? Ns { get; init; }
 
     /// <summary>
     /// Mapping Entry Item (source or target) - A specific edge within a source or target that is the subject of a mapping.

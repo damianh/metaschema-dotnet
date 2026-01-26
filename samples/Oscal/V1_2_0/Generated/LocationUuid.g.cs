@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -13,6 +14,7 @@ namespace Oscal.V1_2_0;
 /// <summary>
 /// Location Universally Unique Identifier Reference - Reference to a location by UUID.
 /// </summary>
+[JsonConverter(typeof(LocationUuidJsonConverter))]
 public sealed record LocationUuid
 {
     /// <summary>
@@ -20,4 +22,33 @@ public sealed record LocationUuid
     /// </summary>
     [JsonPropertyName("value")]
     public Guid? Value { get; init; }
+}
+
+/// <summary>
+/// JSON converter for LocationUuid that handles direct primitive values.
+/// </summary>
+public sealed class LocationUuidJsonConverter : JsonConverter<LocationUuid>
+{
+    public override LocationUuid? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.Null)
+        {
+            return null;
+        }
+
+        var value = reader.GetGuid();
+        return new LocationUuid { Value = value };
+    }
+
+    public override void Write(Utf8JsonWriter writer, LocationUuid value, JsonSerializerOptions options)
+    {
+        if (value.Value is null)
+        {
+            writer.WriteNullValue();
+        }
+        else
+        {
+            writer.WriteStringValue(value.Value.Value);
+        }
+    }
 }

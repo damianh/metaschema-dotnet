@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -20,4 +21,10 @@ public sealed record Hash
     /// </summary>
     [JsonPropertyName("value")]
     public string? Value { get; init; }
+
+    /// <summary>
+    /// Hash algorithm - The digest method by which a hash is derived.
+    /// </summary>
+    [JsonPropertyName("algorithm")]
+    public required string Algorithm { get; init; }
 }

@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -13,6 +14,7 @@ namespace Oscal.V1_2_0;
 /// <summary>
 /// System Authorization Date - The date the system received its authorization.
 /// </summary>
+[JsonConverter(typeof(DateAuthorizedJsonConverter))]
 public sealed record DateAuthorized
 {
     /// <summary>
@@ -20,4 +22,33 @@ public sealed record DateAuthorized
     /// </summary>
     [JsonPropertyName("value")]
     public DateOnly? Value { get; init; }
+}
+
+/// <summary>
+/// JSON converter for DateAuthorized that handles direct primitive values.
+/// </summary>
+public sealed class DateAuthorizedJsonConverter : JsonConverter<DateAuthorized>
+{
+    public override DateAuthorized? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.Null)
+        {
+            return null;
+        }
+
+        var value = DateOnly.Parse(reader.GetString() ?? throw new JsonException());
+        return new DateAuthorized { Value = value };
+    }
+
+    public override void Write(Utf8JsonWriter writer, DateAuthorized value, JsonSerializerOptions options)
+    {
+        if (value.Value is null)
+        {
+            writer.WriteNullValue();
+        }
+        else
+        {
+            writer.WriteStringValue(value.Value.Value.ToString("O"));
+        }
+    }
 }

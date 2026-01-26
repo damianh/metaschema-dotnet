@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -13,6 +14,7 @@ namespace Oscal.V1_2_0;
 /// <summary>
 /// Base Level (Confidentiality, Integrity, or Availability) - The prescribed base (Confidentiality, Integrity, or Availability) security impact level.
 /// </summary>
+[JsonConverter(typeof(BaseJsonConverter))]
 public sealed record Base
 {
     /// <summary>
@@ -20,4 +22,33 @@ public sealed record Base
     /// </summary>
     [JsonPropertyName("value")]
     public string? Value { get; init; }
+}
+
+/// <summary>
+/// JSON converter for Base that handles direct primitive values.
+/// </summary>
+public sealed class BaseJsonConverter : JsonConverter<Base>
+{
+    public override Base? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.Null)
+        {
+            return null;
+        }
+
+        var value = reader.GetString();
+        return new Base { Value = value };
+    }
+
+    public override void Write(Utf8JsonWriter writer, Base value, JsonSerializerOptions options)
+    {
+        if (value.Value is null)
+        {
+            writer.WriteNullValue();
+        }
+        else
+        {
+            writer.WriteStringValue(value.Value);
+        }
+    }
 }

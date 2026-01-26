@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,6 +16,18 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record Control
 {
+    /// <summary>
+    /// Control Identifier - Identifies a control such that it can be referenced in the defining catalog and other OSCAL instances (e.g., profiles).
+    /// </summary>
+    [JsonPropertyName("id")]
+    public required string Id { get; init; }
+
+    /// <summary>
+    /// Control Class - A textual label that provides a sub-type or characterization of the control.
+    /// </summary>
+    [JsonPropertyName("class")]
+    public string? Class { get; init; }
+
     /// <summary>
     /// Parameter - Parameters provide a mechanism for the dynamic assignment of value(s) in a control.
     /// </summary>

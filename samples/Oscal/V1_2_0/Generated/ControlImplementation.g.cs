@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,6 +16,18 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record ControlImplementation
 {
+    /// <summary>
+    /// Control Implementation Set Identifier - Provides a means to identify a set of control implementations that are supported by a given component or capability.
+    /// </summary>
+    [JsonPropertyName("uuid")]
+    public required Guid Uuid { get; init; }
+
+    /// <summary>
+    /// Source Resource Reference - A reference to an OSCAL catalog or profile providing the referenced control or subcontrol definition.
+    /// </summary>
+    [JsonPropertyName("source")]
+    public required Uri Source { get; init; }
+
     /// <summary>
     /// Props
     /// </summary>

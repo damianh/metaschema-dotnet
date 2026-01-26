@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,4 +16,10 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record ParameterSelection
 {
+    /// <summary>
+    /// Parameter Cardinality - Describes the number of selections that must occur. Without this setting, only one value should be assumed to be permitted.
+    /// </summary>
+    [JsonPropertyName("how-many")]
+    public string? HowMany { get; init; }
+
 }

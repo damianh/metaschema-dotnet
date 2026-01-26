@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -20,4 +21,10 @@ public sealed record Coverage
     /// </summary>
     [JsonPropertyName("value")]
     public decimal? Value { get; init; }
+
+    /// <summary>
+    /// GenerationMethod
+    /// </summary>
+    [JsonPropertyName("generation-method")]
+    public string? GenerationMethod { get; init; }
 }

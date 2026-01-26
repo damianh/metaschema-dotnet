@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -13,6 +14,7 @@ namespace Oscal.V1_2_0;
 /// <summary>
 /// Party Universally Unique Identifier Reference - Reference to a party by UUID.
 /// </summary>
+[JsonConverter(typeof(PartyUuidJsonConverter))]
 public sealed record PartyUuid
 {
     /// <summary>
@@ -20,4 +22,33 @@ public sealed record PartyUuid
     /// </summary>
     [JsonPropertyName("value")]
     public Guid? Value { get; init; }
+}
+
+/// <summary>
+/// JSON converter for PartyUuid that handles direct primitive values.
+/// </summary>
+public sealed class PartyUuidJsonConverter : JsonConverter<PartyUuid>
+{
+    public override PartyUuid? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.Null)
+        {
+            return null;
+        }
+
+        var value = reader.GetGuid();
+        return new PartyUuid { Value = value };
+    }
+
+    public override void Write(Utf8JsonWriter writer, PartyUuid value, JsonSerializerOptions options)
+    {
+        if (value.Value is null)
+        {
+            writer.WriteNullValue();
+        }
+        else
+        {
+            writer.WriteStringValue(value.Value.Value);
+        }
+    }
 }

@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -13,6 +14,7 @@ namespace Oscal.V1_2_0;
 /// <summary>
 /// Last Modified Timestamp - The date and time the document was last stored for later retrieval.
 /// </summary>
+[JsonConverter(typeof(LastModifiedJsonConverter))]
 public sealed record LastModified
 {
     /// <summary>
@@ -20,4 +22,33 @@ public sealed record LastModified
     /// </summary>
     [JsonPropertyName("value")]
     public DateTimeOffset? Value { get; init; }
+}
+
+/// <summary>
+/// JSON converter for LastModified that handles direct primitive values.
+/// </summary>
+public sealed class LastModifiedJsonConverter : JsonConverter<LastModified>
+{
+    public override LastModified? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.Null)
+        {
+            return null;
+        }
+
+        var value = reader.GetDateTimeOffset();
+        return new LastModified { Value = value };
+    }
+
+    public override void Write(Utf8JsonWriter writer, LastModified value, JsonSerializerOptions options)
+    {
+        if (value.Value is null)
+        {
+            writer.WriteNullValue();
+        }
+        else
+        {
+            writer.WriteStringValue(value.Value.Value);
+        }
+    }
 }

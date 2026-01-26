@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,6 +16,12 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record PlanOfActionAndMilestones
 {
+    /// <summary>
+    /// POA&amp;M Universally Unique Identifier - A &lt;a href="https://pages.nist.gov/OSCAL/concepts/identifier-use/#machine-oriented" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;machine-oriented&lt;/a&gt;, &lt;a href="https://pages.nist.gov/OSCAL/concepts/identifier-use/#globally-unique" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;globally unique&lt;/a&gt; identifier with &lt;a href="https://pages.nist.gov/OSCAL/concepts/identifier-use/#instance" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;instance&lt;/a&gt;scope that can be used to reference this POA&amp;amp;M instance in &lt;a href="https://pages.nist.gov/OSCAL/concepts/identifier-use/#poam-identifiers" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;this OSCAL instance&lt;/a&gt;. This UUID should be assigned &lt;a href="https://pages.nist.gov/OSCAL/concepts/identifier-use/#consistency" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;per-subject&lt;/a&gt;, which means it should be consistently used to identify the same subject across revisions of the document.
+    /// </summary>
+    [JsonPropertyName("uuid")]
+    public required Guid Uuid { get; init; }
+
     /// <summary>
     /// Document Metadata - Provides information about the containing document, and defines concepts that are shared across the document.
     /// </summary>

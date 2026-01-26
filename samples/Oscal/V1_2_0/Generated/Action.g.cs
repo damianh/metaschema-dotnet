@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,6 +16,30 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record Action
 {
+    /// <summary>
+    /// Action Universally Unique Identifier - A unique identifier that can be used to reference this defined action elsewhere in an OSCAL document. A UUID should be consistently used for a given location across revisions of the document.
+    /// </summary>
+    [JsonPropertyName("uuid")]
+    public required Guid Uuid { get; init; }
+
+    /// <summary>
+    /// Action Occurrence Date - The date and time when the action occurred.
+    /// </summary>
+    [JsonPropertyName("date")]
+    public DateTimeOffset? Date { get; init; }
+
+    /// <summary>
+    /// Action Type - The type of action documented by the assembly, such as an approval.
+    /// </summary>
+    [JsonPropertyName("type")]
+    public required string Type { get; init; }
+
+    /// <summary>
+    /// Action Type System - Specifies the action type system used.
+    /// </summary>
+    [JsonPropertyName("system")]
+    public required Uri System { get; init; }
+
     /// <summary>
     /// Property - An attribute, characteristic, or quality of the containing object expressed as a namespace qualified name/value pair.
     /// </summary>

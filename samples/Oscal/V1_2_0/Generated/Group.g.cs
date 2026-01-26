@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,6 +16,18 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record Group
 {
+    /// <summary>
+    /// Group Identifier - Identifies the group for the purpose of cross-linking within the defining instance or from other instances that reference the catalog.
+    /// </summary>
+    [JsonPropertyName("id")]
+    public string? Id { get; init; }
+
+    /// <summary>
+    /// Group Class - A textual label that provides a sub-type or characterization of the group.
+    /// </summary>
+    [JsonPropertyName("class")]
+    public string? Class { get; init; }
+
     /// <summary>
     /// Parameter - Parameters provide a mechanism for the dynamic assignment of value(s) in a control.
     /// </summary>

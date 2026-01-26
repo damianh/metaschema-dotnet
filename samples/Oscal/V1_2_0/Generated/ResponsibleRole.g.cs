@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,6 +16,12 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record ResponsibleRole
 {
+    /// <summary>
+    /// Responsible Role ID - A &lt;a href="https://pages.nist.gov/OSCAL/concepts/identifier-use/#human-oriented" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;human-oriented&lt;/a&gt; identifier reference to a &lt;code xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;role&lt;/code&gt; performed.
+    /// </summary>
+    [JsonPropertyName("role-id")]
+    public required string RoleId { get; init; }
+
     /// <summary>
     /// Property - An attribute, characteristic, or quality of the containing object expressed as a namespace qualified name/value pair.
     /// </summary>

@@ -227,6 +227,7 @@ public sealed class RecordCodeGenerator
         var typeName = GetTypeName(field.Name);
         var dataType = GetClrTypeName(field.DataTypeName);
         var jsonValueKey = field.JsonValueKeyName ?? "value";
+        var isSimpleField = field.FlagInstances.Count == 0;
 
         if (_options.IncludeDocumentation)
         {
@@ -236,6 +237,12 @@ public sealed class RecordCodeGenerator
         if (field.DeprecatedVersion is not null)
         {
             w.Line($"[Obsolete(\"Deprecated since version {field.DeprecatedVersion}\")]");
+        }
+
+        // Simple fields (no flags) need a custom converter to deserialize from JSON primitives
+        if (isSimpleField)
+        {
+            w.Line($"[JsonConverter(typeof({typeName}JsonConverter))]");
         }
 
         w.Line($"{visibility} sealed record {typeName}");
@@ -261,6 +268,13 @@ public sealed class RecordCodeGenerator
 
         w.Outdent();
         w.Line("}");
+
+        // Generate converter for simple fields
+        if (isSimpleField)
+        {
+            w.Line();
+            GenerateSimpleFieldConverter(w, typeName, dataType);
+        }
     }
 
     private string GenerateAssemblyRecord(AssemblyDefinition assembly)
@@ -350,6 +364,173 @@ public sealed class RecordCodeGenerator
         var nullable = !isRequired ? "?" : "";
         var required = isRequired ? "required " : "";
         w.Line($"public {required}{clrType}{nullable} {propName} {{ get; init; }}");
+    }
+
+    private void GenerateSimpleFieldConverter(CodeWriter w, string typeName, string dataType)
+    {
+        var visibility = _options.Visibility == TypeVisibility.Public ? "public" : "internal";
+        
+        if (_options.IncludeDocumentation)
+        {
+            w.Line("/// <summary>");
+            w.Line($"/// JSON converter for {typeName} that handles direct primitive values.");
+            w.Line("/// </summary>");
+        }
+
+        w.Line($"{visibility} sealed class {typeName}JsonConverter : JsonConverter<{typeName}>");
+        w.Line("{");
+        w.Indent();
+
+        // Read method
+        w.Line($"public override {typeName}? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)");
+        w.Line("{");
+        w.Indent();
+        w.Line("if (reader.TokenType == JsonTokenType.Null)");
+        w.Line("{");
+        w.Indent();
+        w.Line("return null;");
+        w.Outdent();
+        w.Line("}");
+        w.Line();
+
+        // Handle direct primitive value
+        GenerateConverterReadLogic(w, dataType, typeName);
+
+        w.Outdent();
+        w.Line("}");
+        w.Line();
+
+        // Write method
+        w.Line($"public override void Write(Utf8JsonWriter writer, {typeName} value, JsonSerializerOptions options)");
+        w.Line("{");
+        w.Indent();
+        w.Line("if (value.Value is null)");
+        w.Line("{");
+        w.Indent();
+        w.Line("writer.WriteNullValue();");
+        w.Outdent();
+        w.Line("}");
+        w.Line("else");
+        w.Line("{");
+        w.Indent();
+
+        // Handle direct primitive value writing
+        GenerateConverterWriteLogic(w, dataType);
+
+        w.Outdent();
+        w.Line("}");
+        w.Outdent();
+        w.Line("}");
+
+        w.Outdent();
+        w.Line("}");
+    }
+
+    private static void GenerateConverterReadLogic(CodeWriter w, string dataType, string typeName)
+    {
+        switch (dataType)
+        {
+            case "string":
+                w.Line($"var value = reader.GetString();");
+                w.Line($"return new {typeName} {{ Value = value }};");
+                break;
+            case "long":
+                w.Line($"var value = reader.GetInt64();");
+                w.Line($"return new {typeName} {{ Value = value }};");
+                break;
+            case "ulong":
+                w.Line($"var value = reader.GetUInt64();");
+                w.Line($"return new {typeName} {{ Value = value }};");
+                break;
+            case "decimal":
+                w.Line($"var value = reader.GetDecimal();");
+                w.Line($"return new {typeName} {{ Value = value }};");
+                break;
+            case "bool":
+                w.Line($"var value = reader.GetBoolean();");
+                w.Line($"return new {typeName} {{ Value = value }};");
+                break;
+            case "DateTime":
+                w.Line($"var value = reader.GetDateTime();");
+                w.Line($"return new {typeName} {{ Value = value }};");
+                break;
+            case "DateTimeOffset":
+                w.Line($"var value = reader.GetDateTimeOffset();");
+                w.Line($"return new {typeName} {{ Value = value }};");
+                break;
+            case "DateOnly":
+                w.Line($"var value = DateOnly.Parse(reader.GetString() ?? throw new JsonException());");
+                w.Line($"return new {typeName} {{ Value = value }};");
+                break;
+            case "Guid":
+                w.Line($"var value = reader.GetGuid();");
+                w.Line($"return new {typeName} {{ Value = value }};");
+                break;
+            case "Uri":
+                w.Line($"var str = reader.GetString();");
+                w.Line($"var value = str is not null ? new Uri(str, UriKind.RelativeOrAbsolute) : null;");
+                w.Line($"return new {typeName} {{ Value = value }};");
+                break;
+            case "byte[]":
+                w.Line($"var value = reader.GetBytesFromBase64();");
+                w.Line($"return new {typeName} {{ Value = value }};");
+                break;
+            case "TimeSpan":
+                w.Line($"var str = reader.GetString();");
+                w.Line($"var value = str is not null ? System.Xml.XmlConvert.ToTimeSpan(str) : default(TimeSpan);");
+                w.Line($"return new {typeName} {{ Value = value }};");
+                break;
+            default:
+                w.Line($"var value = reader.GetString();");
+                w.Line($"return new {typeName} {{ Value = value }};");
+                break;
+        }
+    }
+
+    private static void GenerateConverterWriteLogic(CodeWriter w, string dataType)
+    {
+        switch (dataType)
+        {
+            case "string":
+                w.Line("writer.WriteStringValue(value.Value);");
+                break;
+            case "long":
+                w.Line("writer.WriteNumberValue(value.Value.Value);");
+                break;
+            case "ulong":
+                w.Line("writer.WriteNumberValue(value.Value.Value);");
+                break;
+            case "decimal":
+                w.Line("writer.WriteNumberValue(value.Value.Value);");
+                break;
+            case "bool":
+                w.Line("writer.WriteBooleanValue(value.Value.Value);");
+                break;
+            case "DateTime":
+                w.Line("writer.WriteStringValue(value.Value.Value);");
+                break;
+            case "DateTimeOffset":
+                w.Line("writer.WriteStringValue(value.Value.Value);");
+                break;
+            case "DateOnly":
+                w.Line("writer.WriteStringValue(value.Value.Value.ToString(\"O\"));");
+                break;
+            case "Guid":
+                w.Line("writer.WriteStringValue(value.Value.Value);");
+                break;
+            case "Uri":
+                w.Line("writer.WriteStringValue(value.Value.ToString());");
+                break;
+            case "byte[]":
+                w.Line("writer.WriteBase64StringValue(value.Value);");
+                break;
+            case "TimeSpan":
+                w.Line("writer.WriteStringValue(System.Xml.XmlConvert.ToString(value.Value.Value));");
+                break;
+            default:
+                w.Line("writer.WriteStringValue(value.Value);");
+                break;
+        }
     }
 
     private void GenerateModelProperties(CodeWriter w, ModelContainer model)
@@ -610,6 +791,7 @@ public sealed class RecordCodeGenerator
         w.Line("using System.Collections.Generic;");
         if (includeJson)
         {
+            w.Line("using System.Text.Json;");
             w.Line("using System.Text.Json.Serialization;");
         }
     }

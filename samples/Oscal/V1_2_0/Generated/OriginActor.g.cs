@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,6 +16,24 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record OriginActor
 {
+    /// <summary>
+    /// Actor Type - The kind of actor.
+    /// </summary>
+    [JsonPropertyName("type")]
+    public required string Type { get; init; }
+
+    /// <summary>
+    /// Actor Universally Unique Identifier Reference - A &lt;a href="https://pages.nist.gov/OSCAL/concepts/identifier-use/#machine-oriented" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;machine-oriented&lt;/a&gt; identifier reference to the tool or person based on the associated type.
+    /// </summary>
+    [JsonPropertyName("actor-uuid")]
+    public required Guid ActorUuid { get; init; }
+
+    /// <summary>
+    /// Actor Role - For a party, this can optionally be used to specify the role the actor was performing.
+    /// </summary>
+    [JsonPropertyName("role-id")]
+    public string? RoleId { get; init; }
+
     /// <summary>
     /// Props
     /// </summary>

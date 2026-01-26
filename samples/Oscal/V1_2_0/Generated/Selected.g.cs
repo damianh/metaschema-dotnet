@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -13,6 +14,7 @@ namespace Oscal.V1_2_0;
 /// <summary>
 /// Selected Level (Confidentiality, Integrity, or Availability) - The selected (Confidentiality, Integrity, or Availability) security impact level.
 /// </summary>
+[JsonConverter(typeof(SelectedJsonConverter))]
 public sealed record Selected
 {
     /// <summary>
@@ -20,4 +22,33 @@ public sealed record Selected
     /// </summary>
     [JsonPropertyName("value")]
     public string? Value { get; init; }
+}
+
+/// <summary>
+/// JSON converter for Selected that handles direct primitive values.
+/// </summary>
+public sealed class SelectedJsonConverter : JsonConverter<Selected>
+{
+    public override Selected? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.Null)
+        {
+            return null;
+        }
+
+        var value = reader.GetString();
+        return new Selected { Value = value };
+    }
+
+    public override void Write(Utf8JsonWriter writer, Selected value, JsonSerializerOptions options)
+    {
+        if (value.Value is null)
+        {
+            writer.WriteNullValue();
+        }
+        else
+        {
+            writer.WriteStringValue(value.Value);
+        }
+    }
 }

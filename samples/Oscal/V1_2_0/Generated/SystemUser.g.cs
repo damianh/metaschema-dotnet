@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,6 +16,12 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record SystemUser
 {
+    /// <summary>
+    /// User Universally Unique Identifier - A &lt;a href="https://pages.nist.gov/OSCAL/concepts/identifier-use/#machine-oriented" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;machine-oriented&lt;/a&gt;, &lt;a href="https://pages.nist.gov/OSCAL/concepts/identifier-use/#globally-unique" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;globally unique&lt;/a&gt; identifier with &lt;a href="https://pages.nist.gov/OSCAL/concepts/identifier-use/#cross-instance" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;cross-instance&lt;/a&gt; scope that can be used to reference this user class elsewhere in &lt;a href="https://pages.nist.gov/OSCAL/concepts/identifier-use/#scope" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;this or other OSCAL instances&lt;/a&gt;. The locally defined &lt;em xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;UUID&lt;/em&gt; of the &lt;code xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;system user&lt;/code&gt; can be used to reference the data item locally or globally (e.g., in an imported OSCAL instance). This UUID should be assigned &lt;a href="https://pages.nist.gov/OSCAL/concepts/identifier-use/#consistency" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;per-subject&lt;/a&gt;, which means it should be consistently used to identify the same subject across revisions of the document.
+    /// </summary>
+    [JsonPropertyName("uuid")]
+    public required Guid Uuid { get; init; }
+
     /// <summary>
     /// Property - An attribute, characteristic, or quality of the containing object expressed as a namespace qualified name/value pair.
     /// </summary>

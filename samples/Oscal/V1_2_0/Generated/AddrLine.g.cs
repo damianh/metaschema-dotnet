@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -13,6 +14,7 @@ namespace Oscal.V1_2_0;
 /// <summary>
 /// Address line - A single line of an address.
 /// </summary>
+[JsonConverter(typeof(AddrLineJsonConverter))]
 public sealed record AddrLine
 {
     /// <summary>
@@ -20,4 +22,33 @@ public sealed record AddrLine
     /// </summary>
     [JsonPropertyName("value")]
     public string? Value { get; init; }
+}
+
+/// <summary>
+/// JSON converter for AddrLine that handles direct primitive values.
+/// </summary>
+public sealed class AddrLineJsonConverter : JsonConverter<AddrLine>
+{
+    public override AddrLine? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.Null)
+        {
+            return null;
+        }
+
+        var value = reader.GetString();
+        return new AddrLine { Value = value };
+    }
+
+    public override void Write(Utf8JsonWriter writer, AddrLine value, JsonSerializerOptions options)
+    {
+        if (value.Value is null)
+        {
+            writer.WriteNullValue();
+        }
+        else
+        {
+            writer.WriteStringValue(value.Value);
+        }
+    }
 }

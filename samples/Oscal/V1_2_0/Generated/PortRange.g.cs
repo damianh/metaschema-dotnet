@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,4 +16,22 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record PortRange
 {
+    /// <summary>
+    /// Start - Indicates the starting port number in a port range for a transport layer protocol
+    /// </summary>
+    [JsonPropertyName("start")]
+    public ulong? Start { get; init; }
+
+    /// <summary>
+    /// End - Indicates the ending port number in a port range for a transport layer protocol
+    /// </summary>
+    [JsonPropertyName("end")]
+    public ulong? End { get; init; }
+
+    /// <summary>
+    /// Transport - Indicates the transport type.
+    /// </summary>
+    [JsonPropertyName("transport")]
+    public string? Transport { get; init; }
+
 }

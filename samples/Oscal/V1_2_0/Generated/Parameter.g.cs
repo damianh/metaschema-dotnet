@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,6 +16,25 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record Parameter
 {
+    /// <summary>
+    /// Parameter Identifier - A unique identifier for the parameter.
+    /// </summary>
+    [JsonPropertyName("id")]
+    public required string Id { get; init; }
+
+    /// <summary>
+    /// Parameter Class - A textual label that provides a characterization of the type, purpose, use or scope of the parameter.
+    /// </summary>
+    [JsonPropertyName("class")]
+    public string? Class { get; init; }
+
+    /// <summary>
+    /// Depends on - &lt;strong xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;(deprecated)&lt;/strong&gt; Another parameter invoking this one. This construct has been deprecated and should not be used.
+    /// </summary>
+    [Obsolete("Deprecated since version 1.0.1")]
+    [JsonPropertyName("depends-on")]
+    public string? DependsOn { get; init; }
+
     /// <summary>
     /// Property - An attribute, characteristic, or quality of the containing object expressed as a namespace qualified name/value pair.
     /// </summary>

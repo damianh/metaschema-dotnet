@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -13,6 +14,7 @@ namespace Oscal.V1_2_0;
 /// <summary>
 /// Functions Performed - Describes a function performed for a given authorized privilege by this user class.
 /// </summary>
+[JsonConverter(typeof(FunctionPerformedJsonConverter))]
 public sealed record FunctionPerformed
 {
     /// <summary>
@@ -20,4 +22,33 @@ public sealed record FunctionPerformed
     /// </summary>
     [JsonPropertyName("value")]
     public string? Value { get; init; }
+}
+
+/// <summary>
+/// JSON converter for FunctionPerformed that handles direct primitive values.
+/// </summary>
+public sealed class FunctionPerformedJsonConverter : JsonConverter<FunctionPerformed>
+{
+    public override FunctionPerformed? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.Null)
+        {
+            return null;
+        }
+
+        var value = reader.GetString();
+        return new FunctionPerformed { Value = value };
+    }
+
+    public override void Write(Utf8JsonWriter writer, FunctionPerformed value, JsonSerializerOptions options)
+    {
+        if (value.Value is null)
+        {
+            writer.WriteNullValue();
+        }
+        else
+        {
+            writer.WriteStringValue(value.Value);
+        }
+    }
 }

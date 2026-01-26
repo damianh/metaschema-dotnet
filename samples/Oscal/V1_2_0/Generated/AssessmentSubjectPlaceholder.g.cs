@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,6 +16,12 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record AssessmentSubjectPlaceholder
 {
+    /// <summary>
+    /// Assessment Subject Placeholder Universally Unique Identifier - A &lt;a href="https://pages.nist.gov/OSCAL/concepts/identifier-use/#machine-oriented" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;machine-oriented&lt;/a&gt;, &lt;a href="https://pages.nist.gov/OSCAL/concepts/identifier-use/#globally-unique" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;globally unique&lt;/a&gt; identifier for a set of assessment subjects that will be identified by a task or an activity that is part of a task. The locally defined &lt;em xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;UUID&lt;/em&gt; of the &lt;code xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;assessment subject placeholder&lt;/code&gt; can be used to reference the data item locally or globally (e.g., in an &lt;a href="https://pages.nist.gov/OSCAL/concepts/identifier-use/#scope" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;imported OSCAL instance&lt;/a&gt;). This UUID should be assigned &lt;a href="https://pages.nist.gov/OSCAL/concepts/identifier-use/#consistency" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;per-subject&lt;/a&gt;, which means it should be consistently used to identify the same subject across revisions of the document.
+    /// </summary>
+    [JsonPropertyName("uuid")]
+    public required Guid Uuid { get; init; }
+
     /// <summary>
     /// Props
     /// </summary>

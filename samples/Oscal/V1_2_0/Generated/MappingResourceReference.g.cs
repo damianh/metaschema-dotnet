@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,6 +16,24 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record MappingResourceReference
 {
+    /// <summary>
+    /// Resource Type Namespace - An optional namespace qualifying the resource's &lt;code xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;type&lt;/code&gt;.
+    /// </summary>
+    [JsonPropertyName("ns")]
+    public Uri? Ns { get; init; }
+
+    /// <summary>
+    /// Resource Type - The semantic type of the resource.
+    /// </summary>
+    [JsonPropertyName("type")]
+    public required string Type { get; init; }
+
+    /// <summary>
+    /// Catalog or Profile Reference - A resolvable URL reference to the base catalog or profile that this profile is tailoring.
+    /// </summary>
+    [JsonPropertyName("href")]
+    public required Uri Href { get; init; }
+
     /// <summary>
     /// Property - An attribute, characteristic, or quality of the containing object expressed as a namespace qualified name/value pair.
     /// </summary>

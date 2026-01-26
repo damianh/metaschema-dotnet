@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,6 +16,12 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record ImportProfile
 {
+    /// <summary>
+    /// Profile Reference - A resolvable URL reference to the profile or catalog to use as the system's control baseline.
+    /// </summary>
+    [JsonPropertyName("href")]
+    public required Uri Href { get; init; }
+
     /// <summary>
     /// Remarks - Additional commentary about the containing object.
     /// </summary>

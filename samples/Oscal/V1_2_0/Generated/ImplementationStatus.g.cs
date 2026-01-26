@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,6 +16,12 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record ImplementationStatus
 {
+    /// <summary>
+    /// Implementation State - Identifies the implementation status of the control or control objective.
+    /// </summary>
+    [JsonPropertyName("state")]
+    public required string State { get; init; }
+
     /// <summary>
     /// Remarks - Additional commentary about the containing object.
     /// </summary>

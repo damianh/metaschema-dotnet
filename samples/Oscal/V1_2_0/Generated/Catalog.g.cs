@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,6 +16,12 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record Catalog
 {
+    /// <summary>
+    /// Catalog Universally Unique Identifier - Provides a globally unique means to identify a given catalog instance.
+    /// </summary>
+    [JsonPropertyName("uuid")]
+    public required Guid Uuid { get; init; }
+
     /// <summary>
     /// Document Metadata - Provides information about the containing document, and defines concepts that are shared across the document.
     /// </summary>

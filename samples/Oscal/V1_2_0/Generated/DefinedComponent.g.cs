@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -20,6 +21,12 @@ public sealed record DefinedComponent
     /// </summary>
     [JsonPropertyName("type")]
     public required string Type { get; init; }
+
+    /// <summary>
+    /// Component Identifier - Provides a globally unique means to identify a given component.
+    /// </summary>
+    [JsonPropertyName("uuid")]
+    public required Guid Uuid { get; init; }
 
     /// <summary>
     /// Props

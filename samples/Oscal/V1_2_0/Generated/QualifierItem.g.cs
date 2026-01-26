@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,6 +16,24 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record QualifierItem
 {
+    /// <summary>
+    /// Subject - The focus of the qualifier.
+    /// </summary>
+    [JsonPropertyName("subject")]
+    public required string Subject { get; init; }
+
+    /// <summary>
+    /// Predicate - The predicate describes how the qualifer applies to the subject.
+    /// </summary>
+    [JsonPropertyName("predicate")]
+    public required string Predicate { get; init; }
+
+    /// <summary>
+    /// Category - The category expresses the resolvable nature of the predicate.
+    /// </summary>
+    [JsonPropertyName("category")]
+    public required string Category { get; init; }
+
     /// <summary>
     /// Remarks - Additional commentary about the containing object.
     /// </summary>

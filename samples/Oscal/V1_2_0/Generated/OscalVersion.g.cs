@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -13,6 +14,7 @@ namespace Oscal.V1_2_0;
 /// <summary>
 /// OSCAL Version - The OSCAL model version the document was authored against and will conform to as valid.
 /// </summary>
+[JsonConverter(typeof(OscalVersionJsonConverter))]
 public sealed record OscalVersion
 {
     /// <summary>
@@ -20,4 +22,33 @@ public sealed record OscalVersion
     /// </summary>
     [JsonPropertyName("value")]
     public string? Value { get; init; }
+}
+
+/// <summary>
+/// JSON converter for OscalVersion that handles direct primitive values.
+/// </summary>
+public sealed class OscalVersionJsonConverter : JsonConverter<OscalVersion>
+{
+    public override OscalVersion? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.Null)
+        {
+            return null;
+        }
+
+        var value = reader.GetString();
+        return new OscalVersion { Value = value };
+    }
+
+    public override void Write(Utf8JsonWriter writer, OscalVersion value, JsonSerializerOptions options)
+    {
+        if (value.Value is null)
+        {
+            writer.WriteNullValue();
+        }
+        else
+        {
+            writer.WriteStringValue(value.Value);
+        }
+    }
 }

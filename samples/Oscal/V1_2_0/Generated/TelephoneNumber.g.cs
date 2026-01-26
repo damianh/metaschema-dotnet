@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -20,4 +21,10 @@ public sealed record TelephoneNumber
     /// </summary>
     [JsonPropertyName("number")]
     public string? Value { get; init; }
+
+    /// <summary>
+    /// type flag - Indicates the type of phone number.
+    /// </summary>
+    [JsonPropertyName("type")]
+    public string? Type { get; init; }
 }

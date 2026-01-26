@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -13,6 +14,7 @@ namespace Oscal.V1_2_0;
 /// <summary>
 /// Email Address - An email address as defined by &lt;a href="https://tools.ietf.org/html/rfc5322#section-3.4.1" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;RFC 5322 Section 3.4.1&lt;/a&gt;.
 /// </summary>
+[JsonConverter(typeof(EmailAddressJsonConverter))]
 public sealed record EmailAddress
 {
     /// <summary>
@@ -20,4 +22,33 @@ public sealed record EmailAddress
     /// </summary>
     [JsonPropertyName("value")]
     public string? Value { get; init; }
+}
+
+/// <summary>
+/// JSON converter for EmailAddress that handles direct primitive values.
+/// </summary>
+public sealed class EmailAddressJsonConverter : JsonConverter<EmailAddress>
+{
+    public override EmailAddress? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.Null)
+        {
+            return null;
+        }
+
+        var value = reader.GetString();
+        return new EmailAddress { Value = value };
+    }
+
+    public override void Write(Utf8JsonWriter writer, EmailAddress value, JsonSerializerOptions options)
+    {
+        if (value.Value is null)
+        {
+            writer.WriteNullValue();
+        }
+        else
+        {
+            writer.WriteStringValue(value.Value);
+        }
+    }
 }

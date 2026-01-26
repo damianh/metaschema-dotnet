@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,6 +16,12 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record RelatedTask
 {
+    /// <summary>
+    /// Task Universally Unique Identifier Reference - A &lt;a href="https://pages.nist.gov/OSCAL/concepts/identifier-use/#machine-oriented" xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;machine-oriented&lt;/a&gt; identifier reference to a unique task.
+    /// </summary>
+    [JsonPropertyName("task-uuid")]
+    public required Guid TaskUuid { get; init; }
+
     /// <summary>
     /// Props
     /// </summary>

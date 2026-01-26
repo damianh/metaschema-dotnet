@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -13,6 +14,7 @@ namespace Oscal.V1_2_0;
 /// <summary>
 /// Adjustment Justification - If the selected security level is different from the base security level, this contains the justification for the change.
 /// </summary>
+[JsonConverter(typeof(AdjustmentJustificationJsonConverter))]
 public sealed record AdjustmentJustification
 {
     /// <summary>
@@ -20,4 +22,33 @@ public sealed record AdjustmentJustification
     /// </summary>
     [JsonPropertyName("value")]
     public string? Value { get; init; }
+}
+
+/// <summary>
+/// JSON converter for AdjustmentJustification that handles direct primitive values.
+/// </summary>
+public sealed class AdjustmentJustificationJsonConverter : JsonConverter<AdjustmentJustification>
+{
+    public override AdjustmentJustification? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.Null)
+        {
+            return null;
+        }
+
+        var value = reader.GetString();
+        return new AdjustmentJustification { Value = value };
+    }
+
+    public override void Write(Utf8JsonWriter writer, AdjustmentJustification value, JsonSerializerOptions options)
+    {
+        if (value.Value is null)
+        {
+            writer.WriteNullValue();
+        }
+        else
+        {
+            writer.WriteStringValue(value.Value);
+        }
+    }
 }

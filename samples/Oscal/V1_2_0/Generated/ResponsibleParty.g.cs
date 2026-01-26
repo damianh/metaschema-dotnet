@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -15,6 +16,12 @@ namespace Oscal.V1_2_0;
 /// </summary>
 public sealed record ResponsibleParty
 {
+    /// <summary>
+    /// Responsible Role - A reference to a &lt;code xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;role&lt;/code&gt; performed by a &lt;code xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;party&lt;/code&gt;.
+    /// </summary>
+    [JsonPropertyName("role-id")]
+    public required string RoleId { get; init; }
+
     /// <summary>
     /// Party Universally Unique Identifier Reference - Specifies one or more parties responsible for performing the associated &lt;code xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0"&gt;role&lt;/code&gt;.
     /// </summary>

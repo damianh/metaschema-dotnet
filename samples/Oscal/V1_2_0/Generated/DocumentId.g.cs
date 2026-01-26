@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -20,4 +21,10 @@ public sealed record DocumentId
     /// </summary>
     [JsonPropertyName("identifier")]
     public string? Value { get; init; }
+
+    /// <summary>
+    /// Document Identification Scheme - Qualifies the kind of document identifier using a URI. If the scheme is not provided the value of the element will be interpreted as a string of characters.
+    /// </summary>
+    [JsonPropertyName("scheme")]
+    public Uri? Scheme { get; init; }
 }

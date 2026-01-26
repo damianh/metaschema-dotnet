@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Oscal.V1_2_0;
@@ -20,6 +21,12 @@ public sealed record ImplementedRequirement
     /// </summary>
     [JsonPropertyName("control-id")]
     public required string ControlId { get; init; }
+
+    /// <summary>
+    /// Control Implementation Identifier - Provides a globally unique means to identify a given control implementation by a component.
+    /// </summary>
+    [JsonPropertyName("uuid")]
+    public required Guid Uuid { get; init; }
 
     /// <summary>
     /// Props
