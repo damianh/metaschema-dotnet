@@ -3,12 +3,9 @@
     <File Path="build.cs" />
   </Folder>
   <Folder Name="/src/">
-    <Project Path="src/Metaschema.Core/Metaschema.Core.csproj" />
-    <Project Path="src/Metaschema.Databind/Metaschema.Databind.csproj" />
-    <Project Path="src/Metaschema.Schemagen/Metaschema.Schemagen.csproj" />
+    <Project Path="src/Metaschema/Metaschema.csproj" />
     <File Path="Directory.Build.props" />
     <Project Path="src/Metaschema.Tool/Metaschema.Tool.csproj" />
-    <Project Path="src/Metaschema.Testing/Metaschema.Testing.csproj" />
     <Project Path="src/Oscal/Oscal.csproj" />
   </Folder>
   <Folder Name="/test/">

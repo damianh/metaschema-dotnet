@@ -1,7 +1,7 @@
 // Licensed under the MIT License.
 
 using System.Text.Json;
-using Metaschema.Core.Loading;
+using Metaschema.Loading;
 using Oscal.V1_2_0;
 using Shouldly;
 using Xunit;

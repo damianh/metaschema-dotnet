@@ -1,10 +1,10 @@
 // Licensed under the MIT License.
 
-using Metaschema.Core.Metapath.Item;
+using Metaschema.Metapath.Item;
 using Shouldly;
 using Xunit;
 
-namespace Metaschema.Core.Constraints;
+namespace Metaschema.Constraints;
 
 /// <summary>
 /// Tests for constraint validation.

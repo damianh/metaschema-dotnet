@@ -2,8 +2,8 @@
 // Demonstrates the new record-based code generation with STJ support.
 
 using System.Text;
-using Metaschema.Core.Model;
-using Metaschema.Databind.CodeGeneration;
+using Metaschema.Model;
+using Metaschema.CodeGeneration;
 
 // Create a simple test metaschema module programmatically
 var module = CreateTestModule();

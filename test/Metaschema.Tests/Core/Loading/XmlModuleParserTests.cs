@@ -1,11 +1,11 @@
 // Licensed under the MIT License.
 
 using System.Xml.Linq;
-using Metaschema.Core.Constraints;
+using Metaschema.Constraints;
 using Shouldly;
 using Xunit;
 
-namespace Metaschema.Core.Loading;
+namespace Metaschema.Loading;
 
 public class XmlModuleParserTests
 {
@@ -130,7 +130,7 @@ public class XmlModuleParserTests
         var flag = module.GetFlagDefinition("my-flag");
         flag.ShouldNotBeNull();
         flag.DataTypeName.ShouldBe("string"); // default
-        flag.Scope.ShouldBe(Metaschema.Core.Model.Scope.Global); // default
+        flag.Scope.ShouldBe(Metaschema.Model.Scope.Global); // default
     }
 
     #region Constraint Parsing Tests

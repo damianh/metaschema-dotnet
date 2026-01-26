@@ -1,9 +1,9 @@
 // Licensed under the MIT License.
 // Demonstrates loading an OSCAL Catalog document using the dynamic document API.
 
-using Metaschema.Core.Loading;
-using Metaschema.Databind;
-using Metaschema.Databind.Nodes;
+using Metaschema.Loading;
+using Metaschema;
+using Metaschema.Nodes;
 
 // Load the OSCAL Catalog Metaschema
 var loader = new ModuleLoader();

@@ -1,5 +1,5 @@
-using Metaschema.Core.Loading;
-using Metaschema.Databind.Nodes;
+using Metaschema.Loading;
+using Metaschema.Nodes;
 using Shouldly;
 using Xunit;
 

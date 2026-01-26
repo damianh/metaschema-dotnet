@@ -1,7 +1,7 @@
 // Licensed under the MIT License.
 
-using Metaschema.Core.Loading;
-using Metaschema.Databind.CodeGeneration;
+using Metaschema.Loading;
+using Metaschema.CodeGeneration;
 using Shouldly;
 using Xunit;
 

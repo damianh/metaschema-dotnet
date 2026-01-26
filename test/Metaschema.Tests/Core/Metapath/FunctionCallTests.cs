@@ -1,12 +1,12 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using Metaschema.Core.Metapath.Context;
-using Metaschema.Core.Metapath.Item;
+using Metaschema.Metapath.Context;
+using Metaschema.Metapath.Item;
 using Shouldly;
 using Xunit;
 
-namespace Metaschema.Core.Metapath;
+namespace Metaschema.Metapath;
 
 /// <summary>
 /// Tests for evaluating built-in function calls.

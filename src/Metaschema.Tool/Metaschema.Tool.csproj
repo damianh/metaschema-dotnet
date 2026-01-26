@@ -20,9 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Metaschema.Core\Metaschema.Core.csproj" />
-    <ProjectReference Include="..\Metaschema.Databind\Metaschema.Databind.csproj" />
-    <ProjectReference Include="..\Metaschema.Schemagen\Metaschema.Schemagen.csproj" />
+    <ProjectReference Include="..\Metaschema\Metaschema.csproj" />
   </ItemGroup>
 
   <ItemGroup>

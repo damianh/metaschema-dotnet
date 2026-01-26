@@ -3,7 +3,7 @@
 using Shouldly;
 using Xunit;
 
-namespace Metaschema.Core;
+namespace Metaschema;
 
 public class MetaschemaCoreTests
 {

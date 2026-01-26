@@ -1,8 +1,8 @@
 // Licensed under the MIT License.
 
 using System.CommandLine;
-using Metaschema.Core.Loading;
-using Metaschema.Databind;
+using Metaschema.Loading;
+using Metaschema;
 
 namespace Metaschema.Tool.Commands;
 

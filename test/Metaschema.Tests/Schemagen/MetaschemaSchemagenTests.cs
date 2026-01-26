@@ -3,7 +3,7 @@
 using Shouldly;
 using Xunit;
 
-namespace Metaschema.Schemagen;
+namespace Metaschema.SchemaGeneration;
 
 public class MetaschemaSchemagenTests
 {

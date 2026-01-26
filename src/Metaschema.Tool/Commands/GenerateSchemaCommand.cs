@@ -2,10 +2,10 @@
 
 using System.CommandLine;
 using System.Text.Json;
-using Metaschema.Core.Loading;
-using Metaschema.Schemagen;
-using Metaschema.Schemagen.JsonSchema;
-using Metaschema.Schemagen.Xsd;
+using Metaschema.Loading;
+using Metaschema.SchemaGeneration;
+using Metaschema.SchemaGeneration.JsonSchema;
+using Metaschema.SchemaGeneration.Xsd;
 
 namespace Metaschema.Tool.Commands;
 

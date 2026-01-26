@@ -6,8 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Metaschema.Core\Metaschema.Core.csproj" />
-    <ProjectReference Include="..\..\src\Metaschema.Databind\Metaschema.Databind.csproj" />
+    <ProjectReference Include="..\..\src\Metaschema\Metaschema.csproj" />
     <ProjectReference Include="..\..\src\Oscal\Oscal.csproj" />
   </ItemGroup>
 

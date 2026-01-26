@@ -1,7 +1,7 @@
 // Licensed under the MIT License.
 
 using System.CommandLine;
-using Metaschema.Core.Loading;
+using Metaschema.Loading;
 
 namespace Metaschema.Tool.Commands;
 

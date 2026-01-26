@@ -1,7 +1,7 @@
 // Licensed under the MIT License.
 
-using Metaschema.Core.Loading;
-using Metaschema.Databind.CodeGeneration;
+using Metaschema.Loading;
+using Metaschema.CodeGeneration;
 using Shouldly;
 using Xunit;
 
@@ -12,7 +12,7 @@ public class CSharpCodeGeneratorTests
     private static string GetTestDataPath(string relativePath) =>
         Path.Combine(AppContext.BaseDirectory, "TestData", relativePath);
 
-    private static Core.Model.MetaschemaModule LoadTestModule()
+    private static Model.MetaschemaModule LoadTestModule()
     {
         var loader = new ModuleLoader();
         return loader.Load(GetTestDataPath("simple-module.xml"));
@@ -285,7 +285,7 @@ public class CSharpCodeGeneratorTests
         var content = files.Values.First();
         content.ShouldContain("using System;");
         content.ShouldContain("using System.Collections.Generic;");
-        content.ShouldContain("using Metaschema.Databind.Binding.Attributes;");
+        content.ShouldContain("using Metaschema.Binding.Attributes;");
     }
 
     [Fact]

@@ -3,7 +3,7 @@
 using Shouldly;
 using Xunit;
 
-namespace Metaschema.Core.Loading;
+namespace Metaschema.Loading;
 
 public class CircularImportTests
 {

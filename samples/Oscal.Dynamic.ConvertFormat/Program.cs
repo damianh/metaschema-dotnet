@@ -1,8 +1,8 @@
 // Licensed under the MIT License.
 // Demonstrates converting OSCAL documents between JSON, XML, and YAML formats.
 
-using Metaschema.Core.Loading;
-using Metaschema.Databind;
+using Metaschema.Loading;
+using Metaschema;
 
 // Load the profile metaschema and document
 var loader = new ModuleLoader();

@@ -2,12 +2,12 @@
 // Demonstrates querying OSCAL documents using Metapath expressions.
 
 using System.Globalization;
-using Metaschema.Core.Loading;
-using Metaschema.Core.Metapath;
-using Metaschema.Core.Metapath.Context;
-using Metaschema.Core.Metapath.Item;
-using Metaschema.Databind;
-using Metaschema.Databind.Validation;
+using Metaschema.Loading;
+using Metaschema.Metapath;
+using Metaschema.Metapath.Context;
+using Metaschema.Metapath.Item;
+using Metaschema;
+using Metaschema.Validation;
 
 // Load the OSCAL Catalog
 var loader = new ModuleLoader();

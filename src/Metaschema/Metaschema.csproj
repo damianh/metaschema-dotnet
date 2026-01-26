@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Comprehensive library for working with NIST Metaschema including model loading, validation, serialization, code generation, and schema generation.</Description>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Antlr4.Runtime.Standard" />
+    <PackageReference Include="Antlr4BuildTasks" PrivateAssets="all" />
+    <PackageReference Include="Markdig" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="YamlDotNet" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Antlr4 Include="Metapath\Parser\Metapath10Lexer.g4">
+      <Listener>false</Listener>
+      <Visitor>true</Visitor>
+      <CSharpNamespace>Metaschema.Metapath.Parser</CSharpNamespace>
+    </Antlr4>
+    <Antlr4 Include="Metapath\Parser\Metapath10.g4">
+      <Listener>false</Listener>
+      <Visitor>true</Visitor>
+      <CSharpNamespace>Metaschema.Metapath.Parser</CSharpNamespace>
+    </Antlr4>
+  </ItemGroup>
+
+</Project>

@@ -1,10 +1,10 @@
 // Licensed under the MIT License.
 
-using Metaschema.Core.Model;
+using Metaschema.Model;
 using Shouldly;
 using Xunit;
 
-namespace Metaschema.Core.Loading;
+namespace Metaschema.Loading;
 
 public class ModuleLoaderTests
 {

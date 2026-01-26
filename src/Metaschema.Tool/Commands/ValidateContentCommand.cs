@@ -1,12 +1,12 @@
 // Licensed under the MIT License.
 
 using System.CommandLine;
-using Metaschema.Core.Constraints;
-using Metaschema.Core.Loading;
-using Metaschema.Core.Model;
-using Metaschema.Databind;
-using Metaschema.Databind.Nodes;
-using Metaschema.Databind.Validation;
+using Metaschema.Constraints;
+using Metaschema.Loading;
+using Metaschema.Model;
+using Metaschema;
+using Metaschema.Nodes;
+using Metaschema.Validation;
 
 namespace Metaschema.Tool.Commands;
 

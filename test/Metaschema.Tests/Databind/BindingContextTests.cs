@@ -1,5 +1,5 @@
-using Metaschema.Core.Loading;
-using Metaschema.Databind.Serialization;
+using Metaschema.Loading;
+using Metaschema.Serialization;
 using Shouldly;
 using Xunit;
 

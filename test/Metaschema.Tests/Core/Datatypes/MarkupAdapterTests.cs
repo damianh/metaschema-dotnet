@@ -1,11 +1,11 @@
 // Licensed under the MIT License.
 
-using Metaschema.Core.Datatypes.Adapters;
-using Metaschema.Core.Markup;
+using Metaschema.Datatypes.Adapters;
+using Metaschema.Markup;
 using Shouldly;
 using Xunit;
 
-namespace Metaschema.Core.Datatypes;
+namespace Metaschema.Datatypes;
 
 public class MarkupLineAdapterTests
 {

@@ -1,10 +1,10 @@
 // Licensed under the MIT License.
 // Demonstrates validating OSCAL content against Metaschema constraints.
 
-using Metaschema.Core.Constraints;
-using Metaschema.Core.Loading;
-using Metaschema.Databind;
-using Metaschema.Databind.Validation;
+using Metaschema.Constraints;
+using Metaschema.Loading;
+using Metaschema;
+using Metaschema.Validation;
 
 // Load the OSCAL Catalog Metaschema
 var loader = new ModuleLoader();

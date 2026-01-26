@@ -1,8 +1,8 @@
 // Licensed under the MIT License.
 
 using System.CommandLine;
-using Metaschema.Core.Loading;
-using Metaschema.Databind.CodeGeneration;
+using Metaschema.Loading;
+using Metaschema.CodeGeneration;
 
 namespace Metaschema.Tool.Commands;
 
@@ -235,10 +235,10 @@ public sealed class GenerateCodeCommand : Command
             p.Length > 0 ? char.ToUpperInvariant(p[0]) + p[1..] : p));
     }
 
-    private static string GetFirstProperty(Metaschema.Core.Model.AssemblyDefinition assembly)
+    private static string GetFirstProperty(Metaschema.Model.AssemblyDefinition assembly)
     {
-        var firstField = assembly.Model?.Elements.OfType<Metaschema.Core.Model.FieldInstance>().FirstOrDefault();
-        var firstAssembly = assembly.Model?.Elements.OfType<Metaschema.Core.Model.AssemblyInstance>().FirstOrDefault();
+        var firstField = assembly.Model?.Elements.OfType<Metaschema.Model.FieldInstance>().FirstOrDefault();
+        var firstAssembly = assembly.Model?.Elements.OfType<Metaschema.Model.AssemblyInstance>().FirstOrDefault();
         
         if (firstField is not null)
         {

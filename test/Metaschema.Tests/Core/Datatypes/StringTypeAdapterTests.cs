@@ -1,11 +1,11 @@
 // Licensed under the MIT License.
 
 using System.Net;
-using Metaschema.Core.Datatypes.Adapters;
+using Metaschema.Datatypes.Adapters;
 using Shouldly;
 using Xunit;
 
-namespace Metaschema.Core.Datatypes;
+namespace Metaschema.Datatypes;
 
 public class StringAdapterTests
 {
