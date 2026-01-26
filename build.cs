@@ -39,6 +39,7 @@ for (int i = 0; i < args.Length; i++)
 const string Clean = "clean";
 const string DebugBuild = "debug-build";
 const string Default = "default";
+const string GenerateOscal = "generate-oscal";
 const string Pack = "pack";
 const string ReleaseBuild = "release-build";
 const string Restore = "restore";
@@ -68,6 +69,60 @@ Target(Pack, dependsOn: [ReleaseBuild], () =>
     RunAsync("dotnet", $"pack {SolutionFile} --no-build -c Release -o artifacts/packages", workingDirectory: repoRoot));
 
 Target(Default, [Clean, ReleaseBuild, Test]);
+
+Target(GenerateOscal, dependsOn: [DebugBuild], async () =>
+{
+    var oscalReferenceDir = Path.Combine(repoRoot, "reference", "oscal");
+    var oscalOutputDir = Path.Combine(repoRoot, "src", "Oscal");
+    var metaschemaToolProject = Path.Combine(repoRoot, "src", "Metaschema.Tool", "Metaschema.Tool.csproj");
+
+    // Find all version directories (v1.0.0, v1.1.0, etc.)
+    var versionDirs = Directory.GetDirectories(oscalReferenceDir)
+        .Where(d => Path.GetFileName(d).StartsWith("v"))
+        .OrderByDescending(d => d)
+        .ToList();
+
+    Console.WriteLine($"Found {versionDirs.Count} OSCAL versions to generate");
+
+    foreach (var versionDir in versionDirs)
+    {
+        var versionName = Path.GetFileName(versionDir); // e.g., "v1.2.0"
+        var metaschemaFile = Path.Combine(versionDir, "oscal_complete_metaschema.xml");
+
+        if (!File.Exists(metaschemaFile))
+        {
+            Console.WriteLine($"Skipping {versionName}: oscal_complete_metaschema.xml not found");
+            continue;
+        }
+
+        // Convert version to namespace-friendly format: v1.2.0 -> V1_2_0
+        var namespaceSuffix = versionName.Replace(".", "_").ToUpperInvariant();
+        var outputDir = Path.Combine(oscalOutputDir, namespaceSuffix, "Generated");
+
+        Console.WriteLine($"Generating OSCAL {versionName} -> {namespaceSuffix}");
+
+        // Clean output directory
+        if (Directory.Exists(outputDir))
+        {
+            Directory.Delete(outputDir, recursive: true);
+        }
+
+        // Run code generator
+        await RunAsync("dotnet", 
+            $"run --project \"{metaschemaToolProject}\" --no-build -c Debug -- " +
+            $"generate-code \"{metaschemaFile}\" " +
+            $"--namespace Oscal.{namespaceSuffix} " +
+            $"--output \"{outputDir}\"",
+            workingDirectory: repoRoot);
+
+        var fileCount = Directory.Exists(outputDir) 
+            ? Directory.GetFiles(outputDir, "*.cs").Length 
+            : 0;
+        Console.WriteLine($"  Generated {fileCount} files");
+    }
+
+    Console.WriteLine("=== OSCAL code generation complete ===");
+});
 
 Target(UpdateOscal, async () =>
 {
