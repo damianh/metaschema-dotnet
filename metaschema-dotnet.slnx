@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="build.cs" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/Metaschema.Core/Metaschema.Core.csproj" />
     <Project Path="src/Metaschema.Databind/Metaschema.Databind.csproj" />
