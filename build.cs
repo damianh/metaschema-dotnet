@@ -218,6 +218,7 @@ void UpdateVersionsManifest(string manifestPath, string version, string tag)
             versions = arr
                 .OfType<JsonObject>()
                 .Where(v => v["version"]?.ToString() != version)
+                .Select(v => JsonNode.Parse(v.ToJsonString())!.AsObject()) // Clone to detach from parent
                 .ToList();
         }
     }
@@ -237,7 +238,7 @@ void UpdateVersionsManifest(string manifestPath, string version, string tag)
     // Write manifest
     var manifest = new JsonObject
     {
-        ["versions"] = new JsonArray([.. versions.Select(v => (JsonNode)v)])
+        ["versions"] = new JsonArray([.. versions])
     };
 
     var options = new JsonSerializerOptions { WriteIndented = true };
