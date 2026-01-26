@@ -7,6 +7,6 @@ if (Test-Path $OutputDir) {
 }
 
 dotnet run --project ../../src/Metaschema.Tool/Metaschema.Tool.csproj -- `
-    generate-code ../oscal-metaschema-v1.2.0/oscal_complete_metaschema.xml `
+    generate-code ../../reference/oscal/v1.2.0/oscal_complete_metaschema.xml `
     --namespace Oscal.V1_2_0 `
     --output $OutputDir

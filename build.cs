@@ -39,6 +39,7 @@ for (int i = 0; i < args.Length; i++)
 const string Clean = "clean";
 const string DebugBuild = "debug-build";
 const string Default = "default";
+const string Pack = "pack";
 const string ReleaseBuild = "release-build";
 const string Restore = "restore";
 const string Test = "test";
@@ -62,6 +63,9 @@ Target(Test, dependsOn: [ReleaseBuild], async () =>
     await RunAsync("dotnet", "run --project test/Metaschema.Tests --no-build -c Release", workingDirectory: repoRoot);
     await RunAsync("dotnet", "run --project test/Oscal.Tests --no-build -c Release", workingDirectory: repoRoot);
 });
+
+Target(Pack, dependsOn: [ReleaseBuild], () =>
+    RunAsync("dotnet", $"pack {SolutionFile} --no-build -c Release -o artifacts/packages", workingDirectory: repoRoot));
 
 Target(Default, [Clean, ReleaseBuild, Test]);
 

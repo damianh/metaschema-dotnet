@@ -2,6 +2,20 @@
 
 This library contains strongly-typed C# models for OSCAL (Open Security Controls Assessment Language), generated from NIST Metaschema definitions.
 
+## Installation
+
+Install via NuGet:
+
+```bash
+dotnet add package DamianH.Oscal
+```
+
+Or via Package Manager Console:
+
+```powershell
+Install-Package DamianH.Oscal
+```
+
 ## Versioning Strategy
 
 The OSCAL library uses a **versioned namespace approach** to allow multiple OSCAL versions to coexist in the same application:
@@ -19,16 +33,61 @@ The OSCAL library uses a **versioned namespace approach** to allow multiple OSCA
 
 ## Usage
 
+### Basic JSON Deserialization
+
+```csharp
+using System.Text.Json;
+using Oscal.V1_2_0;
+
+// Load an OSCAL catalog from JSON
+var json = File.ReadAllText("nist-800-53-catalog.json");
+var catalog = JsonSerializer.Deserialize<Catalog>(json, V1_2_0JsonContext.Default.Options);
+
+Console.WriteLine($"Catalog: {catalog.Metadata.Title}");
+Console.WriteLine($"Controls: {catalog.Groups.SelectMany(g => g.Controls).Count()}");
+```
+
+### Using System.Text.Json Source Generation
+
+The library includes source-generated JSON contexts for high-performance serialization:
+
+```csharp
+using System.Text.Json;
+using Oscal.V1_2_0;
+
+// Deserialize using source-generated context
+var catalog = JsonSerializer.Deserialize(json, V1_2_0JsonContext.Default.Catalog);
+
+// Serialize back to JSON
+var outputJson = JsonSerializer.Serialize(catalog, V1_2_0JsonContext.Default.Catalog);
+```
+
 ### Using a Specific Version
 
 ```csharp
 using Oscal.V1_2_0;
 
-// Load an OSCAL catalog
-var catalog = JsonSerializer.Deserialize<Catalog>(json, V1_2_0JsonContext.Default.Options);
-
 // The namespace tells you the version: Oscal.V1_2_0 = OSCAL v1.2.0
+var catalog = JsonSerializer.Deserialize<Catalog>(json, V1_2_0JsonContext.Default.Options);
 Console.WriteLine($"Loaded catalog: {catalog.Metadata.Title}");
+```
+
+### Working with Different OSCAL Model Types
+
+```csharp
+using Oscal.V1_2_0;
+
+// Load a catalog (controls library)
+var catalog = JsonSerializer.Deserialize<Catalog>(catalogJson, V1_2_0JsonContext.Default.Catalog);
+
+// Load a profile (control baseline)
+var profile = JsonSerializer.Deserialize<Profile>(profileJson, V1_2_0JsonContext.Default.Profile);
+
+// Load a system security plan
+var ssp = JsonSerializer.Deserialize<SystemSecurityPlan>(sspJson, V1_2_0JsonContext.Default.SystemSecurityPlan);
+
+// Load a POA&M (plan of action and milestones)
+var poam = JsonSerializer.Deserialize<PlanOfActionAndMilestones>(poamJson, V1_2_0JsonContext.Default.PlanOfActionAndMilestones);
 ```
 
 ### Working with Multiple Versions
@@ -45,7 +104,11 @@ var newCatalog = JsonSerializer.Deserialize<OscalV1_3_0.Catalog>(newJson);
 var migratedCatalog = MigrateCatalog(oldCatalog);
 ```
 
-## Regenerating Code
+## For Library Developers
+
+### Regenerating Code
+
+To regenerate the C# models from updated metaschema definitions:
 
 ```powershell
 .\generate-oscal.ps1
@@ -54,17 +117,29 @@ var migratedCatalog = MigrateCatalog(oldCatalog);
 Or manually:
 
 ```bash
-dotnet run --project ../../src/Metaschema.Tool/Metaschema.Tool.csproj -- \
+dotnet run --project ../../src/Metaschema.Tool -- \
   generate-code \
-  ../oscal-metaschema-v1.2.0/oscal_complete_metaschema.xml \
+  ../../reference/oscal/v1.2.0/oscal_complete_metaschema.xml \
   --namespace Oscal.V1_2_0 \
   --output V1_2_0/Generated
 ```
 
-## Adding a New OSCAL Version
+### Adding a New OSCAL Version
 
-1. Add metaschema files to `samples/oscal-metaschema-v{version}/`
-2. Copy and modify `generate-oscal.ps1` for the new version
+1. Fetch the new OSCAL version metaschema files:
+   ```bash
+   dotnet run build.cs -- update-oscal 1.3.0
+   ```
+
+2. Generate code for the new version:
+   ```bash
+   dotnet run --project src/Metaschema.Tool -- \
+     generate-code \
+     reference/oscal/v1.3.0/oscal_complete_metaschema.xml \
+     --namespace Oscal.V1_3_0 \
+     --output src/Oscal/V1_3_0/Generated
+   ```
+
 3. Update `Oscal.csproj` to include the new folder:
    ```xml
    <Compile Include="V1_3_0\Generated\**\*.g.cs" />
@@ -112,13 +187,21 @@ All 8 OSCAL models are included in each version:
 - **Comprehensive XML documentation** from metaschema descriptions
 - **Type-safe models** validated against official NIST metaschema definitions
 
+## Requirements
+
+- **.NET 10.0** or later
+
+## License
+
+MIT License. See LICENSE file in the repository.
+
 ## Source Metaschemas
 
-The metaschema sources are stored in version-specific directories:
+The metaschema sources are stored in the repository under `reference/oscal/`:
 
 ```
-samples/
-├── oscal-metaschema-v1.2.0/
+reference/oscal/
+├── v1.2.0/
 │   ├── oscal_complete_metaschema.xml
 │   ├── oscal_catalog_metaschema.xml
 │   ├── oscal_profile_metaschema.xml
@@ -129,8 +212,9 @@ samples/
 │   ├── oscal_component_metaschema.xml
 │   ├── oscal_mapping_metaschema.xml
 │   └── ... (common/shared modules)
-└── oscal-metaschema-v1.3.0/        # Future versions
-    └── ...
+├── v1.3.0/                         # Future versions
+│   └── ...
+└── versions.json                   # Version manifest
 ```
 
 ## References
