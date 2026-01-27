@@ -12,14 +12,14 @@ namespace Metaschema.Serialization;
 /// </summary>
 public sealed class YamlContentDeserializer : IDeserializer
 {
-    private readonly IBindingContext _context;
+    private readonly BindingContext _context;
     private readonly IDataTypeProvider _dataTypeProvider;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="YamlContentDeserializer"/> class.
     /// </summary>
     /// <param name="context">The binding context.</param>
-    public YamlContentDeserializer(IBindingContext context)
+    public YamlContentDeserializer(BindingContext context)
         : this(context, DataTypeProvider.Default)
     {
     }
@@ -29,7 +29,7 @@ public sealed class YamlContentDeserializer : IDeserializer
     /// </summary>
     /// <param name="context">The binding context.</param>
     /// <param name="dataTypeProvider">The data type provider.</param>
-    public YamlContentDeserializer(IBindingContext context, IDataTypeProvider dataTypeProvider)
+    public YamlContentDeserializer(BindingContext context, IDataTypeProvider dataTypeProvider)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
         _dataTypeProvider = dataTypeProvider ?? throw new ArgumentNullException(nameof(dataTypeProvider));

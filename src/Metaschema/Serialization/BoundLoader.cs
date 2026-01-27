@@ -7,24 +7,30 @@ namespace Metaschema.Serialization;
 /// <summary>
 /// Loads Metaschema-based content with automatic format detection.
 /// </summary>
-public sealed class BoundLoader : IBoundLoader
+public sealed class BoundLoader
 {
-    private readonly IBindingContext _context;
+    private readonly BindingContext _context;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BoundLoader"/> class.
     /// </summary>
     /// <param name="context">The binding context.</param>
-    public BoundLoader(IBindingContext context)
+    public BoundLoader(BindingContext context)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    /// <inheritdoc />
-    public IEnumerable<Format> EnabledFormats => [Format.Xml, Format.Json, Format.Yaml];
+    /// <summary>
+    /// Gets the formats enabled for this loader.
+    /// </summary>
+    public static IEnumerable<Format> EnabledFormats => [Format.Xml, Format.Json, Format.Yaml];
 
-    /// <inheritdoc />
-    public Format DetectFormat(Stream input)
+    /// <summary>
+    /// Detects the format of the content in a stream.
+    /// </summary>
+    /// <param name="input">The input stream (must be seekable).</param>
+    /// <returns>The detected format.</returns>
+    public static Format DetectFormat(Stream input)
     {
         if (!input.CanSeek)
         {
@@ -151,7 +157,11 @@ public sealed class BoundLoader : IBoundLoader
         return Format.Yaml;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Loads content from a stream with automatic format detection.
+    /// </summary>
+    /// <param name="input">The input stream.</param>
+    /// <returns>The loaded document node.</returns>
     public DocumentNode Load(Stream input)
     {
         if (!input.CanSeek)
@@ -167,7 +177,11 @@ public sealed class BoundLoader : IBoundLoader
         return Load(input, format);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Loads content from a file with automatic format detection.
+    /// </summary>
+    /// <param name="path">The file path.</param>
+    /// <returns>The loaded document node.</returns>
     public DocumentNode Load(string path)
     {
         var format = DetectFormatFromExtension(path);
@@ -181,7 +195,12 @@ public sealed class BoundLoader : IBoundLoader
         return Load(stream);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Loads content from a stream with a specified format.
+    /// </summary>
+    /// <param name="input">The input stream.</param>
+    /// <param name="format">The content format.</param>
+    /// <returns>The loaded document node.</returns>
     public DocumentNode Load(Stream input, Format format)
     {
         var deserializer = _context.GetDeserializer(format);

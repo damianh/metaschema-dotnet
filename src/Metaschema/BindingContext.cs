@@ -6,9 +6,9 @@ using Metaschema.Serialization;
 namespace Metaschema;
 
 /// <summary>
-/// Default implementation of <see cref="IBindingContext"/>.
+/// Provides the context for binding Metaschema modules to serialization operations.
 /// </summary>
-public sealed class BindingContext : IBindingContext
+public sealed class BindingContext
 {
     private readonly List<MetaschemaModule> _modules = [];
     private readonly Dictionary<string, AssemblyDefinition> _rootAssembliesByName = new(StringComparer.Ordinal);
@@ -30,10 +30,15 @@ public sealed class BindingContext : IBindingContext
         RegisterModule(module);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Gets the registered modules.
+    /// </summary>
     public IEnumerable<MetaschemaModule> Modules => _modules;
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Registers a module with this binding context.
+    /// </summary>
+    /// <param name="metaschemaModule">The module to register.</param>
     public void RegisterModule(MetaschemaModule metaschemaModule)
     {
         ArgumentNullException.ThrowIfNull(metaschemaModule);
@@ -75,7 +80,11 @@ public sealed class BindingContext : IBindingContext
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Gets a serializer for the specified format.
+    /// </summary>
+    /// <param name="format">The serialization format.</param>
+    /// <returns>A serializer for the format.</returns>
     public ISerializer GetSerializer(Format format)
     {
         return format switch
@@ -87,7 +96,11 @@ public sealed class BindingContext : IBindingContext
         };
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Gets a deserializer for the specified format.
+    /// </summary>
+    /// <param name="format">The serialization format.</param>
+    /// <returns>A deserializer for the format.</returns>
     public IDeserializer GetDeserializer(Format format)
     {
         return format switch
@@ -99,19 +112,31 @@ public sealed class BindingContext : IBindingContext
         };
     }
 
-    /// <inheritdoc />
-    public IBoundLoader NewBoundLoader()
+    /// <summary>
+    /// Creates a new bound loader for loading content with format detection.
+    /// </summary>
+    /// <returns>A new bound loader.</returns>
+    public BoundLoader NewBoundLoader()
     {
         return new BoundLoader(this);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Resolves an assembly definition by root name across all registered modules.
+    /// </summary>
+    /// <param name="rootName">The root element name.</param>
+    /// <returns>The assembly definition, or null if not found.</returns>
     public AssemblyDefinition? ResolveRootAssembly(string rootName)
     {
         return _rootAssembliesByName.GetValueOrDefault(rootName);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Resolves an assembly definition by root name and namespace across all registered modules.
+    /// </summary>
+    /// <param name="rootName">The root element name.</param>
+    /// <param name="namespaceUri">The XML namespace URI.</param>
+    /// <returns>The assembly definition, or null if not found.</returns>
     public AssemblyDefinition? ResolveRootAssembly(string rootName, Uri namespaceUri)
     {
         return _rootAssembliesByNameAndNamespace.GetValueOrDefault((rootName, namespaceUri));

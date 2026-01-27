@@ -10,13 +10,13 @@ namespace Metaschema.Serialization;
 /// </summary>
 public sealed class XmlContentSerializer : ISerializer
 {
-    private readonly IBindingContext _context;
+    private readonly BindingContext _context;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="XmlContentSerializer"/> class.
     /// </summary>
     /// <param name="context">The binding context.</param>
-    public XmlContentSerializer(IBindingContext context)
+    public XmlContentSerializer(BindingContext context)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }

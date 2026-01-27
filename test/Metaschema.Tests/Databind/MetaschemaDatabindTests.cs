@@ -2,6 +2,7 @@
 
 using Metaschema.Loading;
 using Metaschema.Nodes;
+using Metaschema.Serialization;
 using Shouldly;
 using Xunit;
 
@@ -270,7 +271,7 @@ public class BoundLoaderTests
         using var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(xml));
 
         // Act
-        var format = loader.DetectFormat(stream);
+        var format = BoundLoader.DetectFormat(stream);
 
         // Assert
         format.ShouldBe(Format.Xml);
@@ -286,7 +287,7 @@ public class BoundLoaderTests
         using var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(json));
 
         // Act
-        var format = loader.DetectFormat(stream);
+        var format = BoundLoader.DetectFormat(stream);
 
         // Assert
         format.ShouldBe(Format.Json);
@@ -302,7 +303,7 @@ public class BoundLoaderTests
         using var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(yaml));
 
         // Act
-        var format = loader.DetectFormat(stream);
+        var format = BoundLoader.DetectFormat(stream);
 
         // Assert
         format.ShouldBe(Format.Yaml);
@@ -318,7 +319,7 @@ public class BoundLoaderTests
         using var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(yaml));
 
         // Act
-        var format = loader.DetectFormat(stream);
+        var format = BoundLoader.DetectFormat(stream);
 
         // Assert
         format.ShouldBe(Format.Yaml);

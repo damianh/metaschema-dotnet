@@ -11,13 +11,13 @@ namespace Metaschema.Serialization;
 /// </summary>
 public sealed class YamlContentSerializer : ISerializer
 {
-    private readonly IBindingContext _context;
+    private readonly BindingContext _context;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="YamlContentSerializer"/> class.
     /// </summary>
     /// <param name="context">The binding context.</param>
-    public YamlContentSerializer(IBindingContext context)
+    public YamlContentSerializer(BindingContext context)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }

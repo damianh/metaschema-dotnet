@@ -10,13 +10,13 @@ namespace Metaschema.Serialization;
 /// </summary>
 public sealed class JsonContentSerializer : ISerializer
 {
-    private readonly IBindingContext _context;
+    private readonly BindingContext _context;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="JsonContentSerializer"/> class.
     /// </summary>
     /// <param name="context">The binding context.</param>
-    public JsonContentSerializer(IBindingContext context)
+    public JsonContentSerializer(BindingContext context)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
