@@ -3,7 +3,12 @@
   <PropertyGroup>
     <Description>Comprehensive library for working with NIST Metaschema including model loading, validation, serialization, code generation, and schema generation.</Description>
     <IsPackable>true</IsPackable>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Antlr4.Runtime.Standard" />

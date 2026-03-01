@@ -32,7 +32,7 @@ Metaschema is a framework for defining information models that can be used to ge
 
 ## Requirements
 
-- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) (Preview)
+- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 
 ## Installation
 
