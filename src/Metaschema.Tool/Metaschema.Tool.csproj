@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <Description>Command-line interface for Metaschema operations including validation, schema generation, code generation, and format conversion.</Description>
+    
+    <!-- Tool Configuration -->
+    <IsPackable>true</IsPackable>
+    <IsPublishable>true</IsPublishable>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>metaschema</ToolCommandName>
+    
+    <!-- Package Metadata -->
+    <PackageTags>metaschema;oscal;codegen;schema-generation;nist;xml-schema;json-schema;validation;dotnet-tool</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Metaschema\Metaschema.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.CommandLine" />
+  </ItemGroup>
+
+</Project>

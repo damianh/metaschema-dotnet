@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<METASCHEMA xmlns="http://csrc.nist.gov/ns/oscal/metaschema/1.0">
+  <schema-name>Circular B</schema-name>
+  <short-name>circular-b</short-name>
+  <schema-version>1.0.0</schema-version>
+  <namespace>http://example.com/ns/circular-b</namespace>
+  <json-base-uri>http://example.com/schema/circular-b</json-base-uri>
+
+  <import href="a.xml"/>
+
+  <define-flag name="flag-b" as-type="string">
+    <formal-name>Flag B</formal-name>
+    <description>A flag from module B.</description>
+  </define-flag>
+
+</METASCHEMA>

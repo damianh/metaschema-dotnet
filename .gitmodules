@@ -1,0 +1,6 @@
+[submodule "metaschema-java"]
+	path = metaschema-java
+	url = https://github.com/usnistgov/metaschema-java.git
+[submodule "liboscal-java"]
+	path = liboscal-java
+	url = https://github.com/usnistgov/liboscal-java.git
