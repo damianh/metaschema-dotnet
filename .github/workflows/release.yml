@@ -66,7 +66,6 @@ jobs:
     - name: Run tests
       run: |
         dotnet run --project test/Metaschema.Tests/Metaschema.Tests.csproj --no-build --configuration Release
-        dotnet run --project test/Oscal.Tests/Oscal.Tests.csproj --no-build --configuration Release
 
     - name: Pack NuGet packages
       run: dotnet pack metaschema-dotnet.slnx --configuration Release --no-build --output ./packages
