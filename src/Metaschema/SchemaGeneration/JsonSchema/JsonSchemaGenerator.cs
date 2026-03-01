@@ -1,4 +1,5 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -18,10 +19,7 @@ public sealed class JsonSchemaGenerator
     /// Initializes a new instance of the <see cref="JsonSchemaGenerator"/> class.
     /// </summary>
     /// <param name="options">The generation options.</param>
-    public JsonSchemaGenerator(SchemaGenerationOptions? options = null)
-    {
-        _options = options ?? SchemaGenerationOptions.Default;
-    }
+    public JsonSchemaGenerator(SchemaGenerationOptions? options = null) => _options = options ?? SchemaGenerationOptions.Default;
 
     /// <summary>
     /// Generates a JSON Schema document from the specified module.

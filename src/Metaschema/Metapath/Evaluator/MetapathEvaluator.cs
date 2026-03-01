@@ -1,5 +1,5 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using System.Globalization;
 using Metaschema.Metapath.Item;
@@ -17,19 +17,13 @@ public sealed class MetapathEvaluator : Metapath10BaseVisitor<ISequence>
     /// Initializes a new instance of the <see cref="MetapathEvaluator"/> class.
     /// </summary>
     /// <param name="context">The evaluation context.</param>
-    public MetapathEvaluator(IMetapathContext context)
-    {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
-    }
+    public MetapathEvaluator(IMetapathContext context) => _context = context ?? throw new ArgumentNullException(nameof(context));
 
     /// <inheritdoc/>
     protected override ISequence DefaultResult => Sequence.Empty;
 
     /// <inheritdoc/>
-    public override ISequence VisitMetapath(Metapath10.MetapathContext context)
-    {
-        return Visit(context.expr());
-    }
+    public override ISequence VisitMetapath(Metapath10.MetapathContext context) => Visit(context.expr());
 
     /// <inheritdoc/>
     public override ISequence VisitExpr(Metapath10.ExprContext context)
@@ -167,22 +161,68 @@ public sealed class MetapathEvaluator : Metapath10BaseVisitor<ISequence>
         // Try numeric comparison first
         if (TryGetNumericValue(left, out var leftNum) && TryGetNumericValue(right, out var rightNum))
         {
-            if (comp.EQ() is not null) return leftNum == rightNum;
-            if (comp.NE() is not null) return leftNum != rightNum;
-            if (comp.LT() is not null) return leftNum < rightNum;
-            if (comp.LE() is not null) return leftNum <= rightNum;
-            if (comp.GT() is not null) return leftNum > rightNum;
-            if (comp.GE() is not null) return leftNum >= rightNum;
+            if (comp.EQ() is not null)
+            {
+                return leftNum == rightNum;
+            }
+
+            if (comp.NE() is not null)
+            {
+                return leftNum != rightNum;
+            }
+
+            if (comp.LT() is not null)
+            {
+                return leftNum < rightNum;
+            }
+
+            if (comp.LE() is not null)
+            {
+                return leftNum <= rightNum;
+            }
+
+            if (comp.GT() is not null)
+            {
+                return leftNum > rightNum;
+            }
+
+            if (comp.GE() is not null)
+            {
+                return leftNum >= rightNum;
+            }
         }
 
         // String comparison
         var cmp = string.Compare(leftStr, rightStr, StringComparison.Ordinal);
-        if (comp.EQ() is not null) return cmp == 0;
-        if (comp.NE() is not null) return cmp != 0;
-        if (comp.LT() is not null) return cmp < 0;
-        if (comp.LE() is not null) return cmp <= 0;
-        if (comp.GT() is not null) return cmp > 0;
-        if (comp.GE() is not null) return cmp >= 0;
+        if (comp.EQ() is not null)
+        {
+            return cmp == 0;
+        }
+
+        if (comp.NE() is not null)
+        {
+            return cmp != 0;
+        }
+
+        if (comp.LT() is not null)
+        {
+            return cmp < 0;
+        }
+
+        if (comp.LE() is not null)
+        {
+            return cmp <= 0;
+        }
+
+        if (comp.GT() is not null)
+        {
+            return cmp > 0;
+        }
+
+        if (comp.GE() is not null)
+        {
+            return cmp >= 0;
+        }
 
         return false;
     }
@@ -195,22 +235,68 @@ public sealed class MetapathEvaluator : Metapath10BaseVisitor<ISequence>
         // Try numeric comparison first
         if (TryGetNumericValue(left, out var leftNum) && TryGetNumericValue(right, out var rightNum))
         {
-            if (comp.KW_EQ() is not null) return leftNum == rightNum;
-            if (comp.KW_NE() is not null) return leftNum != rightNum;
-            if (comp.KW_LT() is not null) return leftNum < rightNum;
-            if (comp.KW_LE() is not null) return leftNum <= rightNum;
-            if (comp.KW_GT() is not null) return leftNum > rightNum;
-            if (comp.KW_GE() is not null) return leftNum >= rightNum;
+            if (comp.KW_EQ() is not null)
+            {
+                return leftNum == rightNum;
+            }
+
+            if (comp.KW_NE() is not null)
+            {
+                return leftNum != rightNum;
+            }
+
+            if (comp.KW_LT() is not null)
+            {
+                return leftNum < rightNum;
+            }
+
+            if (comp.KW_LE() is not null)
+            {
+                return leftNum <= rightNum;
+            }
+
+            if (comp.KW_GT() is not null)
+            {
+                return leftNum > rightNum;
+            }
+
+            if (comp.KW_GE() is not null)
+            {
+                return leftNum >= rightNum;
+            }
         }
 
         // String comparison
         var cmp = string.Compare(leftStr, rightStr, StringComparison.Ordinal);
-        if (comp.KW_EQ() is not null) return cmp == 0;
-        if (comp.KW_NE() is not null) return cmp != 0;
-        if (comp.KW_LT() is not null) return cmp < 0;
-        if (comp.KW_LE() is not null) return cmp <= 0;
-        if (comp.KW_GT() is not null) return cmp > 0;
-        if (comp.KW_GE() is not null) return cmp >= 0;
+        if (comp.KW_EQ() is not null)
+        {
+            return cmp == 0;
+        }
+
+        if (comp.KW_NE() is not null)
+        {
+            return cmp != 0;
+        }
+
+        if (comp.KW_LT() is not null)
+        {
+            return cmp < 0;
+        }
+
+        if (comp.KW_LE() is not null)
+        {
+            return cmp <= 0;
+        }
+
+        if (comp.KW_GT() is not null)
+        {
+            return cmp > 0;
+        }
+
+        if (comp.KW_GE() is not null)
+        {
+            return cmp >= 0;
+        }
 
         return false;
     }
@@ -504,7 +590,7 @@ public sealed class MetapathEvaluator : Metapath10BaseVisitor<ISequence>
 
         // Parse namespace prefix from function name
         string? namespaceUri = null;
-        string localName = name;
+        var localName = name;
 
         var colonIndex = name.IndexOf(':');
         if (colonIndex > 0)
@@ -543,10 +629,7 @@ public sealed class MetapathEvaluator : Metapath10BaseVisitor<ISequence>
     }
 
     /// <inheritdoc/>
-    public override ISequence VisitForexpr(Metapath10.ForexprContext context)
-    {
-        return EvaluateForClause(context.simpleforclause(), context.exprsingle(), 0);
-    }
+    public override ISequence VisitForexpr(Metapath10.ForexprContext context) => EvaluateForClause(context.simpleforclause(), context.exprsingle(), 0);
 
     private ISequence EvaluateForClause(Metapath10.SimpleforclauseContext clause, Metapath10.ExprsingleContext returnExpr, int bindingIndex)
     {
@@ -576,10 +659,7 @@ public sealed class MetapathEvaluator : Metapath10BaseVisitor<ISequence>
     }
 
     /// <inheritdoc/>
-    public override ISequence VisitLetexpr(Metapath10.LetexprContext context)
-    {
-        return EvaluateLetClause(context.simpleletclause(), context.exprsingle(), 0);
-    }
+    public override ISequence VisitLetexpr(Metapath10.LetexprContext context) => EvaluateLetClause(context.simpleletclause(), context.exprsingle(), 0);
 
     private ISequence EvaluateLetClause(Metapath10.SimpleletclauseContext clause, Metapath10.ExprsingleContext returnExpr, int bindingIndex)
     {
@@ -806,22 +886,13 @@ public sealed class MetapathEvaluator : Metapath10BaseVisitor<ISequence>
     }
 
     /// <inheritdoc/>
-    public override ISequence VisitTreatexpr(Metapath10.TreatexprContext context)
-    {
-        return Visit(context.castableexpr());
-    }
+    public override ISequence VisitTreatexpr(Metapath10.TreatexprContext context) => Visit(context.castableexpr());
 
     /// <inheritdoc/>
-    public override ISequence VisitCastableexpr(Metapath10.CastableexprContext context)
-    {
-        return Visit(context.castexpr());
-    }
+    public override ISequence VisitCastableexpr(Metapath10.CastableexprContext context) => Visit(context.castexpr());
 
     /// <inheritdoc/>
-    public override ISequence VisitCastexpr(Metapath10.CastexprContext context)
-    {
-        return Visit(context.arrowexpr());
-    }
+    public override ISequence VisitCastexpr(Metapath10.CastexprContext context) => Visit(context.arrowexpr());
 
     /// <inheritdoc/>
     public override ISequence VisitArrowexpr(Metapath10.ArrowexprContext context)
@@ -838,7 +909,10 @@ public sealed class MetapathEvaluator : Metapath10BaseVisitor<ISequence>
         foreach (var arrowFunc in arrowFuncs)
         {
             var funcName = arrowFunc.eqname()?.GetText();
-            if (funcName is null) continue;
+            if (funcName is null)
+            {
+                continue;
+            }
 
             var argList = context.argumentlist().FirstOrDefault();
             var args = new List<ISequence> { result };
@@ -864,10 +938,7 @@ public sealed class MetapathEvaluator : Metapath10BaseVisitor<ISequence>
     }
 
     /// <inheritdoc/>
-    public override ISequence VisitValueexpr(Metapath10.ValueexprContext context)
-    {
-        return Visit(context.simplemapexpr());
-    }
+    public override ISequence VisitValueexpr(Metapath10.ValueexprContext context) => Visit(context.simplemapexpr());
 
     /// <inheritdoc/>
     public override ISequence VisitSimplemapexpr(Metapath10.SimplemapexprContext context)
@@ -969,25 +1040,46 @@ public sealed class MetapathEvaluator : Metapath10BaseVisitor<ISequence>
     {
         // Try each primary expression type
         var literal = context.literal();
-        if (literal is not null) return Visit(literal);
+        if (literal is not null)
+        {
+            return Visit(literal);
+        }
 
         var varref = context.varref();
-        if (varref is not null) return Visit(varref);
+        if (varref is not null)
+        {
+            return Visit(varref);
+        }
 
         var parenExpr = context.parenthesizedexpr();
-        if (parenExpr is not null) return Visit(parenExpr);
+        if (parenExpr is not null)
+        {
+            return Visit(parenExpr);
+        }
 
         var contextItem = context.contextitemexpr();
-        if (contextItem is not null) return Visit(contextItem);
+        if (contextItem is not null)
+        {
+            return Visit(contextItem);
+        }
 
         var funcCall = context.functioncall();
-        if (funcCall is not null) return Visit(funcCall);
+        if (funcCall is not null)
+        {
+            return Visit(funcCall);
+        }
 
         var arrayConstr = context.arrayconstructor();
-        if (arrayConstr is not null) return Visit(arrayConstr);
+        if (arrayConstr is not null)
+        {
+            return Visit(arrayConstr);
+        }
 
         var mapConstr = context.mapconstructor();
-        if (mapConstr is not null) return Visit(mapConstr);
+        if (mapConstr is not null)
+        {
+            return Visit(mapConstr);
+        }
 
         return Sequence.Empty;
     }

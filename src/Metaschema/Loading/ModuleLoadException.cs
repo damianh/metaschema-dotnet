@@ -1,4 +1,5 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 namespace Metaschema.Loading;
 
@@ -27,10 +28,7 @@ public class ModuleLoadException : MetaschemaException
     /// <param name="message">The error message.</param>
     /// <param name="location">The location of the module.</param>
     public ModuleLoadException(string message, Uri location)
-        : base(message)
-    {
-        Location = location;
-    }
+        : base(message) => Location = location;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ModuleLoadException"/> class.
@@ -39,8 +37,5 @@ public class ModuleLoadException : MetaschemaException
     /// <param name="location">The location of the module.</param>
     /// <param name="innerException">The inner exception.</param>
     public ModuleLoadException(string message, Uri location, Exception innerException)
-        : base(message, innerException)
-    {
-        Location = location;
-    }
+        : base(message, innerException) => Location = location;
 }

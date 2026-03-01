@@ -1,5 +1,5 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using Metaschema.Metapath.Functions;
 
@@ -20,19 +20,13 @@ public sealed class StaticContext : IStaticContext
     /// <summary>
     /// Initializes a new instance of the <see cref="StaticContext"/> class with built-in functions.
     /// </summary>
-    public StaticContext()
-    {
-        FunctionLibrary = Functions.FunctionLibrary.Default;
-    }
+    public StaticContext() => FunctionLibrary = Functions.FunctionLibrary.Default;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="StaticContext"/> class with the specified function library.
     /// </summary>
     /// <param name="functionLibrary">The function library.</param>
-    public StaticContext(IFunctionLibrary functionLibrary)
-    {
-        FunctionLibrary = functionLibrary ?? throw new ArgumentNullException(nameof(functionLibrary));
-    }
+    public StaticContext(IFunctionLibrary functionLibrary) => FunctionLibrary = functionLibrary ?? throw new ArgumentNullException(nameof(functionLibrary));
 
     /// <inheritdoc/>
     public string? DefaultElementNamespace { get; set; }

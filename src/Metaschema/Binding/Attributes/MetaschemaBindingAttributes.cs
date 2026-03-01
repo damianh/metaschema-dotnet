@@ -1,4 +1,5 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 namespace Metaschema.Binding.Attributes;
 
@@ -63,10 +64,7 @@ public sealed class BoundFlagAttribute : Attribute
     /// Initializes a new instance of the <see cref="BoundFlagAttribute"/> class.
     /// </summary>
     /// <param name="name">The flag name.</param>
-    public BoundFlagAttribute(string name)
-    {
-        Name = name;
-    }
+    public BoundFlagAttribute(string name) => Name = name;
 
     /// <summary>
     /// Gets or sets the flag name.
@@ -106,10 +104,7 @@ public sealed class BoundFieldAttribute : Attribute
     /// Initializes a new instance of the <see cref="BoundFieldAttribute"/> class.
     /// </summary>
     /// <param name="name">The field name.</param>
-    public BoundFieldAttribute(string name)
-    {
-        Name = name;
-    }
+    public BoundFieldAttribute(string name) => Name = name;
 
     /// <summary>
     /// Gets or sets the field name.
@@ -159,10 +154,7 @@ public sealed class BoundAssemblyAttribute : Attribute
     /// Initializes a new instance of the <see cref="BoundAssemblyAttribute"/> class.
     /// </summary>
     /// <param name="name">The assembly name.</param>
-    public BoundAssemblyAttribute(string name)
-    {
-        Name = name;
-    }
+    public BoundAssemblyAttribute(string name) => Name = name;
 
     /// <summary>
     /// Gets or sets the assembly name.
@@ -200,10 +192,7 @@ public sealed class JsonFieldValueKeyAttribute : Attribute
     /// Initializes a new instance of the <see cref="JsonFieldValueKeyAttribute"/> class.
     /// </summary>
     /// <param name="name">The JSON property name for the field value.</param>
-    public JsonFieldValueKeyAttribute(string name)
-    {
-        Name = name;
-    }
+    public JsonFieldValueKeyAttribute(string name) => Name = name;
 
     /// <summary>
     /// Gets the JSON property name for the field value.
@@ -221,10 +210,7 @@ public sealed class XmlNamespaceAttribute : Attribute
     /// Initializes a new instance of the <see cref="XmlNamespaceAttribute"/> class.
     /// </summary>
     /// <param name="uri">The XML namespace URI.</param>
-    public XmlNamespaceAttribute(string uri)
-    {
-        Uri = uri;
-    }
+    public XmlNamespaceAttribute(string uri) => Uri = uri;
 
     /// <summary>
     /// Gets the XML namespace URI.
@@ -247,10 +233,7 @@ public sealed class GroupAsAttribute : Attribute
     /// Initializes a new instance of the <see cref="GroupAsAttribute"/> class.
     /// </summary>
     /// <param name="name">The group name.</param>
-    public GroupAsAttribute(string name)
-    {
-        Name = name;
-    }
+    public GroupAsAttribute(string name) => Name = name;
 
     /// <summary>
     /// Gets the group name.

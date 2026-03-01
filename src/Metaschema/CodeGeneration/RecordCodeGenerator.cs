@@ -1,6 +1,6 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
-using System.Globalization;
 using System.Text;
 using Metaschema.Model;
 
@@ -18,10 +18,7 @@ public sealed class RecordCodeGenerator
     /// Initializes a new instance of the <see cref="RecordCodeGenerator"/> class.
     /// </summary>
     /// <param name="options">The code generation options.</param>
-    public RecordCodeGenerator(CodeGenerationOptions? options = null)
-    {
-        _options = options ?? new CodeGenerationOptions();
-    }
+    public RecordCodeGenerator(CodeGenerationOptions? options = null) => _options = options ?? new CodeGenerationOptions();
 
     /// <summary>
     /// Generates C# source code for all definitions in a module and its imports.
@@ -45,7 +42,7 @@ public sealed class RecordCodeGenerator
             // For imported modules, include all definitions (global and local)
             // For the main module, only include global definitions
             var isMainModule = mod == module;
-            
+
             foreach (var flag in mod.FlagDefinitions.Where(f => !isMainModule || f.Scope == Scope.Global))
             {
                 var typeName = GetTypeName(flag.Name);
@@ -76,7 +73,7 @@ public sealed class RecordCodeGenerator
         foreach (var mod in allModules)
         {
             var isMainModule = mod == module;
-            
+
             foreach (var flag in mod.FlagDefinitions.Where(f => !isMainModule || f.Scope == Scope.Global))
             {
                 var typeName = GetTypeName(flag.Name);
@@ -360,7 +357,7 @@ public sealed class RecordCodeGenerator
         }
 
         w.Line($"[JsonPropertyName(\"{jsonName}\")]");
-        
+
         var nullable = !isRequired ? "?" : "";
         var required = isRequired ? "required " : "";
         w.Line($"public {required}{clrType}{nullable} {propName} {{ get; init; }}");
@@ -369,7 +366,7 @@ public sealed class RecordCodeGenerator
     private void GenerateSimpleFieldConverter(CodeWriter w, string typeName, string dataType)
     {
         var visibility = _options.Visibility == TypeVisibility.Public ? "public" : "internal";
-        
+
         if (_options.IncludeDocumentation)
         {
             w.Line("/// <summary>");
@@ -826,7 +823,10 @@ public sealed class RecordCodeGenerator
 
     private static string ToPascalCase(string name)
     {
-        if (string.IsNullOrEmpty(name)) return name;
+        if (string.IsNullOrEmpty(name))
+        {
+            return name;
+        }
 
         var sb = new StringBuilder();
         var capitalizeNext = true;
@@ -861,7 +861,11 @@ public sealed class RecordCodeGenerator
     private static string ToCamelCase(string name)
     {
         var pascal = ToPascalCase(name);
-        if (string.IsNullOrEmpty(pascal)) return pascal;
+        if (string.IsNullOrEmpty(pascal))
+        {
+            return pascal;
+        }
+
         return char.ToLowerInvariant(pascal[0]) + pascal[1..];
     }
 
@@ -896,7 +900,11 @@ public sealed class RecordCodeGenerator
 
     private static string EscapeXmlDoc(string text)
     {
-        if (string.IsNullOrEmpty(text)) return text;
+        if (string.IsNullOrEmpty(text))
+        {
+            return text;
+        }
+
         return text
             .Replace("&", "&amp;")
             .Replace("<", "&lt;")
@@ -905,7 +913,10 @@ public sealed class RecordCodeGenerator
 
     private static string NormalizeWhitespace(string text)
     {
-        if (string.IsNullOrEmpty(text)) return text;
+        if (string.IsNullOrEmpty(text))
+        {
+            return text;
+        }
         // Replace newlines and multiple spaces with a single space
         return System.Text.RegularExpressions.Regex.Replace(text, @"\s+", " ").Trim();
     }
@@ -922,10 +933,7 @@ public sealed class RecordCodeGenerator
         public void Indent() => _indent++;
         public void Outdent() => _indent = Math.Max(0, _indent - 1);
 
-        public void Line()
-        {
-            _sb.AppendLine();
-        }
+        public void Line() => _sb.AppendLine();
 
         public void Line(string text)
         {

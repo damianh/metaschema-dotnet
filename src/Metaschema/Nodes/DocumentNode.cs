@@ -1,4 +1,5 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using Metaschema.Model;
 
@@ -46,8 +47,5 @@ public sealed class DocumentNode : IDocumentRootNode
     /// Adds a child node.
     /// </summary>
     /// <param name="child">The child node to add.</param>
-    public void AddChild(IDocumentNode child)
-    {
-        _children.Add(child);
-    }
+    public void AddChild(IDocumentNode child) => _children.Add(child);
 }

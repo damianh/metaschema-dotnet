@@ -1,4 +1,5 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using System.CommandLine;
 using System.Text.Json;
@@ -56,7 +57,7 @@ public sealed class GenerateSchemaCommand : Command
         Options.Add(inlineOption);
         Options.Add(noDocsOption);
 
-        this.SetAction(async (parseResult, cancellationToken) =>
+        SetAction(async (parseResult, cancellationToken) =>
         {
             var file = parseResult.GetValue(fileArgument)!;
             var schemaType = parseResult.GetValue(typeOption);

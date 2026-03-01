@@ -1,4 +1,5 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using System.Xml.Linq;
 using Metaschema.Constraints;
@@ -449,11 +450,11 @@ public class XmlModuleParserTests
         var field = module.GetFieldDefinition("hash");
         field.ShouldNotBeNull();
         field.FlagInstances.Count.ShouldBe(1);
-        
+
         var flagInstance = field.FlagInstances[0];
         flagInstance.Ref.ShouldBe("algorithm");
         flagInstance.IsRequired.ShouldBeTrue();
-        
+
         // The inline flag should have its definition attached
         flagInstance.ResolvedDefinition.ShouldNotBeNull();
         flagInstance.ResolvedDefinition!.Name.ShouldBe("algorithm");
@@ -496,7 +497,7 @@ public class XmlModuleParserTests
         var assembly = module.GetAssemblyDefinition("item");
         assembly.ShouldNotBeNull();
         assembly.FlagInstances.Count.ShouldBe(1);
-        
+
         var flagInstance = assembly.FlagInstances[0];
         flagInstance.Ref.ShouldBe("id");
         flagInstance.IsRequired.ShouldBeTrue();
@@ -539,11 +540,11 @@ public class XmlModuleParserTests
         var field = module.GetFieldDefinition("mixed");
         field.ShouldNotBeNull();
         field.FlagInstances.Count.ShouldBe(2);
-        
+
         // First flag is a reference
         field.FlagInstances[0].Ref.ShouldBe("global-flag");
         field.FlagInstances[0].IsRequired.ShouldBeFalse();
-        
+
         // Second flag is inline
         field.FlagInstances[1].Ref.ShouldBe("local-flag");
         field.FlagInstances[1].IsRequired.ShouldBeTrue();

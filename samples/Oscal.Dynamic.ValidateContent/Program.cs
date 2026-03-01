@@ -1,9 +1,9 @@
-// Licensed under the MIT License.
-// Demonstrates validating OSCAL content against Metaschema constraints.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
+using Metaschema;
 using Metaschema.Constraints;
 using Metaschema.Loading;
-using Metaschema;
 using Metaschema.Validation;
 
 // Load the OSCAL Catalog Metaschema
@@ -29,8 +29,13 @@ Console.WriteLine();
 var allConstraints = new List<IConstraint>();
 var constraintCounts = new Dictionary<string, int>
 {
-    ["allowed-values"] = 0, ["matches"] = 0, ["expect"] = 0,
-    ["index"] = 0, ["index-has-key"] = 0, ["is-unique"] = 0, ["has-cardinality"] = 0
+    ["allowed-values"] = 0,
+    ["matches"] = 0,
+    ["expect"] = 0,
+    ["index"] = 0,
+    ["index-has-key"] = 0,
+    ["is-unique"] = 0,
+    ["has-cardinality"] = 0
 };
 
 foreach (var assembly in module.AssemblyDefinitions)
@@ -51,7 +56,10 @@ foreach (var flag in module.FlagDefinitions)
 
 Console.WriteLine("Constraint types in catalog metaschema:");
 foreach (var (type, count) in constraintCounts.Where(c => c.Value > 0))
+{
     Console.WriteLine($"  {type}: {count}");
+}
+
 Console.WriteLine($"Total constraints: {allConstraints.Count}");
 Console.WriteLine();
 
@@ -81,10 +89,14 @@ if (!results.IsValid || results.Count > 0)
         {
             Console.WriteLine($"  [{finding.Severity}] {finding.Message}");
             if (finding.Location is not null)
+            {
                 Console.WriteLine($"           at: {finding.Location}");
+            }
         }
         if (results.Count > 5)
+        {
             Console.WriteLine($"  ... and {results.Count - 5} more findings");
+        }
     }
 }
 else
@@ -107,6 +119,9 @@ void CountConstraints(IReadOnlyList<IConstraint> constraints, Dictionary<string,
             ICardinalityConstraint => "has-cardinality",
             _ => null
         };
-        if (key is not null) counts[key]++;
+        if (key is not null)
+        {
+            counts[key]++;
+        }
     }
 }

@@ -1,5 +1,5 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using Metaschema.Metapath.Context;
 using Metaschema.Metapath.Item;
@@ -25,25 +25,19 @@ public class MetapathExpressionTests
     }
 
     [Fact]
-    public void Compile_WithInvalidExpression_ShouldThrowMetapathException()
-    {
+    public void Compile_WithInvalidExpression_ShouldThrowMetapathException() =>
         // Act & Assert - using truly invalid syntax
         Should.Throw<MetapathException>(() => MetapathExpression.Compile("1 + * 2"));
-    }
 
     [Fact]
-    public void Compile_WithEmptyString_ShouldThrowArgumentException()
-    {
+    public void Compile_WithEmptyString_ShouldThrowArgumentException() =>
         // Act & Assert
         Should.Throw<ArgumentException>(() => MetapathExpression.Compile(""));
-    }
 
     [Fact]
-    public void Compile_WithWhitespaceOnly_ShouldThrowArgumentException()
-    {
+    public void Compile_WithWhitespaceOnly_ShouldThrowArgumentException() =>
         // Act & Assert
         Should.Throw<ArgumentException>(() => MetapathExpression.Compile("   "));
-    }
 
     [Fact]
     public void TryCompile_WithValidExpression_ShouldReturnTrue()

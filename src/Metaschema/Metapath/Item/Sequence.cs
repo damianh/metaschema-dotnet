@@ -1,5 +1,5 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using System.Collections;
 
@@ -26,10 +26,7 @@ public sealed class Sequence : ISequence
     /// <summary>
     /// Initializes a new instance of the <see cref="Sequence"/> class.
     /// </summary>
-    public Sequence()
-    {
-        _items = [];
-    }
+    public Sequence() => _items = [];
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Sequence"/> class with the specified items.
@@ -51,10 +48,25 @@ public sealed class Sequence : ISequence
         ArgumentNullException.ThrowIfNull(item);
 
         // Return cached sequences for common values
-        if (ReferenceEquals(item, BooleanItem.True)) return TrueSequence;
-        if (ReferenceEquals(item, BooleanItem.False)) return FalseSequence;
-        if (ReferenceEquals(item, IntegerItem.Zero)) return ZeroSequence;
-        if (ReferenceEquals(item, IntegerItem.One)) return OneSequence;
+        if (ReferenceEquals(item, BooleanItem.True))
+        {
+            return TrueSequence;
+        }
+
+        if (ReferenceEquals(item, BooleanItem.False))
+        {
+            return FalseSequence;
+        }
+
+        if (ReferenceEquals(item, IntegerItem.Zero))
+        {
+            return ZeroSequence;
+        }
+
+        if (ReferenceEquals(item, IntegerItem.One))
+        {
+            return OneSequence;
+        }
 
         return new SingletonSequence(item);
     }
@@ -123,8 +135,16 @@ public sealed class Sequence : ISequence
     public ISequence Concat(ISequence other)
     {
         ArgumentNullException.ThrowIfNull(other);
-        if (IsEmpty) return other;
-        if (other.IsEmpty) return this;
+        if (IsEmpty)
+        {
+            return other;
+        }
+
+        if (other.IsEmpty)
+        {
+            return this;
+        }
+
         return new Sequence(_items.Concat(other));
     }
 
@@ -184,7 +204,11 @@ file sealed class SingletonSequence : ISequence
     public ISequence Concat(ISequence other)
     {
         ArgumentNullException.ThrowIfNull(other);
-        if (other.IsEmpty) return this;
+        if (other.IsEmpty)
+        {
+            return this;
+        }
+
         return new Sequence(Enumerable.Repeat(_item, 1).Concat(other));
     }
 

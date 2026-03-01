@@ -1,5 +1,5 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using Metaschema.Metapath.Item;
 
@@ -53,10 +53,7 @@ public sealed class FunctionLibrary : IFunctionLibrary
     }
 
     /// <inheritdoc/>
-    public IMetapathFunction? GetFunction(string name, int arity)
-    {
-        return GetFunction(null, name, arity);
-    }
+    public IMetapathFunction? GetFunction(string name, int arity) => GetFunction(null, name, arity);
 
     /// <inheritdoc/>
     public IMetapathFunction? GetFunction(string? namespaceUri, string localName, int arity)
@@ -266,20 +263,11 @@ public sealed class FunctionLibrary : IFunctionLibrary
         return Sequence.Of(BooleanItem.Of(ebv));
     }
 
-    private static ISequence EmptyFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
-    {
-        return Sequence.Of(BooleanItem.Of(args[0].IsEmpty));
-    }
+    private static ISequence EmptyFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args) => Sequence.Of(BooleanItem.Of(args[0].IsEmpty));
 
-    private static ISequence ExistsFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
-    {
-        return Sequence.Of(BooleanItem.Of(!args[0].IsEmpty));
-    }
+    private static ISequence ExistsFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args) => Sequence.Of(BooleanItem.Of(!args[0].IsEmpty));
 
-    private static ISequence CountFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
-    {
-        return Sequence.Of(IntegerItem.Of(args[0].Count));
-    }
+    private static ISequence CountFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args) => Sequence.Of(IntegerItem.Of(args[0].Count));
 
     private static ISequence HeadFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
     {
@@ -288,10 +276,7 @@ public sealed class FunctionLibrary : IFunctionLibrary
     }
 
 #pragma warning disable CA1859 // Return type must match delegate signature
-    private static ISequence TailFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
-    {
-        return new Sequence(args[0].Skip(1));
-    }
+    private static ISequence TailFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args) => new Sequence(args[0].Skip(1));
 #pragma warning restore CA1859
 
     private static ISequence StringFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
@@ -307,7 +292,11 @@ public sealed class FunctionLibrary : IFunctionLibrary
 
     private static ISequence ConcatFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
     {
-        if (args.Count == 0) return Sequence.Of(StringItem.Of(string.Empty));
+        if (args.Count == 0)
+        {
+            return Sequence.Of(StringItem.Of(string.Empty));
+        }
+
         var result = string.Concat(args.Select(a => a.FirstOrDefault?.GetStringValue() ?? string.Empty));
         return Sequence.Of(StringItem.Of(result));
     }
@@ -443,14 +432,26 @@ public sealed class FunctionLibrary : IFunctionLibrary
     private static ISequence SumFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
     {
         var seq = args[0];
-        if (seq.IsEmpty) return Sequence.Of(IntegerItem.Zero);
+        if (seq.IsEmpty)
+        {
+            return Sequence.Of(IntegerItem.Zero);
+        }
 
         decimal sum = 0;
         foreach (var item in seq)
         {
-            if (item is IntegerItem i) sum += i.Value;
-            else if (item is DecimalItem d) sum += d.Value;
-            else if (item is DoubleItem db) sum += (decimal)db.Value;
+            if (item is IntegerItem i)
+            {
+                sum += i.Value;
+            }
+            else if (item is DecimalItem d)
+            {
+                sum += d.Value;
+            }
+            else if (item is DoubleItem db)
+            {
+                sum += (decimal)db.Value;
+            }
         }
         return Sequence.Of(DecimalItem.Of(sum));
     }
@@ -458,15 +459,28 @@ public sealed class FunctionLibrary : IFunctionLibrary
     private static ISequence AvgFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
     {
         var seq = args[0];
-        if (seq.IsEmpty) return Sequence.Empty;
+        if (seq.IsEmpty)
+        {
+            return Sequence.Empty;
+        }
 
         decimal sum = 0;
         var count = 0;
         foreach (var item in seq)
         {
-            if (item is IntegerItem i) sum += i.Value;
-            else if (item is DecimalItem d) sum += d.Value;
-            else if (item is DoubleItem db) sum += (decimal)db.Value;
+            if (item is IntegerItem i)
+            {
+                sum += i.Value;
+            }
+            else if (item is DecimalItem d)
+            {
+                sum += d.Value;
+            }
+            else if (item is DoubleItem db)
+            {
+                sum += (decimal)db.Value;
+            }
+
             count++;
         }
         return count > 0 ? Sequence.Of(DecimalItem.Of(sum / count)) : Sequence.Empty;
@@ -475,7 +489,10 @@ public sealed class FunctionLibrary : IFunctionLibrary
     private static ISequence MinFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
     {
         var seq = args[0];
-        if (seq.IsEmpty) return Sequence.Empty;
+        if (seq.IsEmpty)
+        {
+            return Sequence.Empty;
+        }
 
         IItem? min = null;
         var minValue = decimal.MaxValue;
@@ -503,7 +520,10 @@ public sealed class FunctionLibrary : IFunctionLibrary
     private static ISequence MaxFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
     {
         var seq = args[0];
-        if (seq.IsEmpty) return Sequence.Empty;
+        if (seq.IsEmpty)
+        {
+            return Sequence.Empty;
+        }
 
         IItem? max = null;
         var maxValue = decimal.MinValue;
@@ -529,15 +549,9 @@ public sealed class FunctionLibrary : IFunctionLibrary
     }
 
     // Context functions
-    private static ISequence PositionFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
-    {
-        return Sequence.Of(IntegerItem.Of(ctx.DynamicContext.ContextPosition));
-    }
+    private static ISequence PositionFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args) => Sequence.Of(IntegerItem.Of(ctx.DynamicContext.ContextPosition));
 
-    private static ISequence LastFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
-    {
-        return Sequence.Of(IntegerItem.Of(ctx.DynamicContext.ContextSize));
-    }
+    private static ISequence LastFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args) => Sequence.Of(IntegerItem.Of(ctx.DynamicContext.ContextSize));
 
 #pragma warning disable CA1859 // Return type must match delegate signature
     private static ISequence DataFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
@@ -606,10 +620,7 @@ public sealed class FunctionLibrary : IFunctionLibrary
         return new Sequence(results);
     }
 
-    private static ISequence ReverseFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
-    {
-        return new Sequence(args[0].Reverse());
-    }
+    private static ISequence ReverseFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args) => new Sequence(args[0].Reverse());
 
     private static ISequence SubsequenceFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
     {
@@ -665,11 +676,8 @@ public sealed class FunctionLibrary : IFunctionLibrary
         return new Sequence(result);
     }
 
-    private static ISequence UnorderedFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
-    {
-        // unordered() is a hint to the processor - just return the sequence as-is
-        return args[0];
-    }
+    // unordered() is a hint to the processor - just return the sequence as-is
+    private static ISequence UnorderedFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args) => args[0];
 #pragma warning restore CA1859
 
     private static ISequence ZeroOrOneFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
@@ -1028,10 +1036,7 @@ public sealed class FunctionLibrary : IFunctionLibrary
         return Sequence.Of(DateItem.Of(DateOnly.FromDateTime(now.DateTime), now.Offset));
     }
 
-    private static ISequence CurrentDateTimeFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
-    {
-        return Sequence.Of(DateTimeItem.Of(DateTimeOffset.Now));
-    }
+    private static ISequence CurrentDateTimeFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args) => Sequence.Of(DateTimeItem.Of(DateTimeOffset.Now));
 
     private static ISequence CurrentTimeFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
     {
@@ -1270,15 +1275,15 @@ public sealed class FunctionLibrary : IFunctionLibrary
         };
     }
 
-    private static ISequence ImplicitTimezoneFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
-    {
-        return Sequence.Of(DayTimeDurationItem.Of(DateTimeOffset.Now.Offset));
-    }
+    private static ISequence ImplicitTimezoneFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args) => Sequence.Of(DayTimeDurationItem.Of(DateTimeOffset.Now.Offset));
 
     private static ISequence AdjustDateTimeToTimezoneFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
     {
         var item = args[0].FirstOrDefault;
-        if (item is not DateTimeItem dt) return Sequence.Empty;
+        if (item is not DateTimeItem dt)
+        {
+            return Sequence.Empty;
+        }
 
         TimeSpan? tz;
         if (args.Count > 1 && !args[1].IsEmpty)
@@ -1296,7 +1301,10 @@ public sealed class FunctionLibrary : IFunctionLibrary
             tz = DateTimeOffset.Now.Offset;
         }
 
-        if (!tz.HasValue) return Sequence.Of(dt);
+        if (!tz.HasValue)
+        {
+            return Sequence.Of(dt);
+        }
 
         var adjusted = dt.Value.ToOffset(tz.Value);
         return Sequence.Of(DateTimeItem.Of(adjusted));
@@ -1305,7 +1313,10 @@ public sealed class FunctionLibrary : IFunctionLibrary
     private static ISequence AdjustDateToTimezoneFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
     {
         var item = args[0].FirstOrDefault;
-        if (item is not DateItem d) return Sequence.Empty;
+        if (item is not DateItem d)
+        {
+            return Sequence.Empty;
+        }
 
         TimeSpan? tz;
         if (args.Count > 1 && !args[1].IsEmpty)
@@ -1329,7 +1340,10 @@ public sealed class FunctionLibrary : IFunctionLibrary
     private static ISequence AdjustTimeToTimezoneFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
     {
         var item = args[0].FirstOrDefault;
-        if (item is not TimeItem t) return Sequence.Empty;
+        if (item is not TimeItem t)
+        {
+            return Sequence.Empty;
+        }
 
         TimeSpan? tz;
         if (args.Count > 1 && !args[1].IsEmpty)
@@ -1404,14 +1418,20 @@ public sealed class FunctionLibrary : IFunctionLibrary
     {
         var arrItem = args[0].FirstOrDefault;
         var startItem = args[1].FirstOrDefault;
-        if (arrItem is not ArrayItem arr || startItem is not IntegerItem start) return Sequence.Empty;
+        if (arrItem is not ArrayItem arr || startItem is not IntegerItem start)
+        {
+            return Sequence.Empty;
+        }
 
         var startIndex = (int)start.Value - 1;
         var length = args.Count > 2 && args[2].FirstOrDefault is IntegerItem len
             ? (int)len.Value
             : arr.Size - startIndex;
 
-        if (startIndex < 0 || startIndex >= arr.Size) return Sequence.Of(ArrayItem.Empty);
+        if (startIndex < 0 || startIndex >= arr.Size)
+        {
+            return Sequence.Of(ArrayItem.Empty);
+        }
 
         length = Math.Min(length, arr.Size - startIndex);
         var newMembers = arr.Members.Skip(startIndex).Take(length).ToList();
@@ -1623,7 +1643,10 @@ public sealed class FunctionLibrary : IFunctionLibrary
             node = args[0].FirstOrDefault as INodeItem;
         }
 
-        if (node is null) return Sequence.Of(StringItem.Of(string.Empty));
+        if (node is null)
+        {
+            return Sequence.Of(StringItem.Of(string.Empty));
+        }
 
         var name = node.Name ?? string.Empty;
         var localName = name.Contains(':') ? name[(name.IndexOf(':') + 1)..] : name;
@@ -1711,7 +1734,10 @@ public sealed class FunctionLibrary : IFunctionLibrary
     private static ISequence ResolveUriFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
     {
         var relative = args[0].FirstOrDefault?.GetStringValue();
-        if (string.IsNullOrEmpty(relative)) return Sequence.Empty;
+        if (string.IsNullOrEmpty(relative))
+        {
+            return Sequence.Empty;
+        }
 
         Uri? baseUri;
         if (args.Count > 1 && !args[1].IsEmpty)
@@ -1760,7 +1786,10 @@ public sealed class FunctionLibrary : IFunctionLibrary
     {
         // This is a placeholder - actual implementation would require document loading infrastructure
         var uri = args[0].FirstOrDefault?.GetStringValue();
-        if (string.IsNullOrEmpty(uri)) return Sequence.Empty;
+        if (string.IsNullOrEmpty(uri))
+        {
+            return Sequence.Empty;
+        }
 
         // For now, return empty - full implementation would load and parse the document
         return Sequence.Empty;
@@ -1770,7 +1799,10 @@ public sealed class FunctionLibrary : IFunctionLibrary
     {
         // This is a placeholder - actual implementation would check if document is accessible
         var uri = args[0].FirstOrDefault?.GetStringValue();
-        if (string.IsNullOrEmpty(uri)) return Sequence.Of(BooleanItem.False);
+        if (string.IsNullOrEmpty(uri))
+        {
+            return Sequence.Of(BooleanItem.False);
+        }
 
         // For now, return false - full implementation would check document availability
         return Sequence.Of(BooleanItem.False);
@@ -1781,7 +1813,10 @@ public sealed class FunctionLibrary : IFunctionLibrary
     private static ISequence InnermostFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
     {
         var nodes = args[0].OfType<INodeItem>().ToList();
-        if (nodes.Count == 0) return Sequence.Empty;
+        if (nodes.Count == 0)
+        {
+            return Sequence.Empty;
+        }
 
         // Remove any node that is an ancestor of another node in the set
         var result = nodes.Where(n =>
@@ -1793,7 +1828,10 @@ public sealed class FunctionLibrary : IFunctionLibrary
     private static ISequence OutermostFunction(IMetapathContext ctx, IReadOnlyList<ISequence> args)
     {
         var nodes = args[0].OfType<INodeItem>().ToList();
-        if (nodes.Count == 0) return Sequence.Empty;
+        if (nodes.Count == 0)
+        {
+            return Sequence.Empty;
+        }
 
         // Remove any node that is a descendant of another node in the set
         var result = nodes.Where(n =>
@@ -1808,7 +1846,11 @@ public sealed class FunctionLibrary : IFunctionLibrary
         var current = node.Parent;
         while (current is not null)
         {
-            if (ReferenceEquals(current, ancestor)) return true;
+            if (ReferenceEquals(current, ancestor))
+            {
+                return true;
+            }
+
             current = current.Parent;
         }
         return false;
@@ -1848,7 +1890,10 @@ public sealed class FunctionLibrary : IFunctionLibrary
             node = args[0].FirstOrDefault as INodeItem;
         }
 
-        if (node is null) return Sequence.Of(IntegerItem.Zero);
+        if (node is null)
+        {
+            return Sequence.Of(IntegerItem.Zero);
+        }
 
         var depth = 0;
         var current = node;
@@ -1864,8 +1909,16 @@ public sealed class FunctionLibrary : IFunctionLibrary
     {
         public bool Equals(IAtomicItem? x, IAtomicItem? y)
         {
-            if (x is null && y is null) return true;
-            if (x is null || y is null) return false;
+            if (x is null && y is null)
+            {
+                return true;
+            }
+
+            if (x is null || y is null)
+            {
+                return false;
+            }
+
             return string.Equals(x.GetStringValue(), y.GetStringValue(), StringComparison.Ordinal);
         }
 

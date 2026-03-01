@@ -1,4 +1,5 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using System.Xml;
 using System.Xml.Linq;
@@ -26,10 +27,7 @@ public sealed class XmlModuleParser
     /// Initializes a new instance of the <see cref="XmlModuleParser"/> class.
     /// </summary>
     /// <param name="importLoader">A function to load imported modules by URI.</param>
-    public XmlModuleParser(Func<Uri, MetaschemaModule> importLoader)
-    {
-        _importLoader = importLoader ?? throw new ArgumentNullException(nameof(importLoader));
-    }
+    public XmlModuleParser(Func<Uri, MetaschemaModule> importLoader) => _importLoader = importLoader ?? throw new ArgumentNullException(nameof(importLoader));
 
     /// <summary>
     /// Parses a Metaschema module from a stream.
@@ -615,19 +613,16 @@ public sealed class XmlModuleParser
         };
     }
 
-    private static MatchesConstraint ParseMatchesConstraint(XElement element)
+    private static MatchesConstraint ParseMatchesConstraint(XElement element) => new MatchesConstraint
     {
-        return new MatchesConstraint
-        {
-            Id = element.Attribute("id")?.Value,
-            Level = ParseConstraintLevel(element.Attribute("level")?.Value),
-            Target = element.Attribute("target")?.Value,
-            Message = element.Element(Ns + "message")?.Value,
-            Remarks = element.Element(Ns + "remarks")?.Value,
-            Pattern = element.Attribute("regex")?.Value,
-            DataType = element.Attribute("datatype")?.Value
-        };
-    }
+        Id = element.Attribute("id")?.Value,
+        Level = ParseConstraintLevel(element.Attribute("level")?.Value),
+        Target = element.Attribute("target")?.Value,
+        Message = element.Element(Ns + "message")?.Value,
+        Remarks = element.Element(Ns + "remarks")?.Value,
+        Pattern = element.Attribute("regex")?.Value,
+        DataType = element.Attribute("datatype")?.Value
+    };
 
     private static ExpectConstraint ParseExpectConstraint(XElement element)
     {

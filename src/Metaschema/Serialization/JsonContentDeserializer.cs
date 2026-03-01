@@ -1,4 +1,5 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using System.Text.Json;
 using Metaschema.Datatypes;
@@ -268,18 +269,15 @@ public sealed class JsonContentDeserializer : IDeserializer
         };
     }
 
-    private static string? GetRawValue(JsonElement element)
+    private static string? GetRawValue(JsonElement element) => element.ValueKind switch
     {
-        return element.ValueKind switch
-        {
-            JsonValueKind.String => element.GetString(),
-            JsonValueKind.Number => element.GetRawText(),
-            JsonValueKind.True => "true",
-            JsonValueKind.False => "false",
-            JsonValueKind.Null => null,
-            _ => element.GetRawText()
-        };
-    }
+        JsonValueKind.String => element.GetString(),
+        JsonValueKind.Number => element.GetRawText(),
+        JsonValueKind.True => "true",
+        JsonValueKind.False => "false",
+        JsonValueKind.Null => null,
+        _ => element.GetRawText()
+    };
 
     private object? ParseValue(string? rawValue, string dataTypeName)
     {

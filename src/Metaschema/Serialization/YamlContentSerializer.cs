@@ -1,4 +1,5 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using Metaschema.Nodes;
 using YamlDotNet.Serialization;
@@ -17,10 +18,7 @@ public sealed class YamlContentSerializer : ISerializer
     /// Initializes a new instance of the <see cref="YamlContentSerializer"/> class.
     /// </summary>
     /// <param name="context">The binding context.</param>
-    public YamlContentSerializer(BindingContext context)
-    {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
-    }
+    public YamlContentSerializer(BindingContext context) => _context = context ?? throw new ArgumentNullException(nameof(context));
 
     /// <inheritdoc />
     public Format Format => Format.Yaml;
@@ -91,15 +89,12 @@ public sealed class YamlContentSerializer : ISerializer
         return result;
     }
 
-    private object? BuildModelChildObject(IDocumentNode node)
+    private object? BuildModelChildObject(IDocumentNode node) => node switch
     {
-        return node switch
-        {
-            AssemblyNode assembly => BuildAssemblyObject(assembly),
-            FieldNode field => BuildFieldObject(field),
-            _ => null
-        };
-    }
+        AssemblyNode assembly => BuildAssemblyObject(assembly),
+        FieldNode field => BuildFieldObject(field),
+        _ => null
+    };
 
     private static object? BuildFieldObject(FieldNode field)
     {

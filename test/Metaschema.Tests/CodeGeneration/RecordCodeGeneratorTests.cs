@@ -1,7 +1,8 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
-using Metaschema.Loading;
 using Metaschema.CodeGeneration;
+using Metaschema.Loading;
 using Shouldly;
 using Xunit;
 
@@ -15,13 +16,13 @@ public class RecordCodeGeneratorTests
         // Arrange
         var loader = new ModuleLoader();
         var metaschemaPath = Path.Combine(AppContext.BaseDirectory, "TestData", "oscal_metadata_metaschema.xml");
-        
+
         // Skip if file doesn't exist (test data not available)
         if (!File.Exists(metaschemaPath))
         {
             return;
         }
-        
+
         var module = loader.Load(metaschemaPath);
         var generator = new RecordCodeGenerator(new CodeGenerationOptions
         {
@@ -68,12 +69,12 @@ public class RecordCodeGeneratorTests
         // Arrange
         var loader = new ModuleLoader();
         var metaschemaPath = Path.Combine(AppContext.BaseDirectory, "TestData", "oscal_metadata_metaschema.xml");
-        
+
         if (!File.Exists(metaschemaPath))
         {
             return;
         }
-        
+
         var module = loader.Load(metaschemaPath);
         var generator = new RecordCodeGenerator();
 

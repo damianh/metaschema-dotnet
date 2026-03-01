@@ -1,4 +1,5 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using System.Xml.Linq;
 using Metaschema.Model;
@@ -21,10 +22,7 @@ public sealed class XsdGenerator
     /// Initializes a new instance of the <see cref="XsdGenerator"/> class.
     /// </summary>
     /// <param name="options">The generation options.</param>
-    public XsdGenerator(SchemaGenerationOptions? options = null)
-    {
-        _options = options ?? SchemaGenerationOptions.Default;
-    }
+    public XsdGenerator(SchemaGenerationOptions? options = null) => _options = options ?? SchemaGenerationOptions.Default;
 
     /// <summary>
     /// Generates an XSD document from the specified module.
@@ -187,16 +185,13 @@ public sealed class XsdGenerator
         return complexType;
     }
 
-    private XElement? GenerateModelElement(ModelElement element, MetaschemaModule module)
+    private XElement? GenerateModelElement(ModelElement element, MetaschemaModule module) => element switch
     {
-        return element switch
-        {
-            FieldInstance field => GenerateFieldElement(field, module),
-            AssemblyInstance assembly => GenerateAssemblyElement(assembly, module),
-            ChoiceGroup choice => GenerateChoiceElement(choice, module),
-            _ => null
-        };
-    }
+        FieldInstance field => GenerateFieldElement(field, module),
+        AssemblyInstance assembly => GenerateAssemblyElement(assembly, module),
+        ChoiceGroup choice => GenerateChoiceElement(choice, module),
+        _ => null
+    };
 
     private XElement GenerateFieldElement(FieldInstance field, MetaschemaModule module)
     {
@@ -285,11 +280,9 @@ public sealed class XsdGenerator
         return XsdTypeMapper.GetXsdTypeName(metaschemaTypeName);
     }
 
-    private static string GetLocalTypeName(string metaschemaTypeName)
-    {
-        // Convert metaschema type name to a valid XSD type name
-        return metaschemaTypeName.Replace("-", "") + "-type";
-    }
+    // Convert metaschema type name to a valid XSD type name
+    private static string GetLocalTypeName(string metaschemaTypeName) =>
+        metaschemaTypeName.Replace("-", "") + "-type";
 
     private static void AddCardinality(XElement element, int minOccurs, int? maxOccurs)
     {
@@ -305,11 +298,8 @@ public sealed class XsdGenerator
         }
     }
 
-    private static XElement CreateAnnotation(string documentation)
-    {
-        return new XElement(XsdNamespaces.Annotation,
+    private static XElement CreateAnnotation(string documentation) => new XElement(XsdNamespaces.Annotation,
             new XElement(XsdNamespaces.Documentation, documentation));
-    }
 
     private static IEnumerable<FlagDefinition> GetAllFlagDefinitions(MetaschemaModule module)
     {

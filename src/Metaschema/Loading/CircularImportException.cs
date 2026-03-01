@@ -1,4 +1,5 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 namespace Metaschema.Loading;
 
@@ -17,10 +18,7 @@ public class CircularImportException : ModuleLoadException
     /// </summary>
     /// <param name="importChain">The import chain that forms the cycle.</param>
     public CircularImportException(IReadOnlyList<Uri> importChain)
-        : base(BuildMessage(importChain), importChain[^1])
-    {
-        ImportChain = importChain;
-    }
+        : base(BuildMessage(importChain), importChain[^1]) => ImportChain = importChain;
 
     private static string BuildMessage(IReadOnlyList<Uri> importChain)
     {

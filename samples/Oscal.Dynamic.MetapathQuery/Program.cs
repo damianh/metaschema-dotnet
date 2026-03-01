@@ -1,12 +1,12 @@
-// Licensed under the MIT License.
-// Demonstrates querying OSCAL documents using Metapath expressions.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using System.Globalization;
+using Metaschema;
 using Metaschema.Loading;
 using Metaschema.Metapath;
 using Metaschema.Metapath.Context;
 using Metaschema.Metapath.Item;
-using Metaschema;
 using Metaschema.Validation;
 
 // Load the OSCAL Catalog
@@ -70,9 +70,14 @@ void RunQuery(string description, string expression, INodeItem contextNode, int 
         {
             Console.WriteLine($"  Results ({result.Count} items):");
             foreach (var item in result.Take(maxResults))
+            {
                 Console.WriteLine($"    - {FormatItem(item)}");
+            }
+
             if (result.Count > maxResults)
+            {
                 Console.WriteLine($"    ... and {result.Count - maxResults} more");
+            }
         }
     }
     catch (MetapathException ex)

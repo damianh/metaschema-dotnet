@@ -1,8 +1,8 @@
-// Licensed under the MIT License.
-// Demonstrates converting OSCAL documents between JSON, XML, and YAML formats.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
-using Metaschema.Loading;
 using Metaschema;
+using Metaschema.Loading;
 
 // Load the profile metaschema and document
 var loader = new ModuleLoader();
@@ -30,7 +30,10 @@ Console.WriteLine($"  Size: {xmlContent.Length:N0} characters");
 Console.WriteLine();
 Console.WriteLine("  Preview:");
 foreach (var line in xmlContent.Split('\n').Take(8))
+{
     Console.WriteLine($"    {line.TrimEnd()}");
+}
+
 Console.WriteLine("    ...");
 Console.WriteLine();
 
@@ -43,7 +46,10 @@ Console.WriteLine($"  Size: {yamlContent.Length:N0} characters");
 Console.WriteLine();
 Console.WriteLine("  Preview:");
 foreach (var line in yamlContent.Split('\n').Take(12))
+{
     Console.WriteLine($"    {line.TrimEnd()}");
+}
+
 Console.WriteLine("    ...");
 Console.WriteLine();
 

@@ -1,4 +1,5 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using System.Globalization;
 using System.Text;
@@ -17,10 +18,7 @@ public sealed class CSharpCodeGenerator
     /// Initializes a new instance of the <see cref="CSharpCodeGenerator"/> class.
     /// </summary>
     /// <param name="options">The code generation options.</param>
-    public CSharpCodeGenerator(CodeGenerationOptions? options = null)
-    {
-        _options = options ?? new CodeGenerationOptions();
-    }
+    public CSharpCodeGenerator(CodeGenerationOptions? options = null) => _options = options ?? new CodeGenerationOptions();
 
     /// <summary>
     /// Generates C# source code for all definitions in a module.
@@ -546,7 +544,10 @@ public sealed class CSharpCodeGenerator
 
     private static string ToPascalCase(string name)
     {
-        if (string.IsNullOrEmpty(name)) return name;
+        if (string.IsNullOrEmpty(name))
+        {
+            return name;
+        }
 
         var sb = new StringBuilder();
         var capitalizeNext = true;
@@ -623,7 +624,11 @@ public sealed class CSharpCodeGenerator
 
     private static string EscapeXmlDoc(string text)
     {
-        if (string.IsNullOrEmpty(text)) return text;
+        if (string.IsNullOrEmpty(text))
+        {
+            return text;
+        }
+
         return text
             .Replace("&", "&amp;")
             .Replace("<", "&lt;")
@@ -642,10 +647,7 @@ public sealed class CSharpCodeGenerator
         public void Indent() => _indent++;
         public void Outdent() => _indent = Math.Max(0, _indent - 1);
 
-        public void Line()
-        {
-            _sb.AppendLine();
-        }
+        public void Line() => _sb.AppendLine();
 
         public void Line(string text)
         {

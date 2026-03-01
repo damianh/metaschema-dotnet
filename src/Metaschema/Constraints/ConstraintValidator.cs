@@ -1,4 +1,5 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using System.Text.RegularExpressions;
 
@@ -28,10 +29,7 @@ public sealed class ConstraintValidator : IConstraintValidator
     /// Initializes a new instance with a custom Metapath context.
     /// </summary>
     /// <param name="context">The Metapath context to use for evaluations.</param>
-    public ConstraintValidator(IMetapathContext context)
-    {
-        _baseContext = context ?? throw new ArgumentNullException(nameof(context));
-    }
+    public ConstraintValidator(IMetapathContext context) => _baseContext = context ?? throw new ArgumentNullException(nameof(context));
 
     /// <inheritdoc />
     public IEnumerable<ValidationFinding> Validate(INodeItem node, IConstraint constraint)
@@ -95,20 +93,17 @@ public sealed class ConstraintValidator : IConstraintValidator
         }
     }
 
-    private IEnumerable<ValidationFinding> ValidateNode(INodeItem node, IConstraint constraint)
+    private IEnumerable<ValidationFinding> ValidateNode(INodeItem node, IConstraint constraint) => constraint switch
     {
-        return constraint switch
-        {
-            IAllowedValuesConstraint avc => ValidateAllowedValues(node, avc),
-            IMatchesConstraint mc => ValidateMatches(node, mc),
-            IExpectConstraint ec => ValidateExpect(node, ec),
-            IIndexConstraint => [], // Indexes are built, not validated as findings
-            IIndexHasKeyConstraint ihkc => ValidateIndexHasKey(node, ihkc),
-            IUniqueConstraint uc => ValidateUnique(node, uc),
-            ICardinalityConstraint cc => ValidateCardinality(node, cc),
-            _ => []
-        };
-    }
+        IAllowedValuesConstraint avc => ValidateAllowedValues(node, avc),
+        IMatchesConstraint mc => ValidateMatches(node, mc),
+        IExpectConstraint ec => ValidateExpect(node, ec),
+        IIndexConstraint => [], // Indexes are built, not validated as findings
+        IIndexHasKeyConstraint ihkc => ValidateIndexHasKey(node, ihkc),
+        IUniqueConstraint uc => ValidateUnique(node, uc),
+        ICardinalityConstraint cc => ValidateCardinality(node, cc),
+        _ => []
+    };
 
     private static IEnumerable<ValidationFinding> ValidateAllowedValues(INodeItem node, IAllowedValuesConstraint constraint)
     {

@@ -1,10 +1,10 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using Metaschema.Metapath.Item;
 using Metaschema.Nodes;
-
-using MetapathNodeType = Metaschema.Metapath.Item.NodeType;
 using DatabindNodeType = Metaschema.Nodes.NodeType;
+using MetapathNodeType = Metaschema.Metapath.Item.NodeType;
 
 namespace Metaschema.Validation;
 
@@ -114,7 +114,7 @@ public sealed class DocumentNodeAdapter : INodeItem
     /// <inheritdoc />
     public INodeItem? GetFlag(string name)
     {
-        IFlagNode? flag = _node switch
+        var flag = _node switch
         {
             IAssemblyNode assembly when assembly.Flags.TryGetValue(name, out var f) => f,
             IFieldNode fieldNode when fieldNode.Flags.TryGetValue(name, out var f) => f,
@@ -144,26 +144,20 @@ public sealed class DocumentNodeAdapter : INodeItem
     }
 
     /// <inheritdoc />
-    public string GetStringValue()
+    public string GetStringValue() => _node switch
     {
-        return _node switch
-        {
-            IFieldNode fieldNode => fieldNode.RawValue ?? fieldNode.Value?.ToString() ?? string.Empty,
-            IFlagNode flag => flag.RawValue ?? flag.Value?.ToString() ?? string.Empty,
-            _ => string.Empty
-        };
-    }
+        IFieldNode fieldNode => fieldNode.RawValue ?? fieldNode.Value?.ToString() ?? string.Empty,
+        IFlagNode flag => flag.RawValue ?? flag.Value?.ToString() ?? string.Empty,
+        _ => string.Empty
+    };
 
     /// <inheritdoc />
-    public object? GetTypedValue()
+    public object? GetTypedValue() => _node switch
     {
-        return _node switch
-        {
-            IFieldNode fieldNode => fieldNode.Value,
-            IFlagNode flag => flag.Value,
-            _ => null
-        };
-    }
+        IFieldNode fieldNode => fieldNode.Value,
+        IFlagNode flag => flag.Value,
+        _ => null
+    };
 
     /// <inheritdoc />
     public bool GetEffectiveBooleanValue()

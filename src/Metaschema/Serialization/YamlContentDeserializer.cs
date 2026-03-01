@@ -1,4 +1,5 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using Metaschema.Datatypes;
 using Metaschema.Model;
@@ -285,14 +286,11 @@ public sealed class YamlContentDeserializer : IDeserializer
         };
     }
 
-    private static string? GetRawValue(YamlNode node)
+    private static string? GetRawValue(YamlNode node) => node switch
     {
-        return node switch
-        {
-            YamlScalarNode scalar => scalar.Value,
-            _ => node.ToString()
-        };
-    }
+        YamlScalarNode scalar => scalar.Value,
+        _ => node.ToString()
+    };
 
     private object? ParseValue(string? rawValue, string dataTypeName)
     {

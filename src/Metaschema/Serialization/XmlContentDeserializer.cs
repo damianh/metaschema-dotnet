@@ -1,4 +1,5 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using System.Xml;
 using Metaschema.Datatypes;
@@ -59,15 +60,12 @@ public sealed class XmlContentDeserializer : IDeserializer
         return Deserialize(stringReader);
     }
 
-    private static XmlReaderSettings CreateReaderSettings()
+    private static XmlReaderSettings CreateReaderSettings() => new XmlReaderSettings
     {
-        return new XmlReaderSettings
-        {
-            IgnoreWhitespace = true,
-            IgnoreComments = true,
-            IgnoreProcessingInstructions = true
-        };
-    }
+        IgnoreWhitespace = true,
+        IgnoreComments = true,
+        IgnoreProcessingInstructions = true
+    };
 
     private DocumentNode DeserializeCore(XmlReader reader)
     {

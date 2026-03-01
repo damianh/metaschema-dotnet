@@ -1,4 +1,5 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using System.CommandLine;
 using Metaschema.Loading;
@@ -32,7 +33,7 @@ public sealed class ValidateModuleCommand : Command
         Arguments.Add(fileArgument);
         Options.Add(outputOption);
 
-        this.SetAction(async (parseResult, cancellationToken) =>
+        SetAction(async (parseResult, cancellationToken) =>
         {
             var file = parseResult.GetValue(fileArgument)!;
             var outputFormat = parseResult.GetValue(outputOption);
@@ -70,7 +71,7 @@ public sealed class ValidateModuleCommand : Command
             var flagDefs = module.FlagDefinitions.ToList();
             var fieldDefs = module.FieldDefinitions.ToList();
             var assemblyDefs = module.AssemblyDefinitions.ToList();
-            
+
             result.Stats = new ModuleStats
             {
                 FlagDefinitions = flagDefs.Count,

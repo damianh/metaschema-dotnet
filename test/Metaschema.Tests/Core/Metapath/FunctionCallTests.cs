@@ -1,5 +1,5 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using Metaschema.Metapath.Context;
 using Metaschema.Metapath.Item;
@@ -104,7 +104,7 @@ public class FunctionCallTests
     public void TrueFunction_ShouldReturnTrue()
     {
         // Act
-        bool result = EvaluateBoolean("true()");
+        var result = EvaluateBoolean("true()");
 
         // Assert
         result.ShouldBeTrue();
@@ -114,7 +114,7 @@ public class FunctionCallTests
     public void FalseFunction_ShouldReturnFalse()
     {
         // Act
-        bool result = EvaluateBoolean("false()");
+        var result = EvaluateBoolean("false()");
 
         // Assert
         result.ShouldBeFalse();
@@ -128,7 +128,7 @@ public class FunctionCallTests
     public void NotFunction_ShouldNegate(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -144,7 +144,7 @@ public class FunctionCallTests
     public void BooleanFunction_ShouldConvert(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -161,7 +161,7 @@ public class FunctionCallTests
     public void EmptyFunction_ShouldCheckIfEmpty(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -174,7 +174,7 @@ public class FunctionCallTests
     public void ExistsFunction_ShouldCheckIfExists(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -186,7 +186,7 @@ public class FunctionCallTests
     public void CountFunction_ShouldReturnCount(string expression, long expected)
     {
         // Act
-        long result = EvaluateInteger(expression);
+        var result = EvaluateInteger(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -196,7 +196,7 @@ public class FunctionCallTests
     public void HeadFunction_ShouldReturnFirstItem()
     {
         // Act
-        long result = EvaluateInteger("head((1, 2, 3))");
+        var result = EvaluateInteger("head((1, 2, 3))");
 
         // Assert
         result.ShouldBe(1);
@@ -226,7 +226,7 @@ public class FunctionCallTests
     public void StringFunction_ShouldConvert(string expression, string expected)
     {
         // Act
-        string? result = EvaluateString(expression);
+        var result = EvaluateString(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -240,7 +240,7 @@ public class FunctionCallTests
     public void ConcatFunction_ShouldConcatenate(string expression, string expected)
     {
         // Act
-        string? result = EvaluateString(expression);
+        var result = EvaluateString(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -253,7 +253,7 @@ public class FunctionCallTests
     public void StringLengthFunction_ShouldReturnLength(string expression, long expected)
     {
         // Act
-        long result = EvaluateInteger(expression);
+        var result = EvaluateInteger(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -267,7 +267,7 @@ public class FunctionCallTests
     public void NormalizeSpaceFunction_ShouldNormalize(string expression, string expected)
     {
         // Act
-        string? result = EvaluateString(expression);
+        var result = EvaluateString(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -281,7 +281,7 @@ public class FunctionCallTests
     public void ContainsFunction_ShouldCheckContainment(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -295,7 +295,7 @@ public class FunctionCallTests
     public void StartsWithFunction_ShouldCheck(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -309,7 +309,7 @@ public class FunctionCallTests
     public void EndsWithFunction_ShouldCheck(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -323,7 +323,7 @@ public class FunctionCallTests
     public void SubstringFunction_ShouldExtract(string expression, string expected)
     {
         // Act
-        string? result = EvaluateString(expression);
+        var result = EvaluateString(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -336,7 +336,7 @@ public class FunctionCallTests
     public void UpperCaseFunction_ShouldConvert(string expression, string expected)
     {
         // Act
-        string? result = EvaluateString(expression);
+        var result = EvaluateString(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -349,7 +349,7 @@ public class FunctionCallTests
     public void LowerCaseFunction_ShouldConvert(string expression, string expected)
     {
         // Act
-        string? result = EvaluateString(expression);
+        var result = EvaluateString(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -365,7 +365,7 @@ public class FunctionCallTests
     public void AbsFunction_ShouldReturnAbsoluteValue(string expression, double expected)
     {
         // Act
-        double result = EvaluateNumeric(expression);
+        var result = EvaluateNumeric(expression);
 
         // Assert
         result.ShouldBe(expected, 0.00001);
@@ -379,7 +379,7 @@ public class FunctionCallTests
     public void RoundFunction_ShouldRound(string expression, double expected)
     {
         // Act
-        double result = EvaluateNumeric(expression);
+        var result = EvaluateNumeric(expression);
 
         // Assert
         result.ShouldBe(expected, 0.00001);
@@ -393,7 +393,7 @@ public class FunctionCallTests
     public void FloorFunction_ShouldFloor(string expression, double expected)
     {
         // Act
-        double result = EvaluateNumeric(expression);
+        var result = EvaluateNumeric(expression);
 
         // Assert
         result.ShouldBe(expected, 0.00001);
@@ -407,7 +407,7 @@ public class FunctionCallTests
     public void CeilingFunction_ShouldCeiling(string expression, double expected)
     {
         // Act
-        double result = EvaluateNumeric(expression);
+        var result = EvaluateNumeric(expression);
 
         // Assert
         result.ShouldBe(expected, 0.00001);
@@ -423,7 +423,7 @@ public class FunctionCallTests
     public void SumFunction_ShouldSum(string expression, double expected)
     {
         // Act
-        double result = EvaluateNumeric(expression);
+        var result = EvaluateNumeric(expression);
 
         // Assert
         result.ShouldBe(expected, 0.00001);
@@ -435,7 +435,7 @@ public class FunctionCallTests
     public void AvgFunction_ShouldAverage(string expression, double expected)
     {
         // Act
-        double result = EvaluateNumeric(expression);
+        var result = EvaluateNumeric(expression);
 
         // Assert
         result.ShouldBe(expected, 0.00001);
@@ -447,7 +447,7 @@ public class FunctionCallTests
     public void MinFunction_ShouldReturnMinimum(string expression, double expected)
     {
         // Act
-        double result = EvaluateNumeric(expression);
+        var result = EvaluateNumeric(expression);
 
         // Assert
         result.ShouldBe(expected, 0.00001);
@@ -459,7 +459,7 @@ public class FunctionCallTests
     public void MaxFunction_ShouldReturnMaximum(string expression, double expected)
     {
         // Act
-        double result = EvaluateNumeric(expression);
+        var result = EvaluateNumeric(expression);
 
         // Assert
         result.ShouldBe(expected, 0.00001);
@@ -594,7 +594,7 @@ public class FunctionCallTests
     public void DeepEqualFunction_ShouldCompareSequences(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -614,25 +614,21 @@ public class FunctionCallTests
     public void ZeroOrOneFunction_WithOne_ShouldReturnItem()
     {
         // Act
-        long result = EvaluateInteger("zero-or-one((42))");
+        var result = EvaluateInteger("zero-or-one((42))");
 
         // Assert
         result.ShouldBe(42);
     }
 
     [Fact]
-    public void ZeroOrOneFunction_WithMultiple_ShouldThrow()
-    {
+    public void ZeroOrOneFunction_WithMultiple_ShouldThrow() =>
         // Act & Assert
         Should.Throw<MetapathException>(() => Evaluate("zero-or-one((1, 2, 3))"));
-    }
 
     [Fact]
-    public void OneOrMoreFunction_WithEmpty_ShouldThrow()
-    {
+    public void OneOrMoreFunction_WithEmpty_ShouldThrow() =>
         // Act & Assert
         Should.Throw<MetapathException>(() => Evaluate("one-or-more(())"));
-    }
 
     [Fact]
     public void OneOrMoreFunction_WithItems_ShouldReturnSequence()
@@ -648,25 +644,21 @@ public class FunctionCallTests
     public void ExactlyOneFunction_WithOne_ShouldReturnItem()
     {
         // Act
-        long result = EvaluateInteger("exactly-one((42))");
+        var result = EvaluateInteger("exactly-one((42))");
 
         // Assert
         result.ShouldBe(42);
     }
 
     [Fact]
-    public void ExactlyOneFunction_WithEmpty_ShouldThrow()
-    {
+    public void ExactlyOneFunction_WithEmpty_ShouldThrow() =>
         // Act & Assert
         Should.Throw<MetapathException>(() => Evaluate("exactly-one(())"));
-    }
 
     [Fact]
-    public void ExactlyOneFunction_WithMultiple_ShouldThrow()
-    {
+    public void ExactlyOneFunction_WithMultiple_ShouldThrow() =>
         // Act & Assert
         Should.Throw<MetapathException>(() => Evaluate("exactly-one((1, 2))"));
-    }
 
     #endregion
 
@@ -681,7 +673,7 @@ public class FunctionCallTests
     public void StringJoinFunction_ShouldJoinWithSeparator(string expression, string expected)
     {
         // Act
-        string? result = EvaluateString(expression);
+        var result = EvaluateString(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -691,7 +683,7 @@ public class FunctionCallTests
     public void StringJoinFunction_WithoutSeparator_ShouldConcatenate()
     {
         // Act
-        string? result = EvaluateString("string-join(('a', 'b', 'c'))");
+        var result = EvaluateString("string-join(('a', 'b', 'c'))");
 
         // Assert
         result.ShouldBe("abc");
@@ -705,7 +697,7 @@ public class FunctionCallTests
     public void SubstringBeforeFunction_ShouldReturnPrefix(string expression, string expected)
     {
         // Act
-        string? result = EvaluateString(expression);
+        var result = EvaluateString(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -719,7 +711,7 @@ public class FunctionCallTests
     public void SubstringAfterFunction_ShouldReturnSuffix(string expression, string expected)
     {
         // Act
-        string? result = EvaluateString(expression);
+        var result = EvaluateString(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -733,7 +725,7 @@ public class FunctionCallTests
     public void TranslateFunction_ShouldReplaceCharacters(string expression, string expected)
     {
         // Act
-        string? result = EvaluateString(expression);
+        var result = EvaluateString(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -747,7 +739,7 @@ public class FunctionCallTests
     public void CompareFunction_ShouldCompareStrings(string expression, long expected)
     {
         // Act
-        long result = EvaluateInteger(expression);
+        var result = EvaluateInteger(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -757,7 +749,7 @@ public class FunctionCallTests
     public void CodepointsToStringFunction_ShouldConvert()
     {
         // Act
-        string? result = EvaluateString("codepoints-to-string((72, 105))");
+        var result = EvaluateString("codepoints-to-string((72, 105))");
 
         // Assert
         result.ShouldBe("Hi");
@@ -788,7 +780,7 @@ public class FunctionCallTests
     public void MatchesFunction_ShouldMatchPattern(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -802,7 +794,7 @@ public class FunctionCallTests
     public void ReplaceFunction_ShouldReplacePattern(string expression, string expected)
     {
         // Act
-        string? result = EvaluateString(expression);
+        var result = EvaluateString(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -858,7 +850,7 @@ public class FunctionCallTests
     public void NumberFunction_ShouldConvert(string expression, double expected)
     {
         // Act
-        double result = EvaluateNumeric(expression);
+        var result = EvaluateNumeric(expression);
 
         // Assert
         result.ShouldBe(expected, 0.00001);
@@ -868,7 +860,7 @@ public class FunctionCallTests
     public void NumberFunction_WithNonNumeric_ShouldReturnNaN()
     {
         // Act
-        double result = EvaluateNumeric("number('hello')");
+        var result = EvaluateNumeric("number('hello')");
 
         // Assert
         double.IsNaN(result).ShouldBeTrue();
@@ -932,7 +924,7 @@ public class FunctionCallTests
     public void NestedFunctionCalls_ShouldEvaluate()
     {
         // Act
-        string? result = EvaluateString("upper-case(concat('hello', ' ', 'world'))");
+        var result = EvaluateString("upper-case(concat('hello', ' ', 'world'))");
 
         // Assert
         result.ShouldBe("HELLO WORLD");
@@ -942,7 +934,7 @@ public class FunctionCallTests
     public void FunctionWithArithmeticArgument_ShouldEvaluate()
     {
         // Act
-        double result = EvaluateNumeric("abs(-5 - 5)");
+        var result = EvaluateNumeric("abs(-5 - 5)");
 
         // Assert
         result.ShouldBe(10.0, 0.00001);
@@ -952,7 +944,7 @@ public class FunctionCallTests
     public void FunctionWithComparisonArgument_ShouldEvaluate()
     {
         // Act
-        bool result = EvaluateBoolean("not(1 + 1 eq 3)");
+        var result = EvaluateBoolean("not(1 + 1 eq 3)");
 
         // Assert
         result.ShouldBeTrue();
@@ -1616,7 +1608,7 @@ public class FunctionCallTests
     public void EncodeForUriFunction_ShouldEscapeSpecialCharacters()
     {
         // Act
-        string? result = EvaluateString("encode-for-uri('hello world')");
+        var result = EvaluateString("encode-for-uri('hello world')");
 
         // Assert
         result.ShouldBe("hello%20world");
@@ -1629,7 +1621,7 @@ public class FunctionCallTests
     public void EncodeForUriFunction_ShouldEncodeCorrectly(string expression, string expected)
     {
         // Act
-        string? result = EvaluateString(expression);
+        var result = EvaluateString(expression);
 
         // Assert
         result.ShouldBe(expected);

@@ -1,0 +1,1149 @@
+{
+  "profile": {
+    "uuid": "e8f3a1b2-4c5d-6e7f-8a9b-0c1d2e3f4a5b",
+    "metadata": {
+      "title": "FAPI 2.0 Security Profile - NIST SP 800-53 Rev 5 Mapping",
+      "last-modified": "2026-01-27T12:00:00.000Z",
+      "version": "1.0.0-draft",
+      "oscal-version": "1.1.1",
+      "remarks": "This profile maps OpenID Foundation FAPI 2.0 Security Profile requirements to NIST SP 800-53 Rev 5 controls. It selects applicable controls, sets FAPI-specific parameter values, and adds FAPI-specific assessment guidance. For requirements that do not map directly to NIST controls, profile-specific additions are included.",
+      "props": [
+        {
+          "name": "keywords",
+          "value": "FAPI, OAuth 2.0, OpenID Connect, NIST 800-53, API Security, Financial-grade API, PKCE, PAR, DPoP, MTLS"
+        },
+        {
+          "name": "fapi-spec-version",
+          "ns": "https://openid.net/specs/fapi",
+          "value": "2.0"
+        }
+      ],
+      "links": [
+        {
+          "href": "https://openid.net/specs/fapi-2_0-security-profile.html",
+          "rel": "reference",
+          "text": "FAPI 2.0 Security Profile"
+        },
+        {
+          "href": "https://openid.net/specs/fapi-2_0-attacker-model.html",
+          "rel": "reference",
+          "text": "FAPI 2.0 Attacker Model"
+        },
+        {
+          "href": "https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final",
+          "rel": "reference",
+          "text": "NIST SP 800-53 Rev 5"
+        }
+      ],
+      "roles": [
+        {
+          "id": "creator",
+          "title": "Profile Creator"
+        },
+        {
+          "id": "contact",
+          "title": "Contact"
+        }
+      ],
+      "parties": [
+        {
+          "uuid": "b1c2d3e4-f5a6-7b8c-9d0e-1f2a3b4c5d6e",
+          "type": "organization",
+          "name": "OpenID Foundation FAPI Working Group",
+          "links": [
+            {
+              "href": "https://openid.net/wg/fapi/",
+              "rel": "homepage"
+            }
+          ],
+          "remarks": "The FAPI Working Group develops the FAPI 2.0 specifications. This OSCAL profile is a derivative work that maps FAPI requirements to NIST 800-53 controls."
+        }
+      ],
+      "responsible-parties": [
+        {
+          "role-id": "creator",
+          "party-uuids": ["b1c2d3e4-f5a6-7b8c-9d0e-1f2a3b4c5d6e"]
+        }
+      ]
+    },
+    "imports": [
+      {
+        "href": "#6b2e4a85-7f3c-4d1e-9a8b-5c0d2e1f3a4b",
+        "include-controls": [
+          {
+            "with-ids": [
+              "ac-3",
+              "ac-12",
+              "au-9",
+              "ia-5",
+              "ia-5.2",
+              "ia-8",
+              "ia-9",
+              "sc-8",
+              "sc-8.1",
+              "sc-12",
+              "sc-12.1",
+              "sc-13",
+              "sc-17",
+              "sc-20",
+              "sc-21",
+              "sc-22",
+              "sc-23",
+              "si-10"
+            ]
+          }
+        ]
+      }
+    ],
+    "merge": {
+      "as-is": true
+    },
+    "modify": {
+      "set-parameters": [
+        {
+          "param-id": "sc-08_odp",
+          "values": ["confidentiality", "integrity"],
+          "remarks": "FAPI 2.0 requires both confidentiality and integrity protection for all transmissions via TLS 1.2+ per Section 5.2.1"
+        },
+        {
+          "param-id": "sc-08.01_odp",
+          "values": ["prevent unauthorized disclosure of information", "detect changes to information"],
+          "remarks": "FAPI 2.0 requires cryptographic protection (TLS) to prevent disclosure and detect tampering"
+        },
+        {
+          "param-id": "sc-13_odp.01",
+          "values": ["TLS 1.2 or higher with BCP 195 cipher suites; PS256, ES256, or EdDSA (Ed25519) for JWT signatures; RSA-2048 or EC-224 minimum key sizes"],
+          "remarks": "FAPI 2.0 Section 5.4.1 specifies approved cryptographic algorithms and key sizes"
+        },
+        {
+          "param-id": "ac-12_odp.01",
+          "values": ["60 seconds for authorization codes; as defined by authorization server policy for sessions"],
+          "remarks": "FAPI 2.0 Section 5.3.2.1 requires authorization codes with maximum 60 second lifetime"
+        },
+        {
+          "param-id": "ac-12_odp.02",
+          "values": ["expiration of authorization code; completion of token exchange; user logout; session timeout"],
+          "remarks": "FAPI 2.0 requires short-lived authorization codes and proper session management"
+        }
+      ],
+      "alters": [
+        {
+          "control-id": "sc-8",
+          "adds": [
+            {
+              "position": "after",
+              "by-id": "sc-8_gdn",
+              "parts": [
+                {
+                  "id": "sc-8_fapi_gdn",
+                  "name": "guidance",
+                  "props": [
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "security-profile-2.0#5.2.1" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "authorization-server,client,resource-server" }
+                  ],
+                  "prose": "FAPI 2.0 Network Layer Requirements (Section 5.2.1): All endpoints SHALL only offer TLS-protected connections and establish connections using TLS. TLS version 1.2 or later is required. TLS configuration SHALL follow BCP 195 recommendations. For endpoints used by web browsers, HSTS with preload is required to prevent TLS stripping attacks. Server certificate validation per RFC 9525 is mandatory. DNSSEC SHOULD be used to protect against DNS spoofing that could lead to rogue certificate issuance."
+                },
+                {
+                  "id": "sc-8_fapi_obj",
+                  "name": "assessment-objective",
+                  "prose": "Verify that all FAPI 2.0 endpoints (authorization server, client, resource server) enforce TLS 1.2+ with BCP 195 compliant configuration, proper certificate validation, and HSTS for browser-facing endpoints."
+                },
+                {
+                  "id": "sc-8_fapi_test",
+                  "name": "assessment-method",
+                  "props": [
+                    { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                    { "name": "label", "value": "SC-08-FAPI-Test", "class": "fapi-2.0" }
+                  ],
+                  "parts": [
+                    {
+                      "id": "sc-8_fapi_test_obj",
+                      "name": "assessment-objects",
+                      "prose": "1. Attempt HTTP (non-TLS) connection to all endpoints; verify connection refused or redirect to HTTPS\n2. Use TLS scanner (testssl.sh, sslyze) to enumerate supported TLS versions; verify TLS 1.0 and 1.1 are disabled\n3. Verify TLS 1.2 and/or 1.3 are enabled\n4. For server-to-server endpoints (token, PAR, introspection): verify only BCP 195 'recommended' cipher suites are offered\n5. For browser-facing endpoints (authorization): verify BCP 195 'allowed' cipher suites are used\n6. Check Strict-Transport-Security header on authorization endpoint; verify max-age >= 31536000 (1 year)\n7. Check HSTS preload list status for domain\n8. Present invalid certificates to client/RS (expired, wrong hostname, self-signed); verify rejection\n9. Query DNS for DNSSEC records; verify DNSSEC chain if implemented\n10. Query CAA records; document authorized certificate authorities"
+                    }
+                  ]
+                },
+                {
+                  "id": "sc-8_fapi_examine",
+                  "name": "assessment-method",
+                  "props": [
+                    { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "EXAMINE" },
+                    { "name": "label", "value": "SC-08-FAPI-Examine", "class": "fapi-2.0" }
+                  ],
+                  "parts": [
+                    {
+                      "id": "sc-8_fapi_examine_obj",
+                      "name": "assessment-objects",
+                      "prose": "TLS configuration documentation; web server/load balancer/API gateway TLS settings; cipher suite configuration; HSTS policy configuration; certificate validation code in OAuth/OIDC client libraries; DNSSEC zone configuration"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "control-id": "sc-8.1",
+          "adds": [
+            {
+              "position": "after",
+              "by-id": "sc-8.1_gdn",
+              "parts": [
+                {
+                  "id": "sc-8.1_fapi_gdn",
+                  "name": "guidance",
+                  "props": [
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "security-profile-2.0#5.2.2" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "authorization-server,client,resource-server" }
+                  ],
+                  "prose": "FAPI 2.0 Cipher Suite Requirements: For TLS 1.2 on server-to-server endpoints (not used by browsers), servers SHALL only permit BCP 195 'recommended' cipher suites. Clients SHOULD only permit recommended suites. For browser-facing endpoints, servers SHALL only use BCP 195 'allowed' cipher suites. Authorization servers SHALL NOT support CORS on the authorization endpoint as clients must perform HTTP redirect, not direct access."
+                },
+                {
+                  "id": "sc-8.1_fapi_test",
+                  "name": "assessment-method",
+                  "props": [
+                    { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                    { "name": "label", "value": "SC-08(01)-FAPI-Test", "class": "fapi-2.0" }
+                  ],
+                  "parts": [
+                    {
+                      "id": "sc-8.1_fapi_test_obj",
+                      "name": "assessment-objects",
+                      "prose": "1. Enumerate cipher suites on token endpoint using TLS scanner\n2. Verify only BCP 195 recommended suites (for TLS 1.2): TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384, or TLS 1.3 suites\n3. Enumerate cipher suites on authorization endpoint\n4. Verify only BCP 195 allowed suites (superset of recommended)\n5. Send OPTIONS request with Origin header to authorization endpoint; verify no Access-Control-Allow-Origin header returned\n6. Attempt cross-origin fetch to authorization endpoint; verify blocked by browser"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "control-id": "sc-13",
+          "adds": [
+            {
+              "position": "after",
+              "by-id": "sc-13_gdn",
+              "parts": [
+                {
+                  "id": "sc-13_fapi_gdn",
+                  "name": "guidance",
+                  "props": [
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "security-profile-2.0#5.4.1" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "authorization-server,client,resource-server" }
+                  ],
+                  "prose": "FAPI 2.0 Cryptographic Requirements (Section 5.4.1): For JWT signatures, only PS256, ES256, or EdDSA (Ed25519) algorithms SHALL be used. The 'none' algorithm SHALL NOT be used or accepted. RSA keys SHALL have minimum 2048-bit length. Elliptic curve keys SHALL have minimum 224-bit length. Credentials not intended for end-users (access tokens, refresh tokens, authorization codes) SHALL be created with at least 128 bits of entropy. All JWT processing SHALL adhere to RFC 8725 (JWT Best Practices)."
+                },
+                {
+                  "id": "sc-13_fapi_obj",
+                  "name": "assessment-objective",
+                  "prose": "Verify that all cryptographic operations use FAPI 2.0 approved algorithms (PS256, ES256, EdDSA), meet minimum key size requirements (RSA-2048, EC-224), reject the 'none' algorithm, and generate tokens with sufficient entropy."
+                },
+                {
+                  "id": "sc-13_fapi_test",
+                  "name": "assessment-method",
+                  "props": [
+                    { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                    { "name": "label", "value": "SC-13-FAPI-Test", "class": "fapi-2.0" }
+                  ],
+                  "parts": [
+                    {
+                      "id": "sc-13_fapi_test_obj",
+                      "name": "assessment-objects",
+                      "prose": "1. Retrieve JWKS from authorization server; verify all keys use PS256, ES256, or EdDSA\n2. Verify RSA keys are at least 2048 bits\n3. Verify EC keys use P-256 or stronger curves (224+ bits)\n4. Decode ID tokens; verify 'alg' header is PS256, ES256, or EdDSA\n5. Submit private_key_jwt with alg=none; verify rejection\n6. Submit private_key_jwt with HS256; verify rejection (symmetric not allowed)\n7. Analyze authorization code entropy; verify sufficient randomness (128+ bits)\n8. Analyze access token format; verify JWT signature algorithm if JWT format"
+                    }
+                  ]
+                },
+                {
+                  "id": "sc-13_fapi_examine",
+                  "name": "assessment-method",
+                  "props": [
+                    { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "EXAMINE" },
+                    { "name": "label", "value": "SC-13-FAPI-Examine", "class": "fapi-2.0" }
+                  ],
+                  "parts": [
+                    {
+                      "id": "sc-13_fapi_examine_obj",
+                      "name": "assessment-objects",
+                      "prose": "Cryptographic library configuration; JWT signing configuration; key generation procedures; algorithm allowlist configuration; JOSE library settings"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "control-id": "sc-23",
+          "adds": [
+            {
+              "position": "after",
+              "by-id": "sc-23_gdn",
+              "parts": [
+                {
+                  "id": "sc-23_fapi_gdn",
+                  "name": "guidance",
+                  "props": [
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "security-profile-2.0#5.3" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "authorization-server,client,resource-server" }
+                  ],
+                  "prose": "FAPI 2.0 Session Authenticity Requirements: Sender-constrained access tokens are mandatory - tokens SHALL be bound to client cryptographic keys via MTLS (RFC 8705) or DPoP (RFC 9449). PKCE with S256 is required for all authorization flows to provide session binding and prevent CSRF/code injection. The 'iss' parameter (RFC 9207) SHALL be returned in authorization responses to prevent mix-up attacks. Authorization codes SHALL be one-time use. Clients SHALL verify the iss parameter matches the expected authorization server."
+                },
+                {
+                  "id": "sc-23_fapi_obj",
+                  "name": "assessment-objective",
+                  "prose": "Verify that access tokens are sender-constrained (MTLS or DPoP), PKCE S256 is enforced, authorization codes are single-use, and iss parameter validation prevents mix-up attacks."
+                },
+                {
+                  "id": "sc-23_fapi_test",
+                  "name": "assessment-method",
+                  "props": [
+                    { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                    { "name": "label", "value": "SC-23-FAPI-Test", "class": "fapi-2.0" }
+                  ],
+                  "parts": [
+                    {
+                      "id": "sc-23_fapi_test_obj",
+                      "name": "assessment-objects",
+                      "prose": "Sender Constraining:\n1. Obtain access token via MTLS; verify token introspection shows cnf.x5t#S256 claim\n2. Attempt to use MTLS-bound token with different certificate at RS; verify rejection\n3. Obtain access token via DPoP; verify token_type=DPoP in response\n4. Verify DPoP token introspection shows cnf.jkt claim\n5. Attempt to use DPoP token with different key at RS; verify rejection\n\nPKCE:\n6. Send PAR without code_challenge; verify rejection\n7. Send PAR with code_challenge_method=plain; verify rejection\n8. Send token request with wrong code_verifier; verify rejection\n\nAuthorization Code:\n9. Exchange authorization code; verify success\n10. Attempt to exchange same code again; verify invalid_grant error\n\nIss Parameter:\n11. Complete authorization; verify iss parameter in redirect\n12. Verify iss matches authorization server issuer\n13. For client: verify client rejects response with wrong iss"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "control-id": "ia-9",
+          "adds": [
+            {
+              "position": "after",
+              "by-id": "ia-9_gdn",
+              "parts": [
+                {
+                  "id": "ia-9_fapi_gdn",
+                  "name": "guidance",
+                  "props": [
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "security-profile-2.0#5.3.2.1" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "authorization-server" }
+                  ],
+                  "prose": "FAPI 2.0 Client Authentication Requirements (Section 5.3.2.1): Authorization servers SHALL only support confidential clients (no public clients). Clients SHALL authenticate using MTLS (RFC 8705 Section 2) or private_key_jwt (OIDC Core Section 9). For private_key_jwt, the audience claim SHALL be the authorization server's issuer identifier as a string (not an array). Authorization servers SHALL validate the aud claim matches their issuer identifier."
+                },
+                {
+                  "id": "ia-9_fapi_obj",
+                  "name": "assessment-objective",
+                  "prose": "Verify that only confidential clients using MTLS or private_key_jwt authentication are supported, and that client assertions are properly validated."
+                },
+                {
+                  "id": "ia-9_fapi_test",
+                  "name": "assessment-method",
+                  "props": [
+                    { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                    { "name": "label", "value": "IA-09-FAPI-Test", "class": "fapi-2.0" }
+                  ],
+                  "parts": [
+                    {
+                      "id": "ia-9_fapi_test_obj",
+                      "name": "assessment-objects",
+                      "prose": "1. Verify token_endpoint_auth_methods_supported in metadata contains only 'private_key_jwt', 'tls_client_auth', or 'self_signed_tls_client_auth'\n2. Attempt token request without client authentication; verify 401 rejection\n3. Attempt token request with client_secret_basic; verify rejection\n4. Attempt token request with client_secret_post; verify rejection\n5. For private_key_jwt: decode client_assertion; verify aud equals AS issuer identifier (string)\n6. Submit private_key_jwt with wrong aud; verify rejection\n7. Submit private_key_jwt with aud as array containing issuer; document behavior\n8. For MTLS: verify client certificate is validated against registered certificate/CA\n9. Attempt token request with unregistered certificate; verify rejection"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "control-id": "ia-5.2",
+          "adds": [
+            {
+              "position": "after",
+              "by-id": "ia-5.2_gdn",
+              "parts": [
+                {
+                  "id": "ia-5.2_fapi_gdn",
+                  "name": "guidance",
+                  "props": [
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "security-profile-2.0#5.4.2" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "authorization-server,client" }
+                  ],
+                  "prose": "FAPI 2.0 PKI and JWKS Requirements (Section 5.4.2): For private_key_jwt and OIDC, both clients and authorization servers need to verify signatures using keys from another party. Authorization servers SHOULD use JWKS URI endpoints to distribute public keys. Clients SHOULD use JWKS URI endpoints or the jwks parameter with RFC 7591/7592. JWKS endpoints SHALL only be served over TLS. The x5u and jku JOSE headers SHOULD NOT be used. JWK sets SHOULD NOT contain multiple keys with the same kid."
+                },
+                {
+                  "id": "ia-5.2_fapi_test",
+                  "name": "assessment-method",
+                  "props": [
+                    { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                    { "name": "label", "value": "IA-05(02)-FAPI-Test", "class": "fapi-2.0" }
+                  ],
+                  "parts": [
+                    {
+                      "id": "ia-5.2_fapi_test_obj",
+                      "name": "assessment-objects",
+                      "prose": "1. Verify jwks_uri in authorization server metadata\n2. Fetch jwks_uri; verify served over HTTPS\n3. Verify JWKS contains valid keys with unique kid values\n4. For client JWKS: verify accessible and contains valid keys\n5. Inspect JWTs (ID tokens, client assertions); verify no x5u or jku headers\n6. Test signature validation with rotated keys; verify AS handles key rollover"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "control-id": "si-10",
+          "adds": [
+            {
+              "position": "after",
+              "by-id": "si-10_gdn",
+              "parts": [
+                {
+                  "id": "si-10_fapi_gdn",
+                  "name": "guidance",
+                  "props": [
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "security-profile-2.0#5.3.2.2" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "authorization-server,client" }
+                  ],
+                  "prose": "FAPI 2.0 Input Validation Requirements: PAR (RFC 9126) is mandatory - authorization servers SHALL reject requests not using PAR. The redirect_uri parameter SHALL be required in PAR requests. Authorization servers and clients SHALL NOT expose open redirectors. Clients SHALL only send client_id and request_uri to the authorization endpoint (all other parameters via PAR). The issuer URL used for metadata discovery SHALL be from an authoritative source, and clients SHALL verify the issuer claim in metadata matches the URL used to fetch it."
+                },
+                {
+                  "id": "si-10_fapi_obj",
+                  "name": "assessment-objective",
+                  "prose": "Verify that PAR is enforced, redirect URIs are validated, open redirectors are blocked, and issuer URL validation prevents injection attacks."
+                },
+                {
+                  "id": "si-10_fapi_test",
+                  "name": "assessment-method",
+                  "props": [
+                    { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                    { "name": "label", "value": "SI-10-FAPI-Test", "class": "fapi-2.0" }
+                  ],
+                  "parts": [
+                    {
+                      "id": "si-10_fapi_test_obj",
+                      "name": "assessment-objects",
+                      "prose": "PAR Enforcement:\n1. Send authorization request with inline parameters (no request_uri); verify rejection\n2. Verify require_pushed_authorization_requests=true in metadata\n3. Send PAR without redirect_uri; verify rejection\n4. Send PAR without client authentication; verify 401 rejection\n\nRedirect URI Validation:\n5. Send PAR with unregistered redirect_uri; verify rejection\n6. Test redirect_uri with path traversal (../); verify rejection or normalization\n7. Test redirect_uri with query parameter injection; verify proper handling\n\nOpen Redirector Prevention:\n8. Test AS endpoints for open redirector vulnerabilities\n9. Test client endpoints for open redirector vulnerabilities\n\nIssuer Validation:\n10. Serve metadata with mismatched issuer claim; verify client rejects\n11. Verify client only uses endpoints from discovered metadata"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "control-id": "ac-3",
+          "adds": [
+            {
+              "position": "after",
+              "by-id": "ac-3_gdn",
+              "parts": [
+                {
+                  "id": "ac-3_fapi_gdn",
+                  "name": "guidance",
+                  "props": [
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "security-profile-2.0#5.3.4" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "resource-server" }
+                  ],
+                  "prose": "FAPI 2.0 Resource Server Access Enforcement (Section 5.3.4): Resource servers SHALL verify the validity, integrity, expiration, and revocation status of access tokens. Resource servers SHALL verify that the authorization represented by the access token is sufficient for the requested resource access. Insufficient authorization SHALL result in errors per RFC 6750 Section 3.1. Access tokens SHALL only be accepted in the HTTP Authorization header, NOT in query parameters."
+                },
+                {
+                  "id": "ac-3_fapi_obj",
+                  "name": "assessment-objective",
+                  "prose": "Verify that resource servers properly validate access tokens and enforce scope-based access control."
+                },
+                {
+                  "id": "ac-3_fapi_test",
+                  "name": "assessment-method",
+                  "props": [
+                    { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                    { "name": "label", "value": "AC-03-FAPI-Test", "class": "fapi-2.0" }
+                  ],
+                  "parts": [
+                    {
+                      "id": "ac-3_fapi_test_obj",
+                      "name": "assessment-objects",
+                      "prose": "Token Validation:\n1. Send request with valid access token; verify access granted\n2. Send request with expired token; verify 401 with error=invalid_token\n3. Send request with revoked token; verify rejection\n4. Send request with tampered JWT signature; verify rejection\n\nScope Enforcement:\n5. Request resource requiring specific scope with matching scope; verify access\n6. Request resource requiring specific scope without it; verify 403 with error=insufficient_scope\n7. Verify WWW-Authenticate header includes scope information\n\nToken Location:\n8. Send access token in Authorization header; verify acceptance\n9. Send access token as query parameter; verify rejection\n10. Send access token in request body; verify rejection"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "control-id": "ac-12",
+          "adds": [
+            {
+              "position": "after",
+              "by-id": "ac-12_gdn",
+              "parts": [
+                {
+                  "id": "ac-12_fapi_gdn",
+                  "name": "guidance",
+                  "props": [
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "security-profile-2.0#5.3.2.1" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "authorization-server" }
+                  ],
+                  "prose": "FAPI 2.0 Session/Token Lifetime Requirements: Authorization codes SHALL have a maximum lifetime of 60 seconds. PAR request_uri values SHALL expire within 600 seconds. Authorization servers SHOULD use short-lived access tokens combined with refresh tokens for long-lived grants. Refresh token rotation SHOULD NOT be used except in extraordinary circumstances (e.g., infrastructure migration), and if used, a retry mechanism with the old token must be available."
+                },
+                {
+                  "id": "ac-12_fapi_test",
+                  "name": "assessment-method",
+                  "props": [
+                    { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                    { "name": "label", "value": "AC-12-FAPI-Test", "class": "fapi-2.0" }
+                  ],
+                  "parts": [
+                    {
+                      "id": "ac-12_fapi_test_obj",
+                      "name": "assessment-objects",
+                      "prose": "Authorization Code Lifetime:\n1. Obtain authorization code\n2. Wait 61 seconds\n3. Attempt token exchange; verify invalid_grant error\n\nRequest URI Lifetime:\n4. Send PAR request; verify expires_in <= 600 in response\n5. Wait for expires_in + 1 second\n6. Attempt to use request_uri; verify rejection\n\nRefresh Token Behavior:\n7. Use refresh token to obtain new access token\n8. Verify same refresh token can be used again (no rotation)\n9. If rotation is configured: verify old token remains valid for retry period"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "control-id": "au-9",
+          "adds": [
+            {
+              "position": "after",
+              "by-id": "au-9_gdn",
+              "parts": [
+                {
+                  "id": "au-9_fapi_gdn",
+                  "name": "guidance",
+                  "props": [
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "security-profile-2.0#5.3.3.1" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "client,resource-server" }
+                  ],
+                  "prose": "FAPI 2.0 Token Protection in Logs: Clients SHALL send access tokens only in HTTP headers (not query parameters) to prevent token exposure in server access logs, browser history, and referrer headers. Resource servers SHALL NOT accept tokens in query parameters. This protects sensitive credentials from exposure in audit logs and other logging systems."
+                },
+                {
+                  "id": "au-9_fapi_test",
+                  "name": "assessment-method",
+                  "props": [
+                    { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                    { "name": "label", "value": "AU-09-FAPI-Test", "class": "fapi-2.0" }
+                  ],
+                  "parts": [
+                    {
+                      "id": "au-9_fapi_test_obj",
+                      "name": "assessment-objects",
+                      "prose": "1. Capture client requests to resource server; verify token in Authorization header only\n2. Attempt to send token as query parameter to RS; verify rejection\n3. Review client code/configuration; verify no option to send tokens in URL\n4. Review RS access logs; verify tokens are not logged in request URLs"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "control-id": "sc-12",
+          "adds": [
+            {
+              "position": "after",
+              "by-id": "sc-12_gdn",
+              "parts": [
+                {
+                  "id": "sc-12_fapi_gdn",
+                  "name": "guidance",
+                  "props": [
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "security-profile-2.0#5.4" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "authorization-server,client,resource-server" }
+                  ],
+                  "prose": "FAPI 2.0 Cryptographic Key Management: RSA keys SHALL have minimum 2048-bit length. Elliptic curve keys SHALL have minimum 224-bit length. Credentials not intended for end-users (access tokens, refresh tokens, authorization codes) SHALL be created with at least 128 bits of entropy. Key rotation is RECOMMENDED; jwks_uri endpoints allow parties to rotate keys without manual coordination. Single-purpose keys are RECOMMENDED (do not use same key for signing and encryption)."
+                },
+                {
+                  "id": "sc-12_fapi_examine",
+                  "name": "assessment-method",
+                  "props": [
+                    { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "EXAMINE" },
+                    { "name": "label", "value": "SC-12-FAPI-Examine", "class": "fapi-2.0" }
+                  ],
+                  "parts": [
+                    {
+                      "id": "sc-12_fapi_examine_obj",
+                      "name": "assessment-objects",
+                      "prose": "Key management procedures; key generation configuration; key rotation schedules; HSM or key vault configuration; JWKS endpoint key publication; entropy source for token generation; key usage policies (signing vs encryption)"
+                    }
+                  ]
+                },
+                {
+                  "id": "sc-12_fapi_test",
+                  "name": "assessment-method",
+                  "props": [
+                    { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                    { "name": "label", "value": "SC-12-FAPI-Test", "class": "fapi-2.0" }
+                  ],
+                  "parts": [
+                    {
+                      "id": "sc-12_fapi_test_obj",
+                      "name": "assessment-objects",
+                      "prose": "1. Retrieve JWKS; verify RSA keys are >= 2048 bits (check 'n' parameter length)\n2. Verify EC keys use P-256, P-384, P-521, or Ed25519 curves\n3. Collect sample of authorization codes; analyze entropy\n4. Collect sample of access tokens (if opaque); analyze entropy\n5. Verify keys have appropriate 'use' claim (sig vs enc) if both operations needed"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "control-id": "sc-20",
+          "adds": [
+            {
+              "position": "after",
+              "by-id": "sc-20_gdn",
+              "parts": [
+                {
+                  "id": "sc-20_fapi_gdn",
+                  "name": "guidance",
+                  "props": [
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "security-profile-2.0#5.2.1" },
+                    { "name": "requirement-level", "value": "should" },
+                    { "name": "applies-to", "value": "authorization-server,client,resource-server" }
+                  ],
+                  "prose": "FAPI 2.0 DNSSEC Recommendation: DNSSEC SHOULD be used to protect against DNS spoofing attacks that can lead to the issuance of rogue domain-validated TLS certificates. Even with OV or EV certificates, an attacker with rogue DV certificates can impersonate endpoints. CAA records help mitigate this risk by restricting which CAs can issue certificates for the domain."
+                },
+                {
+                  "id": "sc-20_fapi_test",
+                  "name": "assessment-method",
+                  "props": [
+                    { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                    { "name": "label", "value": "SC-20-FAPI-Test", "class": "fapi-2.0" }
+                  ],
+                  "parts": [
+                    {
+                      "id": "sc-20_fapi_test_obj",
+                      "name": "assessment-objects",
+                      "prose": "1. Query DNS for DNSKEY records for the domain\n2. Validate DNSSEC chain of trust using dig +dnssec or online validator\n3. Query CAA records; verify authorized CAs are listed\n4. Document DNSSEC implementation status (implemented/not implemented)"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "control-id": "sc-23",
+          "adds": [
+            {
+              "position": "ending",
+              "parts": [
+                {
+                  "id": "sc-23_fapi_dpop",
+                  "name": "fapi-specific-requirement",
+                  "title": "DPoP Nonce Support",
+                  "props": [
+                    { "name": "fapi-requirement-id", "ns": "https://openid.net/specs/fapi", "value": "FAPI-DPOP-01" },
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "security-profile-2.0#5.3.3.1" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "client" },
+                    { "name": "no-nist-mapping", "value": "true" }
+                  ],
+                  "prose": "If using DPoP, clients SHALL support the server-provided nonce mechanism as defined in Section 8 of RFC 9449. When a server returns a use_dpop_nonce error with a DPoP-Nonce header, the client must extract the nonce and include it in subsequent DPoP proofs.",
+                  "parts": [
+                    {
+                      "id": "sc-23_fapi_dpop_obj",
+                      "name": "assessment-objective",
+                      "prose": "Verify that clients correctly handle DPoP nonce requirements from authorization servers and resource servers."
+                    },
+                    {
+                      "id": "sc-23_fapi_dpop_test",
+                      "name": "assessment-method",
+                      "props": [
+                        { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                        { "name": "label", "value": "FAPI-DPOP-01-Test", "class": "fapi-2.0" }
+                      ],
+                      "parts": [
+                        {
+                          "name": "assessment-objects",
+                          "prose": "1. Configure AS/RS to require DPoP nonce\n2. Send request without nonce; verify client receives use_dpop_nonce error\n3. Verify client extracts nonce from DPoP-Nonce response header\n4. Verify client includes nonce claim in subsequent DPoP proof JWT\n5. Verify request succeeds with valid nonce"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "sc-23_fapi_dpop_binding",
+                  "name": "fapi-specific-requirement",
+                  "title": "Authorization Code Binding to DPoP Key",
+                  "props": [
+                    { "name": "fapi-requirement-id", "ns": "https://openid.net/specs/fapi", "value": "FAPI-DPOP-02" },
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "security-profile-2.0#5.3.2.1" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "authorization-server" },
+                    { "name": "no-nist-mapping", "value": "true" }
+                  ],
+                  "prose": "If using DPoP, authorization servers SHALL support 'Authorization Code Binding to DPoP Key' as required by Section 10.1 of RFC 9449. The authorization code issued after a PAR request containing a DPoP proof must be bound to the public key from that DPoP proof, and token exchange must be rejected if a different DPoP key is used.",
+                  "parts": [
+                    {
+                      "id": "sc-23_fapi_dpop_binding_obj",
+                      "name": "assessment-objective",
+                      "prose": "Verify that authorization codes are cryptographically bound to the DPoP key used at the PAR endpoint."
+                    },
+                    {
+                      "id": "sc-23_fapi_dpop_binding_test",
+                      "name": "assessment-method",
+                      "props": [
+                        { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                        { "name": "label", "value": "FAPI-DPOP-02-Test", "class": "fapi-2.0" }
+                      ],
+                      "parts": [
+                        {
+                          "name": "assessment-objects",
+                          "prose": "1. Send PAR request with DPoP proof using key pair A\n2. Complete authorization and obtain authorization code\n3. Attempt token exchange with DPoP proof using different key pair B; verify rejection with invalid_grant or invalid_dpop_proof error\n4. Attempt token exchange with DPoP proof using original key pair A; verify success\n5. Verify issued access token is bound to key A (cnf.jkt matches)"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "control-id": "ia-5",
+          "adds": [
+            {
+              "position": "ending",
+              "parts": [
+                {
+                  "id": "ia-5_fapi_jwt_timestamp",
+                  "name": "fapi-specific-requirement",
+                  "title": "JWT Timestamp Tolerance",
+                  "props": [
+                    { "name": "fapi-requirement-id", "ns": "https://openid.net/specs/fapi", "value": "FAPI-JWT-01" },
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "security-profile-2.0#5.3.2.1" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "authorization-server" },
+                    { "name": "no-nist-mapping", "value": "true" }
+                  ],
+                  "prose": "To accommodate clock offsets, authorization servers SHALL accept JWTs (client assertions, DPoP proofs) with an iat or nbf timestamp between 0 and 10 seconds in the future, but SHALL reject JWTs with an iat or nbf timestamp greater than 60 seconds in the future. This balances interoperability (clock skew tolerance) with security (preventing pre-generated tokens).",
+                  "parts": [
+                    {
+                      "id": "ia-5_fapi_jwt_timestamp_obj",
+                      "name": "assessment-objective",
+                      "prose": "Verify that the authorization server accepts JWTs with timestamps slightly in the future (up to 10s) while rejecting those too far in the future (>60s)."
+                    },
+                    {
+                      "id": "ia-5_fapi_jwt_timestamp_test",
+                      "name": "assessment-method",
+                      "props": [
+                        { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                        { "name": "label", "value": "FAPI-JWT-01-Test", "class": "fapi-2.0" }
+                      ],
+                      "parts": [
+                        {
+                          "name": "assessment-objects",
+                          "prose": "1. Send private_key_jwt/DPoP with iat = now; verify acceptance\n2. Send private_key_jwt/DPoP with iat = now + 5 seconds; verify acceptance\n3. Send private_key_jwt/DPoP with iat = now + 10 seconds; verify acceptance\n4. Send private_key_jwt/DPoP with iat = now + 30 seconds; verify acceptance (within allowed range)\n5. Send private_key_jwt/DPoP with iat = now + 90 seconds; verify rejection\n6. Repeat tests with nbf claim"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "ia-5_fapi_mtls_aliases",
+                  "name": "fapi-specific-requirement",
+                  "title": "MTLS Endpoint Aliases Support",
+                  "props": [
+                    { "name": "fapi-requirement-id", "ns": "https://openid.net/specs/fapi", "value": "FAPI-MTLS-01" },
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "security-profile-2.0#5.3.3.1" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "client" },
+                    { "name": "no-nist-mapping", "value": "true" }
+                  ],
+                  "prose": "If using MTLS client authentication or MTLS sender-constrained access tokens, clients SHALL support the mtls_endpoint_aliases metadata defined in RFC 8705. When an authorization server publishes mtls_endpoint_aliases in its metadata, clients must use these alternative endpoints for MTLS connections.",
+                  "parts": [
+                    {
+                      "id": "ia-5_fapi_mtls_aliases_obj",
+                      "name": "assessment-objective",
+                      "prose": "Verify that clients correctly discover and use MTLS endpoint aliases when available."
+                    },
+                    {
+                      "id": "ia-5_fapi_mtls_aliases_test",
+                      "name": "assessment-method",
+                      "props": [
+                        { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                        { "name": "label", "value": "FAPI-MTLS-01-Test", "class": "fapi-2.0" }
+                      ],
+                      "parts": [
+                        {
+                          "name": "assessment-objects",
+                          "prose": "1. Configure AS metadata with mtls_endpoint_aliases containing alternative token_endpoint\n2. Verify client fetches and parses metadata correctly\n3. Verify client uses aliased token endpoint for MTLS token requests\n4. Verify client presents TLS client certificate to aliased endpoint\n5. Verify token exchange succeeds via aliased endpoint"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "control-id": "ac-3",
+          "adds": [
+            {
+              "position": "ending",
+              "parts": [
+                {
+                  "id": "ac-3_fapi_response_type",
+                  "name": "fapi-specific-requirement",
+                  "title": "Response Type Code Only",
+                  "props": [
+                    { "name": "fapi-requirement-id", "ns": "https://openid.net/specs/fapi", "value": "FAPI-FLOW-01" },
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "security-profile-2.0#5.3.2.2" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "authorization-server" },
+                    { "name": "no-nist-mapping", "value": "true" }
+                  ],
+                  "prose": "Authorization servers SHALL require the value of response_type to be 'code'. Implicit flow (response_type=token) and hybrid flows (response_type=code id_token, code token, etc.) are not permitted in FAPI 2.0 due to token exposure risks in browser history and referrer headers.",
+                  "parts": [
+                    {
+                      "id": "ac-3_fapi_response_type_obj",
+                      "name": "assessment-objective",
+                      "prose": "Verify that only response_type=code is accepted and all other response types are rejected."
+                    },
+                    {
+                      "id": "ac-3_fapi_response_type_test",
+                      "name": "assessment-method",
+                      "props": [
+                        { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                        { "name": "label", "value": "FAPI-FLOW-01-Test", "class": "fapi-2.0" }
+                      ],
+                      "parts": [
+                        {
+                          "name": "assessment-objects",
+                          "prose": "1. Send PAR with response_type=code; verify acceptance\n2. Send PAR with response_type=token; verify rejection with unsupported_response_type\n3. Send PAR with response_type=id_token; verify rejection\n4. Send PAR with response_type=code id_token; verify rejection\n5. Send PAR with response_type=code token; verify rejection\n6. Verify response_types_supported in metadata contains only 'code'"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "ac-3_fapi_refresh_rotation",
+                  "name": "fapi-specific-requirement",
+                  "title": "Refresh Token Rotation Restrictions",
+                  "props": [
+                    { "name": "fapi-requirement-id", "ns": "https://openid.net/specs/fapi", "value": "FAPI-TOKEN-01" },
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "security-profile-2.0#5.3.2.1" },
+                    { "name": "requirement-level", "value": "shall-not" },
+                    { "name": "applies-to", "value": "authorization-server" },
+                    { "name": "no-nist-mapping", "value": "true" }
+                  ],
+                  "prose": "Authorization servers SHALL NOT use refresh token rotation except in extraordinary circumstances (e.g., infrastructure migration). Refresh token rotation does not provide security benefits with confidential clients and sender-constrained tokens, and causes UX degradation when clients fail to store new tokens. If rotation is used, the AS must provide a time-limited retry mechanism allowing clients to use the old refresh token.",
+                  "parts": [
+                    {
+                      "id": "ac-3_fapi_refresh_rotation_obj",
+                      "name": "assessment-objective",
+                      "prose": "Verify that refresh token rotation is not used, or if used, includes a retry capability with the old token."
+                    },
+                    {
+                      "id": "ac-3_fapi_refresh_rotation_test",
+                      "name": "assessment-method",
+                      "props": [
+                        { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                        { "name": "label", "value": "FAPI-TOKEN-01-Test", "class": "fapi-2.0" }
+                      ],
+                      "parts": [
+                        {
+                          "name": "assessment-objects",
+                          "prose": "1. Obtain refresh token via authorization code exchange\n2. Use refresh token to obtain new access token\n3. Verify same refresh token is returned (no rotation) OR\n4. If new refresh token is returned: immediately retry with old refresh token; verify it still works within grace period\n5. Document refresh token rotation policy"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "ac-3_fapi_refresh_rotation_examine",
+                      "name": "assessment-method",
+                      "props": [
+                        { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "EXAMINE" },
+                        { "name": "label", "value": "FAPI-TOKEN-01-Examine", "class": "fapi-2.0" }
+                      ],
+                      "parts": [
+                        {
+                          "name": "assessment-objects",
+                          "prose": "Authorization server configuration; refresh token rotation settings; retry/grace period configuration; justification for rotation if enabled"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "control-id": "si-10",
+          "adds": [
+            {
+              "position": "ending",
+              "parts": [
+                {
+                  "id": "si-10_fapi_http_redirect",
+                  "name": "fapi-specific-requirement",
+                  "title": "HTTP Redirect Status Codes",
+                  "props": [
+                    { "name": "fapi-requirement-id", "ns": "https://openid.net/specs/fapi", "value": "FAPI-HTTP-01" },
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "security-profile-2.0#5.3.2.2" },
+                    { "name": "requirement-level", "value": "shall-not" },
+                    { "name": "applies-to", "value": "authorization-server" },
+                    { "name": "no-nist-mapping", "value": "true" }
+                  ],
+                  "prose": "Authorization servers SHALL NOT use HTTP 307 (Temporary Redirect) status code when redirecting a request that contains user credentials, to avoid forwarding credentials to a third party accidentally. HTTP 307 preserves the request method and body. Authorization servers SHOULD use HTTP 303 (See Other) which explicitly changes POST to GET.",
+                  "parts": [
+                    {
+                      "id": "si-10_fapi_http_redirect_obj",
+                      "name": "assessment-objective",
+                      "prose": "Verify that HTTP 307 is not used for redirects in credential-bearing flows, and HTTP 303 is used instead."
+                    },
+                    {
+                      "id": "si-10_fapi_http_redirect_test",
+                      "name": "assessment-method",
+                      "props": [
+                        { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                        { "name": "label", "value": "FAPI-HTTP-01-Test", "class": "fapi-2.0" }
+                      ],
+                      "parts": [
+                        {
+                          "name": "assessment-objects",
+                          "prose": "1. Submit credentials to AS login endpoint; capture redirect response\n2. Verify redirect status is 303, 302, or other safe code (not 307 or 308)\n3. Complete full authorization flow; inspect all redirect responses\n4. Document all redirect status codes used by AS"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "si-10_fapi_nonce_length",
+                  "name": "fapi-specific-requirement",
+                  "title": "OIDC Nonce Length Interoperability",
+                  "props": [
+                    { "name": "fapi-requirement-id", "ns": "https://openid.net/specs/fapi", "value": "FAPI-OIDC-01" },
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "security-profile-2.0#5.3.2.2" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "authorization-server" },
+                    { "name": "no-nist-mapping", "value": "true" }
+                  ],
+                  "prose": "If supporting OpenID Connect, authorization servers SHALL support nonce parameter values up to 64 characters in length. Authorization servers MAY reject nonce values longer than 64 characters. Clients SHOULD NOT use nonce values longer than 64 characters to ensure interoperability.",
+                  "parts": [
+                    {
+                      "id": "si-10_fapi_nonce_length_obj",
+                      "name": "assessment-objective",
+                      "prose": "Verify that nonce values up to 64 characters are accepted and correctly included in ID tokens."
+                    },
+                    {
+                      "id": "si-10_fapi_nonce_length_test",
+                      "name": "assessment-method",
+                      "props": [
+                        { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                        { "name": "label", "value": "FAPI-OIDC-01-Test", "class": "fapi-2.0" }
+                      ],
+                      "parts": [
+                        {
+                          "name": "assessment-objects",
+                          "prose": "1. Send PAR with openid scope and 64-character nonce; verify acceptance\n2. Complete flow; verify nonce appears correctly in id_token\n3. Send PAR with 65+ character nonce; document behavior (may accept or reject)\n4. For client testing: verify client generates nonce <= 64 characters"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "si-10_fapi_request_uri_lifetime",
+                  "name": "fapi-specific-requirement",
+                  "title": "PAR Request URI Lifetime and One-Time Use",
+                  "props": [
+                    { "name": "fapi-requirement-id", "ns": "https://openid.net/specs/fapi", "value": "FAPI-PAR-01" },
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "security-profile-2.0#5.3.2.2" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "authorization-server" },
+                    { "name": "no-nist-mapping", "value": "true" }
+                  ],
+                  "prose": "Authorization servers SHALL issue PAR request_uri values with expires_in less than 600 seconds (10 minutes). The lifetime must be sufficient for users with slow connections to complete the flow. It is RECOMMENDED that authorization servers only accept request_uri once (at point of authorization, not page load) to mitigate authorization request leak attacks.",
+                  "parts": [
+                    {
+                      "id": "si-10_fapi_request_uri_lifetime_obj",
+                      "name": "assessment-objective",
+                      "prose": "Verify that request_uri values expire within 600 seconds and one-time use is enforced or documented."
+                    },
+                    {
+                      "id": "si-10_fapi_request_uri_lifetime_test",
+                      "name": "assessment-method",
+                      "props": [
+                        { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                        { "name": "label", "value": "FAPI-PAR-01-Test", "class": "fapi-2.0" }
+                      ],
+                      "parts": [
+                        {
+                          "name": "assessment-objects",
+                          "prose": "1. Send PAR request; verify expires_in in response is <= 600\n2. Wait for expires_in + 1 second; attempt to use request_uri; verify rejection\n3. Send PAR request; use request_uri to complete authorization\n4. Attempt to reuse same request_uri; document if rejected (recommended) or accepted\n5. If one-time use: verify enforcement happens at authorization time, not page load"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "si-10_fapi_auth_initiation",
+                  "name": "fapi-specific-requirement",
+                  "title": "Authorization Flow Initiation Protection",
+                  "props": [
+                    { "name": "fapi-requirement-id", "ns": "https://openid.net/specs/fapi", "value": "FAPI-CSRF-01" },
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "security-profile-2.0#5.3.3.1" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "client" },
+                    { "name": "no-nist-mapping", "value": "true" }
+                  ],
+                  "prose": "Clients SHALL initiate an authorization process only with the end-user's explicit or implicit consent and protect initiation of an authorization process against cross-site request forgery (CSRF). This enables the end-user to be aware of the context in which an authorization flow was started, preventing attackers from silently triggering authorization.",
+                  "parts": [
+                    {
+                      "id": "si-10_fapi_auth_initiation_obj",
+                      "name": "assessment-objective",
+                      "prose": "Verify that authorization flows require user interaction to initiate and are protected against CSRF attacks."
+                    },
+                    {
+                      "id": "si-10_fapi_auth_initiation_test",
+                      "name": "assessment-method",
+                      "props": [
+                        { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                        { "name": "label", "value": "FAPI-CSRF-01-Test", "class": "fapi-2.0" }
+                      ],
+                      "parts": [
+                        {
+                          "name": "assessment-objects",
+                          "prose": "1. Identify authorization initiation endpoint/action in client\n2. Attempt to trigger authorization via cross-site request (e.g., img src, form submission from external domain)\n3. Verify CSRF protection prevents unauthorized initiation\n4. Verify user action (button click, form submission) is required to start authorization\n5. Review CSRF protection mechanism (tokens, SameSite cookies, origin validation)"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "si-10_fapi_auth_initiation_examine",
+                      "name": "assessment-method",
+                      "props": [
+                        { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "EXAMINE" },
+                        { "name": "label", "value": "FAPI-CSRF-01-Examine", "class": "fapi-2.0" }
+                      ],
+                      "parts": [
+                        {
+                          "name": "assessment-objects",
+                          "prose": "Client source code; CSRF protection implementation; authorization initiation flow; cookie settings (SameSite); form/request validation logic"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "back-matter": {
+      "resources": [
+        {
+          "uuid": "6b2e4a85-7f3c-4d1e-9a8b-5c0d2e1f3a4b",
+          "title": "NIST Special Publication 800-53 Revision 5",
+          "description": "Security and Privacy Controls for Information Systems and Organizations",
+          "rlinks": [
+            {
+              "href": "NIST_SP-800-53_rev5_catalog.json",
+              "media-type": "application/oscal.catalog+json"
+            },
+            {
+              "href": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json",
+              "media-type": "application/oscal.catalog+json"
+            }
+          ]
+        },
+        {
+          "uuid": "7c3f5b96-8a4d-5e2f-0b9c-6d1e3f2a5b6c",
+          "title": "FAPI 2.0 Security Profile",
+          "description": "OpenID Foundation Financial-grade API 2.0 Security Profile specification",
+          "rlinks": [
+            {
+              "href": "https://openid.net/specs/fapi-2_0-security-profile.html",
+              "media-type": "text/html"
+            }
+          ]
+        },
+        {
+          "uuid": "8d4a6c07-9b5e-6f3a-1c0d-7e2f4a3b6c7d",
+          "title": "FAPI 2.0 Attacker Model",
+          "description": "OpenID Foundation Financial-grade API 2.0 Attacker Model specification",
+          "rlinks": [
+            {
+              "href": "https://openid.net/specs/fapi-2_0-attacker-model.html",
+              "media-type": "text/html"
+            }
+          ]
+        },
+        {
+          "uuid": "9e5b7d18-0c6f-7a4b-2d1e-8f3a5b4c7d8e",
+          "title": "RFC 9126 - Pushed Authorization Requests",
+          "rlinks": [
+            {
+              "href": "https://www.rfc-editor.org/rfc/rfc9126",
+              "media-type": "text/html"
+            }
+          ]
+        },
+        {
+          "uuid": "0f6c8e29-1d7a-8b5c-3e2f-9a4b6c5d8e9f",
+          "title": "RFC 7636 - PKCE",
+          "rlinks": [
+            {
+              "href": "https://www.rfc-editor.org/rfc/rfc7636",
+              "media-type": "text/html"
+            }
+          ]
+        },
+        {
+          "uuid": "1a7d9f30-2e8b-9c6d-4f3a-0b5c7d6e9f0a",
+          "title": "RFC 8705 - OAuth 2.0 Mutual-TLS",
+          "rlinks": [
+            {
+              "href": "https://www.rfc-editor.org/rfc/rfc8705",
+              "media-type": "text/html"
+            }
+          ]
+        },
+        {
+          "uuid": "2b8e0a41-3f9c-0d7e-5a4b-1c6d8e7f0a1b",
+          "title": "RFC 9449 - OAuth 2.0 DPoP",
+          "rlinks": [
+            {
+              "href": "https://www.rfc-editor.org/rfc/rfc9449",
+              "media-type": "text/html"
+            }
+          ]
+        },
+        {
+          "uuid": "3c9f1b52-4a0d-1e8f-6b5c-2d7e9f8a1b2c",
+          "title": "RFC 9207 - OAuth 2.0 Authorization Server Issuer Identification",
+          "rlinks": [
+            {
+              "href": "https://www.rfc-editor.org/rfc/rfc9207",
+              "media-type": "text/html"
+            }
+          ]
+        },
+        {
+          "uuid": "4d0a2c63-5b1e-2f9a-7c6d-3e8f0a9b2c3d",
+          "title": "BCP 195 - Secure Use of TLS",
+          "rlinks": [
+            {
+              "href": "https://www.rfc-editor.org/info/bcp195",
+              "media-type": "text/html"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

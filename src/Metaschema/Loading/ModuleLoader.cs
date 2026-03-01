@@ -1,4 +1,5 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using System.Collections.Concurrent;
 using Metaschema.Model;
@@ -29,10 +30,7 @@ public sealed class ModuleLoader : IModuleLoader
     /// Initializes a new instance of the <see cref="ModuleLoader"/> class.
     /// </summary>
     /// <param name="resolver">The resource resolver to use.</param>
-    public ModuleLoader(IResourceResolver resolver)
-    {
-        _resolver = resolver ?? throw new ArgumentNullException(nameof(resolver));
-    }
+    public ModuleLoader(IResourceResolver resolver) => _resolver = resolver ?? throw new ArgumentNullException(nameof(resolver));
 
     /// <inheritdoc />
     public MetaschemaModule Load(string path)
@@ -81,10 +79,7 @@ public sealed class ModuleLoader : IModuleLoader
     }
 
     /// <inheritdoc />
-    public MetaschemaModule Load(Stream stream, Uri baseUri)
-    {
-        return LoadFromStream(stream, baseUri);
-    }
+    public MetaschemaModule Load(Stream stream, Uri baseUri) => LoadFromStream(stream, baseUri);
 
     private MetaschemaModule LoadFromStream(Stream stream, Uri location)
     {

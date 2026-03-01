@@ -1,5 +1,5 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using Metaschema.Metapath.Context;
 using Shouldly;
@@ -31,7 +31,7 @@ public class ComparisonExpressionTests
     public void ValueComparison_Eq_Integers_ShouldEvaluate(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -45,7 +45,7 @@ public class ComparisonExpressionTests
     public void ValueComparison_Eq_Strings_ShouldEvaluate(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -58,7 +58,7 @@ public class ComparisonExpressionTests
     public void ValueComparison_Eq_Booleans_ShouldEvaluate(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -76,7 +76,7 @@ public class ComparisonExpressionTests
     public void ValueComparison_Ne_Integers_ShouldEvaluate(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -88,7 +88,7 @@ public class ComparisonExpressionTests
     public void ValueComparison_Ne_Strings_ShouldEvaluate(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -107,7 +107,7 @@ public class ComparisonExpressionTests
     public void ValueComparison_Lt_Integers_ShouldEvaluate(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -120,7 +120,7 @@ public class ComparisonExpressionTests
     public void ValueComparison_Lt_Strings_ShouldEvaluate(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -138,7 +138,7 @@ public class ComparisonExpressionTests
     public void ValueComparison_Le_Integers_ShouldEvaluate(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -157,7 +157,7 @@ public class ComparisonExpressionTests
     public void ValueComparison_Gt_Integers_ShouldEvaluate(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -169,7 +169,7 @@ public class ComparisonExpressionTests
     public void ValueComparison_Gt_Strings_ShouldEvaluate(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -187,7 +187,7 @@ public class ComparisonExpressionTests
     public void ValueComparison_Ge_Integers_ShouldEvaluate(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -204,7 +204,7 @@ public class ComparisonExpressionTests
     public void GeneralComparison_Equals_ShouldEvaluate(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -221,7 +221,7 @@ public class ComparisonExpressionTests
     public void GeneralComparison_NotEquals_ShouldEvaluate(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -243,7 +243,7 @@ public class ComparisonExpressionTests
     public void GeneralComparison_Inequalities_ShouldEvaluate(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -261,7 +261,7 @@ public class ComparisonExpressionTests
     public void LogicalAnd_ShouldEvaluate(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -274,7 +274,7 @@ public class ComparisonExpressionTests
     public void LogicalAnd_WithComparisons_ShouldEvaluate(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -292,7 +292,7 @@ public class ComparisonExpressionTests
     public void LogicalOr_ShouldEvaluate(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -305,7 +305,7 @@ public class ComparisonExpressionTests
     public void LogicalOr_WithComparisons_ShouldEvaluate(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -319,7 +319,7 @@ public class ComparisonExpressionTests
     public void LogicalNot_True_ShouldReturnFalse()
     {
         // Act
-        bool result = EvaluateBoolean("not(true())");
+        var result = EvaluateBoolean("not(true())");
 
         // Assert
         result.ShouldBeFalse();
@@ -329,7 +329,7 @@ public class ComparisonExpressionTests
     public void LogicalNot_False_ShouldReturnTrue()
     {
         // Act
-        bool result = EvaluateBoolean("not(false())");
+        var result = EvaluateBoolean("not(false())");
 
         // Assert
         result.ShouldBeTrue();
@@ -342,7 +342,7 @@ public class ComparisonExpressionTests
     public void LogicalNot_WithExpressions_ShouldEvaluate(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -362,7 +362,7 @@ public class ComparisonExpressionTests
     public void ComplexLogicalExpressions_ShouldEvaluate(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);
@@ -382,7 +382,7 @@ public class ComparisonExpressionTests
     public void Comparison_WithArithmetic_ShouldEvaluate(string expression, bool expected)
     {
         // Act
-        bool result = EvaluateBoolean(expression);
+        var result = EvaluateBoolean(expression);
 
         // Assert
         result.ShouldBe(expected);

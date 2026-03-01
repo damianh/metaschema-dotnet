@@ -1,5 +1,5 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using Metaschema.Metapath.Functions;
 using Metaschema.Metapath.Item;
@@ -60,10 +60,7 @@ public sealed class MetapathContext : IMetapathContext
     /// </summary>
     /// <param name="node">The context node.</param>
     /// <returns>A new context.</returns>
-    public MetapathContext ForNode(INodeItem node)
-    {
-        return new MetapathContext(StaticContext, DynamicContext.Copy().WithContextItem(node));
-    }
+    public MetapathContext ForNode(INodeItem node) => new MetapathContext(StaticContext, DynamicContext.Copy().WithContextItem(node));
 
     /// <summary>
     /// Creates a default evaluation context.

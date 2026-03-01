@@ -1,4 +1,5 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using System.Text.Json;
 using Metaschema.Nodes;
@@ -16,10 +17,7 @@ public sealed class JsonContentSerializer : ISerializer
     /// Initializes a new instance of the <see cref="JsonContentSerializer"/> class.
     /// </summary>
     /// <param name="context">The binding context.</param>
-    public JsonContentSerializer(BindingContext context)
-    {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
-    }
+    public JsonContentSerializer(BindingContext context) => _context = context ?? throw new ArgumentNullException(nameof(context));
 
     /// <inheritdoc />
     public Format Format => Format.Json;
@@ -51,13 +49,10 @@ public sealed class JsonContentSerializer : ISerializer
         return reader.ReadToEnd();
     }
 
-    private static JsonWriterOptions CreateWriterOptions()
+    private static JsonWriterOptions CreateWriterOptions() => new JsonWriterOptions
     {
-        return new JsonWriterOptions
-        {
-            Indented = true
-        };
-    }
+        Indented = true
+    };
 
     private void SerializeCore(IDocumentRootNode node, Utf8JsonWriter writer)
     {

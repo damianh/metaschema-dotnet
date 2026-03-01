@@ -1,4 +1,5 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
@@ -106,7 +107,9 @@ public sealed class ValidationResults : IReadOnlyCollection<ValidationFinding>
     public override string ToString()
     {
         if (Count == 0)
+        {
             return "Validation passed: no findings";
+        }
 
         var status = IsValid ? "passed with warnings" : "failed";
         return $"Validation {status}: {CriticalCount} critical, {ErrorCount} errors, {WarningCount} warnings, {InformationalCount} info";

@@ -1,8 +1,8 @@
-// Licensed under the MIT License.
-// Demonstrates loading an OSCAL Catalog document using the dynamic document API.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
-using Metaschema.Loading;
 using Metaschema;
+using Metaschema.Loading;
 using Metaschema.Nodes;
 
 // Load the OSCAL Catalog Metaschema
@@ -28,7 +28,9 @@ Console.WriteLine($"Loaded catalog: {catalog.Name}");
 
 // Get catalog UUID
 if (catalog.Flags.TryGetValue("uuid", out var uuidFlag))
+{
     Console.WriteLine($"  UUID: {uuidFlag.RawValue}");
+}
 
 // Extract metadata
 var metadata = catalog.ModelChildren.FirstOrDefault(c => c.Name == "metadata") as AssemblyNode;
@@ -58,7 +60,9 @@ foreach (var group in groups.Take(5))
 }
 
 if (groups.Count > 5)
+{
     Console.WriteLine($"  ... and {groups.Count - 5} more families");
+}
 
 Console.WriteLine();
 

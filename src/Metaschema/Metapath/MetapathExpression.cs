@@ -1,5 +1,5 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using Antlr4.Runtime;
 
@@ -132,10 +132,7 @@ internal sealed class MetapathErrorListener : BaseErrorListener, IAntlrErrorList
     private readonly string _expression;
     private readonly List<string> _errors = [];
 
-    public MetapathErrorListener(string expression)
-    {
-        _expression = expression;
-    }
+    public MetapathErrorListener(string expression) => _expression = expression;
 
     public bool HasErrors => _errors.Count > 0;
 
@@ -148,10 +145,7 @@ internal sealed class MetapathErrorListener : BaseErrorListener, IAntlrErrorList
         int line,
         int charPositionInLine,
         string msg,
-        RecognitionException e)
-    {
-        _errors.Add($"Line {line}:{charPositionInLine} - {msg}");
-    }
+        RecognitionException e) => _errors.Add($"Line {line}:{charPositionInLine} - {msg}");
 
     public void SyntaxError(
         TextWriter output,
@@ -160,8 +154,5 @@ internal sealed class MetapathErrorListener : BaseErrorListener, IAntlrErrorList
         int line,
         int charPositionInLine,
         string msg,
-        RecognitionException e)
-    {
-        _errors.Add($"Line {line}:{charPositionInLine} - {msg}");
-    }
+        RecognitionException e) => _errors.Add($"Line {line}:{charPositionInLine} - {msg}");
 }

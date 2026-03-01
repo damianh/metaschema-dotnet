@@ -1,4 +1,5 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using System.Xml;
 using Metaschema.Nodes;
@@ -16,10 +17,7 @@ public sealed class XmlContentSerializer : ISerializer
     /// Initializes a new instance of the <see cref="XmlContentSerializer"/> class.
     /// </summary>
     /// <param name="context">The binding context.</param>
-    public XmlContentSerializer(BindingContext context)
-    {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
-    }
+    public XmlContentSerializer(BindingContext context) => _context = context ?? throw new ArgumentNullException(nameof(context));
 
     /// <inheritdoc />
     public Format Format => Format.Xml;
@@ -46,15 +44,12 @@ public sealed class XmlContentSerializer : ISerializer
         return stringWriter.ToString();
     }
 
-    private static XmlWriterSettings CreateWriterSettings()
+    private static XmlWriterSettings CreateWriterSettings() => new XmlWriterSettings
     {
-        return new XmlWriterSettings
-        {
-            Indent = true,
-            IndentChars = "  ",
-            OmitXmlDeclaration = false
-        };
-    }
+        Indent = true,
+        IndentChars = "  ",
+        OmitXmlDeclaration = false
+    };
 
     private void SerializeCore(IDocumentRootNode node, XmlWriter writer)
     {

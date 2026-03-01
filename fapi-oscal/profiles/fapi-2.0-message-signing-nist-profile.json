@@ -1,0 +1,373 @@
+{
+  "profile": {
+    "uuid": "a1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+    "metadata": {
+      "title": "FAPI 2.0 Message Signing Profile - NIST SP 800-53 Rev 5 Mapping",
+      "last-modified": "2026-01-27T12:00:00.000Z",
+      "version": "1.0.0-draft",
+      "oscal-version": "1.1.1",
+      "remarks": "This profile extends the FAPI 2.0 Security Profile with Message Signing requirements for non-repudiation. It adds requirements for signed authorization requests (JAR), signed authorization responses (JARM), and signed introspection responses (RFC 9701).",
+      "props": [
+        {
+          "name": "keywords",
+          "value": "FAPI, OAuth 2.0, OpenID Connect, NIST 800-53, Message Signing, JAR, JARM, Non-repudiation, JWT"
+        },
+        {
+          "name": "fapi-spec-version",
+          "ns": "https://openid.net/specs/fapi",
+          "value": "2.0"
+        }
+      ],
+      "links": [
+        {
+          "href": "https://openid.net/specs/fapi-2_0-message-signing.html",
+          "rel": "reference",
+          "text": "FAPI 2.0 Message Signing"
+        },
+        {
+          "href": "https://openid.net/specs/fapi-2_0-security-profile.html",
+          "rel": "reference",
+          "text": "FAPI 2.0 Security Profile"
+        }
+      ],
+      "roles": [
+        {
+          "id": "creator",
+          "title": "Profile Creator"
+        }
+      ],
+      "parties": [
+        {
+          "uuid": "b1c2d3e4-f5a6-7b8c-9d0e-1f2a3b4c5d6e",
+          "type": "organization",
+          "name": "OpenID Foundation FAPI Working Group",
+          "links": [
+            {
+              "href": "https://openid.net/wg/fapi/",
+              "rel": "homepage"
+            }
+          ]
+        }
+      ],
+      "responsible-parties": [
+        {
+          "role-id": "creator",
+          "party-uuids": ["b1c2d3e4-f5a6-7b8c-9d0e-1f2a3b4c5d6e"]
+        }
+      ]
+    },
+    "imports": [
+      {
+        "href": "#e8f3a1b2-4c5d-6e7f-8a9b-0c1d2e3f4a5b",
+        "include-all": {}
+      },
+      {
+        "href": "#6b2e4a85-7f3c-4d1e-9a8b-5c0d2e1f3a4b",
+        "include-controls": [
+          {
+            "with-ids": [
+              "au-10"
+            ]
+          }
+        ]
+      }
+    ],
+    "merge": {
+      "as-is": true
+    },
+    "modify": {
+      "alters": [
+        {
+          "control-id": "au-10",
+          "adds": [
+            {
+              "position": "ending",
+              "parts": [
+                {
+                  "id": "au-10_fapi_gdn",
+                  "name": "guidance",
+                  "props": [
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "message-signing-2.0#5.2" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "authorization-server,client" }
+                  ],
+                  "prose": "FAPI 2.0 Non-Repudiation Requirements: The Message Signing profile provides non-repudiation for OAuth 2.0 messages. Signed authorization requests (JAR/RFC 9101), signed authorization responses (JARM), and signed introspection responses (RFC 9701) enable parties to prove message origin and integrity. Application-level signatures can be stored with payload and metadata for dispute resolution."
+                },
+                {
+                  "id": "au-10_fapi_obj",
+                  "name": "assessment-objective",
+                  "prose": "Verify that authorization requests, responses, and introspection responses are digitally signed to provide non-repudiation evidence."
+                },
+                {
+                  "id": "au-10_fapi_test",
+                  "name": "assessment-method",
+                  "props": [
+                    { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                    { "name": "label", "value": "AU-10-FAPI-Test", "class": "fapi-2.0-ms" }
+                  ],
+                  "parts": [
+                    {
+                      "name": "assessment-objects",
+                      "prose": "1. Verify authorization requests are signed per JAR (RFC 9101)\n2. Verify authorization responses use JARM response_mode=jwt\n3. Verify introspection responses are JWT-formatted per RFC 9701\n4. Verify signatures can be validated using published JWKS\n5. Verify signed messages contain required timestamps (nbf, exp)"
+                    }
+                  ]
+                },
+                {
+                  "id": "au-10_fapi_examine",
+                  "name": "assessment-method",
+                  "props": [
+                    { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "EXAMINE" },
+                    { "name": "label", "value": "AU-10-FAPI-Examine", "class": "fapi-2.0-ms" }
+                  ],
+                  "parts": [
+                    {
+                      "name": "assessment-objects",
+                      "prose": "Message signing architecture; key management for signing keys; message storage and retention policies; dispute resolution procedures; audit trail of signed messages"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "control-id": "sc-13",
+          "adds": [
+            {
+              "position": "ending",
+              "parts": [
+                {
+                  "id": "sc-13_fapi_ms_gdn",
+                  "name": "guidance",
+                  "props": [
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "message-signing-2.0#5.3" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "authorization-server,client" }
+                  ],
+                  "prose": "FAPI 2.0 Message Signing Cryptographic Requirements: Signed authorization requests (JAR) SHALL use PS256, ES256, or EdDSA algorithms. Request objects SHALL include 'aud' claim matching AS issuer, 'nbf' claim no more than 60 minutes in the past, and 'exp' claim with lifetime no more than 60 minutes after 'nbf'. Request objects SHOULD include 'typ' header parameter with value 'oauth-authz-req+jwt'."
+                },
+                {
+                  "id": "sc-13_fapi_ms_test",
+                  "name": "assessment-method",
+                  "props": [
+                    { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                    { "name": "label", "value": "SC-13-FAPI-MS-Test", "class": "fapi-2.0-ms" }
+                  ],
+                  "parts": [
+                    {
+                      "name": "assessment-objects",
+                      "prose": "1. Decode signed authorization request; verify 'alg' is PS256, ES256, or EdDSA\n2. Verify 'aud' claim equals authorization server issuer identifier\n3. Verify 'nbf' claim is present and within 60 minutes\n4. Verify 'exp' claim is present and lifetime <= 60 minutes from 'nbf'\n5. Check 'typ' header parameter for 'oauth-authz-req+jwt'"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "control-id": "si-10",
+          "adds": [
+            {
+              "position": "ending",
+              "parts": [
+                {
+                  "id": "si-10_fapi_jar",
+                  "name": "fapi-specific-requirement",
+                  "title": "Signed Authorization Request Validation",
+                  "props": [
+                    { "name": "fapi-requirement-id", "ns": "https://openid.net/specs/fapi", "value": "FAPI-JAR-01" },
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "message-signing-2.0#5.3.1" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "authorization-server" },
+                    { "name": "no-nist-mapping", "value": "true" }
+                  ],
+                  "prose": "Authorization servers implementing FAPI 2.0 Message Signing SHALL support, require use of, and verify signed request objects according to JAR (RFC 9101) at the PAR endpoint. The 'aud' claim in the request object SHALL be the authorization server's issuer identifier. Request objects with 'nbf' more than 60 minutes in the past or 'exp' lifetime more than 60 minutes after 'nbf' SHALL be rejected.",
+                  "parts": [
+                    {
+                      "id": "si-10_fapi_jar_obj",
+                      "name": "assessment-objective",
+                      "prose": "Verify that the authorization server requires and validates signed authorization requests per JAR (RFC 9101)."
+                    },
+                    {
+                      "id": "si-10_fapi_jar_test",
+                      "name": "assessment-method",
+                      "props": [
+                        { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                        { "name": "label", "value": "FAPI-JAR-01-Test", "class": "fapi-2.0-ms" }
+                      ],
+                      "parts": [
+                        {
+                          "name": "assessment-objects",
+                          "prose": "1. Send PAR with unsigned request; verify rejection\n2. Send PAR with signed request object; verify acceptance\n3. Send request object with 'aud' not matching AS issuer; verify rejection\n4. Send request object with 'nbf' 65 minutes in past; verify rejection\n5. Send request object with 'exp' 65 minutes after 'nbf'; verify rejection\n6. Send request object with 'typ'='oauth-authz-req+jwt'; verify acceptance"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "si-10_fapi_jarm",
+                  "name": "fapi-specific-requirement",
+                  "title": "Signed Authorization Response (JARM)",
+                  "props": [
+                    { "name": "fapi-requirement-id", "ns": "https://openid.net/specs/fapi", "value": "FAPI-JARM-01" },
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "message-signing-2.0#5.4" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "authorization-server,client" },
+                    { "name": "no-nist-mapping", "value": "true" }
+                  ],
+                  "prose": "Authorization servers implementing FAPI 2.0 Message Signing SHALL support, require use of, and issue signed authorization responses via JARM (JWT Secured Authorization Response Mode). Clients SHALL set response_mode='jwt' in authorization requests and SHALL verify signed responses per JARM. The 'iss' parameter SHALL only be included inside the JWT per RFC 9207.",
+                  "parts": [
+                    {
+                      "id": "si-10_fapi_jarm_obj",
+                      "name": "assessment-objective",
+                      "prose": "Verify that authorization responses are signed using JARM and clients properly validate signatures."
+                    },
+                    {
+                      "id": "si-10_fapi_jarm_test",
+                      "name": "assessment-method",
+                      "props": [
+                        { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                        { "name": "label", "value": "FAPI-JARM-01-Test", "class": "fapi-2.0-ms" }
+                      ],
+                      "parts": [
+                        {
+                          "name": "assessment-objects",
+                          "prose": "1. Send authorization request with response_mode=jwt; verify JARM response\n2. Decode JARM response; verify it is a valid signed JWT\n3. Verify JWT signature using AS JWKS\n4. Verify 'iss' claim is inside JWT (not duplicated outside)\n5. Verify 'aud' claim in JARM matches client_id\n6. Modify JARM signature; verify client rejects response"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "si-10_fapi_introspection",
+                  "name": "fapi-specific-requirement",
+                  "title": "Signed Introspection Response",
+                  "props": [
+                    { "name": "fapi-requirement-id", "ns": "https://openid.net/specs/fapi", "value": "FAPI-INTRO-01" },
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "message-signing-2.0#5.5" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "authorization-server,resource-server" },
+                    { "name": "no-nist-mapping", "value": "true" }
+                  ],
+                  "prose": "Authorization servers implementing FAPI 2.0 Message Signing introspection response signing SHALL sign introspection responses in JWT format according to RFC 9701. Resource servers SHALL request signed token introspection responses and SHALL verify the signatures. Authorization servers MUST ensure resource servers are authorized to access introspection information to prevent token information leakage.",
+                  "parts": [
+                    {
+                      "id": "si-10_fapi_introspection_obj",
+                      "name": "assessment-objective",
+                      "prose": "Verify that introspection responses are signed per RFC 9701 and resource servers validate signatures."
+                    },
+                    {
+                      "id": "si-10_fapi_introspection_test",
+                      "name": "assessment-method",
+                      "props": [
+                        { "name": "method", "ns": "http://csrc.nist.gov/ns/rmf", "value": "TEST" },
+                        { "name": "label", "value": "FAPI-INTRO-01-Test", "class": "fapi-2.0-ms" }
+                      ],
+                      "parts": [
+                        {
+                          "name": "assessment-objects",
+                          "prose": "1. Request introspection with Accept: application/token-introspection+jwt\n2. Verify response is a signed JWT with content-type: application/token-introspection+jwt\n3. Verify JWT signature using AS JWKS\n4. Verify 'iss' claim matches AS issuer\n5. Verify 'aud' claim identifies the requesting resource server\n6. Verify only authorized resource servers can call introspection endpoint"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "control-id": "sc-23",
+          "adds": [
+            {
+              "position": "ending",
+              "parts": [
+                {
+                  "id": "sc-23_fapi_ms_gdn",
+                  "name": "guidance",
+                  "props": [
+                    { "name": "spec-section", "ns": "https://openid.net/specs/fapi", "value": "message-signing-2.0#5" },
+                    { "name": "requirement-level", "value": "shall" },
+                    { "name": "applies-to", "value": "authorization-server,client" }
+                  ],
+                  "prose": "FAPI 2.0 Message Signing Session Authenticity: Signed messages provide additional session authenticity guarantees beyond the Security Profile. Signed authorization requests (JAR) cryptographically bind the request to the client's signing key. Signed authorization responses (JARM) provide message integrity and prevent tampering. However, note that non-repudiation is limited to individual messages, not sequences of messages."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "back-matter": {
+      "resources": [
+        {
+          "uuid": "e8f3a1b2-4c5d-6e7f-8a9b-0c1d2e3f4a5b",
+          "title": "FAPI 2.0 Security Profile - NIST SP 800-53 Rev 5 Mapping",
+          "description": "The base FAPI 2.0 Security Profile OSCAL mapping that this Message Signing profile extends.",
+          "rlinks": [
+            {
+              "href": "fapi-2.0-nist-profile.json",
+              "media-type": "application/oscal.profile+json"
+            }
+          ]
+        },
+        {
+          "uuid": "6b2e4a85-7f3c-4d1e-9a8b-5c0d2e1f3a4b",
+          "title": "NIST Special Publication 800-53 Revision 5",
+          "description": "Security and Privacy Controls for Information Systems and Organizations",
+          "rlinks": [
+            {
+              "href": "NIST_SP-800-53_rev5_catalog.json",
+              "media-type": "application/oscal.catalog+json"
+            },
+            {
+              "href": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json",
+              "media-type": "application/oscal.catalog+json"
+            }
+          ]
+        },
+        {
+          "uuid": "c4d5e6f7-8a9b-0c1d-2e3f-4a5b6c7d8e9f",
+          "title": "FAPI 2.0 Message Signing",
+          "description": "OpenID Foundation Financial-grade API 2.0 Message Signing specification",
+          "rlinks": [
+            {
+              "href": "https://openid.net/specs/fapi-2_0-message-signing.html",
+              "media-type": "text/html"
+            }
+          ]
+        },
+        {
+          "uuid": "d5e6f7a8-9b0c-1d2e-3f4a-5b6c7d8e9f0a",
+          "title": "RFC 9101 - JWT-Secured Authorization Request (JAR)",
+          "rlinks": [
+            {
+              "href": "https://www.rfc-editor.org/rfc/rfc9101",
+              "media-type": "text/html"
+            }
+          ]
+        },
+        {
+          "uuid": "e6f7a8b9-0c1d-2e3f-4a5b-6c7d8e9f0a1b",
+          "title": "JARM - JWT Secured Authorization Response Mode",
+          "rlinks": [
+            {
+              "href": "https://openid.net/specs/oauth-v2-jarm-final.html",
+              "media-type": "text/html"
+            }
+          ]
+        },
+        {
+          "uuid": "f7a8b9c0-1d2e-3f4a-5b6c-7d8e9f0a1b2c",
+          "title": "RFC 9701 - JWT Response for OAuth Token Introspection",
+          "rlinks": [
+            {
+              "href": "https://www.rfc-editor.org/rfc/rfc9701",
+              "media-type": "text/html"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

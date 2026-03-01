@@ -1,7 +1,8 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
-using Metaschema.Loading;
 using Metaschema.CodeGeneration;
+using Metaschema.Loading;
 using Shouldly;
 using Xunit;
 
@@ -136,10 +137,10 @@ public class RecordCodeGeneratorTests
     {
         // Arrange
         var module = LoadTestModule();
-        var options = new CodeGenerationOptions 
-        { 
+        var options = new CodeGenerationOptions
+        {
             Namespace = "MyApp.Models",
-            FileScopedNamespaces = true 
+            FileScopedNamespaces = true
         };
         var generator = new RecordCodeGenerator(options);
 
@@ -157,10 +158,10 @@ public class RecordCodeGeneratorTests
     {
         // Arrange
         var module = LoadTestModule();
-        var options = new CodeGenerationOptions 
-        { 
+        var options = new CodeGenerationOptions
+        {
             Namespace = "MyApp.Models",
-            FileScopedNamespaces = false 
+            FileScopedNamespaces = false
         };
         var generator = new RecordCodeGenerator(options);
 
@@ -254,8 +255,8 @@ public class RecordCodeGeneratorTests
     {
         // Arrange
         var module = LoadTestModule();
-        var options = new CodeGenerationOptions 
-        { 
+        var options = new CodeGenerationOptions
+        {
             ClassPrefix = "My",
             ClassSuffix = "Model"
         };
@@ -709,12 +710,10 @@ public class RecordCodeGeneratorTests
     [InlineData("date-time", "DateTime")]
     [InlineData("date-with-timezone", "DateTimeOffset")]
     [InlineData("base64", "byte[]")]
-    public void DataTypeMapping_ShouldMapCorrectly(string metaschemaType, string expectedClrType)
-    {
+    public void DataTypeMapping_ShouldMapCorrectly(string metaschemaType, string expectedClrType) =>
         // This test documents the expected type mappings
         // The actual mapping is tested indirectly through flag generation
         expectedClrType.ShouldNotBeNullOrEmpty();
-    }
 
     #endregion
 
@@ -762,12 +761,10 @@ public class RecordCodeGeneratorTests
     [InlineData("dot.case", "DotCase")]
     [InlineData("already-Pascal", "AlreadyPascal")]
     [InlineData("multiple-words-here", "MultipleWordsHere")]
-    public void PropertyNaming_ShouldConvertToPascalCase(string input, string expected)
-    {
+    public void PropertyNaming_ShouldConvertToPascalCase(string input, string expected) =>
         // This tests the ToPascalCase logic indirectly
         // The actual conversion is tested through property generation
         expected.ShouldNotBeNullOrEmpty();
-    }
 
     #endregion
 

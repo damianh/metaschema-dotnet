@@ -1,10 +1,10 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using System.CommandLine;
 using Metaschema.Constraints;
 using Metaschema.Loading;
 using Metaschema.Model;
-using Metaschema;
 using Metaschema.Nodes;
 using Metaschema.Validation;
 
@@ -51,7 +51,7 @@ public sealed class ValidateContentCommand : Command
         Options.Add(formatOption);
         Options.Add(outputOption);
 
-        this.SetAction(async (parseResult, cancellationToken) =>
+        SetAction(async (parseResult, cancellationToken) =>
         {
             var contentFile = parseResult.GetValue(fileArgument)!;
             var metaschemaFile = parseResult.GetValue(metaschemaOption)!;
@@ -158,27 +158,21 @@ public sealed class ValidateContentCommand : Command
         return result.Valid ? 0 : 1;
     }
 
-    private static Format DetectFormat(FileInfo file)
+    private static Format DetectFormat(FileInfo file) => file.Extension.ToLowerInvariant() switch
     {
-        return file.Extension.ToLowerInvariant() switch
-        {
-            ".xml" => Format.Xml,
-            ".json" => Format.Json,
-            ".yaml" or ".yml" => Format.Yaml,
-            _ => Format.Xml // Default to XML
-        };
-    }
+        ".xml" => Format.Xml,
+        ".json" => Format.Json,
+        ".yaml" or ".yml" => Format.Yaml,
+        _ => Format.Xml // Default to XML
+    };
 
-    private static Format MapFormat(ContentFormat format)
+    private static Format MapFormat(ContentFormat format) => format switch
     {
-        return format switch
-        {
-            ContentFormat.Xml => Format.Xml,
-            ContentFormat.Json => Format.Json,
-            ContentFormat.Yaml => Format.Yaml,
-            _ => Format.Xml
-        };
-    }
+        ContentFormat.Xml => Format.Xml,
+        ContentFormat.Json => Format.Json,
+        ContentFormat.Yaml => Format.Yaml,
+        _ => Format.Xml
+    };
 
     private static void OutputResult(ContentValidationResult result, OutputFormat format)
     {

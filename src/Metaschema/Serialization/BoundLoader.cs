@@ -1,4 +1,5 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using Metaschema.Nodes;
 
@@ -15,10 +16,7 @@ public sealed class BoundLoader
     /// Initializes a new instance of the <see cref="BoundLoader"/> class.
     /// </summary>
     /// <param name="context">The binding context.</param>
-    public BoundLoader(BindingContext context)
-    {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
-    }
+    public BoundLoader(BindingContext context) => _context = context ?? throw new ArgumentNullException(nameof(context));
 
     /// <summary>
     /// Gets the formats enabled for this loader.

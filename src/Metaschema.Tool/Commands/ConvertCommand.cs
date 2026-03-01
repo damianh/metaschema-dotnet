@@ -1,8 +1,8 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using System.CommandLine;
 using Metaschema.Loading;
-using Metaschema;
 
 namespace Metaschema.Tool.Commands;
 
@@ -46,7 +46,7 @@ public sealed class ConvertCommand : Command
         Options.Add(toOption);
         Options.Add(outputOption);
 
-        this.SetAction(async (parseResult, cancellationToken) =>
+        SetAction(async (parseResult, cancellationToken) =>
         {
             var inputFile = parseResult.GetValue(fileArgument)!;
             var metaschemaFile = parseResult.GetValue(metaschemaOption)!;
@@ -147,25 +147,19 @@ public sealed class ConvertCommand : Command
         }
     }
 
-    private static Format DetectFormat(FileInfo file)
+    private static Format DetectFormat(FileInfo file) => file.Extension.ToLowerInvariant() switch
     {
-        return file.Extension.ToLowerInvariant() switch
-        {
-            ".xml" => Format.Xml,
-            ".json" => Format.Json,
-            ".yaml" or ".yml" => Format.Yaml,
-            _ => Format.Xml
-        };
-    }
+        ".xml" => Format.Xml,
+        ".json" => Format.Json,
+        ".yaml" or ".yml" => Format.Yaml,
+        _ => Format.Xml
+    };
 
-    private static Format MapFormat(ContentFormat format)
+    private static Format MapFormat(ContentFormat format) => format switch
     {
-        return format switch
-        {
-            ContentFormat.Xml => Format.Xml,
-            ContentFormat.Json => Format.Json,
-            ContentFormat.Yaml => Format.Yaml,
-            _ => Format.Xml
-        };
-    }
+        ContentFormat.Xml => Format.Xml,
+        ContentFormat.Json => Format.Json,
+        ContentFormat.Yaml => Format.Yaml,
+        _ => Format.Xml
+    };
 }

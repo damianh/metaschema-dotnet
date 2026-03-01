@@ -1,4 +1,5 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using Metaschema.Model;
 using Metaschema.Serialization;
@@ -25,10 +26,7 @@ public sealed class BindingContext
     /// Initializes a new instance of the <see cref="BindingContext"/> class with the specified module.
     /// </summary>
     /// <param name="module">The module to register.</param>
-    public BindingContext(MetaschemaModule module) : this()
-    {
-        RegisterModule(module);
-    }
+    public BindingContext(MetaschemaModule module) : this() => RegisterModule(module);
 
     /// <summary>
     /// Gets the registered modules.
@@ -85,51 +83,39 @@ public sealed class BindingContext
     /// </summary>
     /// <param name="format">The serialization format.</param>
     /// <returns>A serializer for the format.</returns>
-    public ISerializer GetSerializer(Format format)
+    public ISerializer GetSerializer(Format format) => format switch
     {
-        return format switch
-        {
-            Format.Xml => new XmlContentSerializer(this),
-            Format.Json => new JsonContentSerializer(this),
-            Format.Yaml => new YamlContentSerializer(this),
-            _ => throw new ArgumentOutOfRangeException(nameof(format), format, "Unknown format")
-        };
-    }
+        Format.Xml => new XmlContentSerializer(this),
+        Format.Json => new JsonContentSerializer(this),
+        Format.Yaml => new YamlContentSerializer(this),
+        _ => throw new ArgumentOutOfRangeException(nameof(format), format, "Unknown format")
+    };
 
     /// <summary>
     /// Gets a deserializer for the specified format.
     /// </summary>
     /// <param name="format">The serialization format.</param>
     /// <returns>A deserializer for the format.</returns>
-    public IDeserializer GetDeserializer(Format format)
+    public IDeserializer GetDeserializer(Format format) => format switch
     {
-        return format switch
-        {
-            Format.Xml => new XmlContentDeserializer(this),
-            Format.Json => new JsonContentDeserializer(this),
-            Format.Yaml => new YamlContentDeserializer(this),
-            _ => throw new ArgumentOutOfRangeException(nameof(format), format, "Unknown format")
-        };
-    }
+        Format.Xml => new XmlContentDeserializer(this),
+        Format.Json => new JsonContentDeserializer(this),
+        Format.Yaml => new YamlContentDeserializer(this),
+        _ => throw new ArgumentOutOfRangeException(nameof(format), format, "Unknown format")
+    };
 
     /// <summary>
     /// Creates a new bound loader for loading content with format detection.
     /// </summary>
     /// <returns>A new bound loader.</returns>
-    public BoundLoader NewBoundLoader()
-    {
-        return new BoundLoader(this);
-    }
+    public BoundLoader NewBoundLoader() => new BoundLoader(this);
 
     /// <summary>
     /// Resolves an assembly definition by root name across all registered modules.
     /// </summary>
     /// <param name="rootName">The root element name.</param>
     /// <returns>The assembly definition, or null if not found.</returns>
-    public AssemblyDefinition? ResolveRootAssembly(string rootName)
-    {
-        return _rootAssembliesByName.GetValueOrDefault(rootName);
-    }
+    public AssemblyDefinition? ResolveRootAssembly(string rootName) => _rootAssembliesByName.GetValueOrDefault(rootName);
 
     /// <summary>
     /// Resolves an assembly definition by root name and namespace across all registered modules.
@@ -137,8 +123,5 @@ public sealed class BindingContext
     /// <param name="rootName">The root element name.</param>
     /// <param name="namespaceUri">The XML namespace URI.</param>
     /// <returns>The assembly definition, or null if not found.</returns>
-    public AssemblyDefinition? ResolveRootAssembly(string rootName, Uri namespaceUri)
-    {
-        return _rootAssembliesByNameAndNamespace.GetValueOrDefault((rootName, namespaceUri));
-    }
+    public AssemblyDefinition? ResolveRootAssembly(string rootName, Uri namespaceUri) => _rootAssembliesByNameAndNamespace.GetValueOrDefault((rootName, namespaceUri));
 }

@@ -1,5 +1,5 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using System.Globalization;
 
@@ -15,10 +15,7 @@ public abstract class AtomicItem<T> : IAtomicItem
     /// Initializes a new instance of the <see cref="AtomicItem{T}"/> class.
     /// </summary>
     /// <param name="value">The value.</param>
-    protected AtomicItem(T value)
-    {
-        Value = value;
-    }
+    protected AtomicItem(T value) => Value = value;
 
     /// <summary>
     /// Gets the underlying value.
@@ -221,9 +218,21 @@ public sealed class DoubleItem : AtomicItem<double>
     /// <inheritdoc/>
     public override string GetStringValue()
     {
-        if (double.IsNaN(Value)) return "NaN";
-        if (double.IsPositiveInfinity(Value)) return "INF";
-        if (double.IsNegativeInfinity(Value)) return "-INF";
+        if (double.IsNaN(Value))
+        {
+            return "NaN";
+        }
+
+        if (double.IsPositiveInfinity(Value))
+        {
+            return "INF";
+        }
+
+        if (double.IsNegativeInfinity(Value))
+        {
+            return "-INF";
+        }
+
         return Value.ToString("G", CultureInfo.InvariantCulture);
     }
 
@@ -237,8 +246,16 @@ public sealed class DoubleItem : AtomicItem<double>
     /// <returns>A new double item.</returns>
     public static DoubleItem Of(double value)
     {
-        if (double.IsNaN(value)) return NaN;
-        if (value == 0.0) return Zero;
+        if (double.IsNaN(value))
+        {
+            return NaN;
+        }
+
+        if (value == 0.0)
+        {
+            return Zero;
+        }
+
         return new DoubleItem(value);
     }
 }
@@ -303,10 +320,7 @@ public sealed class DateItem : AtomicItem<DateOnly>
     /// </summary>
     /// <param name="value">The date value.</param>
     /// <param name="timezone">The optional timezone.</param>
-    public DateItem(DateOnly value, TimeSpan? timezone = null) : base(value)
-    {
-        Timezone = timezone;
-    }
+    public DateItem(DateOnly value, TimeSpan? timezone = null) : base(value) => Timezone = timezone;
 
     /// <inheritdoc/>
     public override string TypeName => "date";
@@ -319,7 +333,10 @@ public sealed class DateItem : AtomicItem<DateOnly>
         {
             var tz = Timezone.Value;
             if (tz == TimeSpan.Zero)
+            {
                 return dateStr + "Z";
+            }
+
             var sign = tz < TimeSpan.Zero ? "-" : "+";
             return dateStr + sign + tz.ToString(@"hh\:mm", CultureInfo.InvariantCulture);
         }
@@ -377,10 +394,7 @@ public sealed class TimeItem : AtomicItem<TimeOnly>
     /// </summary>
     /// <param name="value">The time value.</param>
     /// <param name="timezone">The optional timezone.</param>
-    public TimeItem(TimeOnly value, TimeSpan? timezone = null) : base(value)
-    {
-        Timezone = timezone;
-    }
+    public TimeItem(TimeOnly value, TimeSpan? timezone = null) : base(value) => Timezone = timezone;
 
     /// <inheritdoc/>
     public override string TypeName => "time";
@@ -393,7 +407,10 @@ public sealed class TimeItem : AtomicItem<TimeOnly>
         {
             var tz = Timezone.Value;
             if (tz == TimeSpan.Zero)
+            {
                 return timeStr + "Z";
+            }
+
             var sign = tz < TimeSpan.Zero ? "-" : "+";
             return timeStr + sign + tz.ToString(@"hh\:mm", CultureInfo.InvariantCulture);
         }
@@ -451,10 +468,7 @@ public sealed class DurationItem : AtomicItem<TimeSpan>
     /// </summary>
     /// <param name="value">The time span value.</param>
     /// <param name="months">The number of months.</param>
-    public DurationItem(TimeSpan value, int months = 0) : base(value)
-    {
-        Months = months;
-    }
+    public DurationItem(TimeSpan value, int months = 0) : base(value) => Months = months;
 
     /// <inheritdoc/>
     public override string TypeName => "duration";
@@ -464,7 +478,11 @@ public sealed class DurationItem : AtomicItem<TimeSpan>
     {
         var sb = new System.Text.StringBuilder();
         var isNegative = Value < TimeSpan.Zero || Months < 0;
-        if (isNegative) sb.Append('-');
+        if (isNegative)
+        {
+            sb.Append('-');
+        }
+
         sb.Append('P');
 
         var absMonths = Math.Abs(Months);
@@ -472,26 +490,51 @@ public sealed class DurationItem : AtomicItem<TimeSpan>
         var months = absMonths % 12;
         var span = Value.Duration();
 
-        if (years > 0) sb.Append(years).Append('Y');
-        if (months > 0) sb.Append(months).Append('M');
-        if (span.Days > 0) sb.Append(span.Days).Append('D');
+        if (years > 0)
+        {
+            sb.Append(years).Append('Y');
+        }
+
+        if (months > 0)
+        {
+            sb.Append(months).Append('M');
+        }
+
+        if (span.Days > 0)
+        {
+            sb.Append(span.Days).Append('D');
+        }
 
         if (span.Hours > 0 || span.Minutes > 0 || span.Seconds > 0 || span.Milliseconds > 0)
         {
             sb.Append('T');
-            if (span.Hours > 0) sb.Append(span.Hours).Append('H');
-            if (span.Minutes > 0) sb.Append(span.Minutes).Append('M');
+            if (span.Hours > 0)
+            {
+                sb.Append(span.Hours).Append('H');
+            }
+
+            if (span.Minutes > 0)
+            {
+                sb.Append(span.Minutes).Append('M');
+            }
+
             if (span.Seconds > 0 || span.Milliseconds > 0)
             {
                 if (span.Milliseconds > 0)
+                {
                     sb.Append(span.Seconds).Append('.').Append(span.Milliseconds.ToString("D3", CultureInfo.InvariantCulture).TrimEnd('0')).Append('S');
+                }
                 else
+                {
                     sb.Append(span.Seconds).Append('S');
+                }
             }
         }
 
         if (sb.Length == 1 || (sb.Length == 2 && isNegative))
+        {
             sb.Append("T0S");
+        }
 
         return sb.ToString();
     }
@@ -526,11 +569,18 @@ public sealed class DurationItem : AtomicItem<TimeSpan>
     public static bool TryParse(string s, out DurationItem? result)
     {
         result = null;
-        if (string.IsNullOrEmpty(s)) return false;
+        if (string.IsNullOrEmpty(s))
+        {
+            return false;
+        }
 
         var isNegative = s.StartsWith('-');
         var input = isNegative ? s[1..] : s;
-        if (!input.StartsWith('P')) return false;
+        if (!input.StartsWith('P'))
+        {
+            return false;
+        }
+
         input = input[1..];
 
         var months = 0;
@@ -551,7 +601,10 @@ public sealed class DurationItem : AtomicItem<TimeSpan>
                 if (!int.TryParse(input[numStart..i], CultureInfo.InvariantCulture, out var num))
                 {
                     if (!double.TryParse(input[numStart..i], CultureInfo.InvariantCulture, out var dnum))
+                    {
                         return false;
+                    }
+
                     num = (int)dnum;
                     // Handle fractional seconds
                     if (c == 'S')
@@ -616,24 +669,47 @@ public sealed class DayTimeDurationItem : AtomicItem<TimeSpan>
     {
         var span = Value;
         var isNegative = span < TimeSpan.Zero;
-        if (isNegative) span = span.Negate();
+        if (isNegative)
+        {
+            span = span.Negate();
+        }
 
         var sb = new System.Text.StringBuilder();
-        if (isNegative) sb.Append('-');
+        if (isNegative)
+        {
+            sb.Append('-');
+        }
+
         sb.Append('P');
-        if (span.Days > 0) sb.Append(span.Days).Append('D');
+        if (span.Days > 0)
+        {
+            sb.Append(span.Days).Append('D');
+        }
+
         if (span.Hours > 0 || span.Minutes > 0 || span.Seconds > 0 || span.Milliseconds > 0)
         {
             sb.Append('T');
-            if (span.Hours > 0) sb.Append(span.Hours).Append('H');
-            if (span.Minutes > 0) sb.Append(span.Minutes).Append('M');
+            if (span.Hours > 0)
+            {
+                sb.Append(span.Hours).Append('H');
+            }
+
+            if (span.Minutes > 0)
+            {
+                sb.Append(span.Minutes).Append('M');
+            }
+
             if (span.Seconds > 0 || span.Milliseconds > 0)
             {
                 var secs = span.Seconds + span.Milliseconds / 1000.0;
                 sb.Append(secs.ToString("0.###", CultureInfo.InvariantCulture)).Append('S');
             }
         }
-        if (sb.Length <= 2) sb.Append("T0S");
+        if (sb.Length <= 2)
+        {
+            sb.Append("T0S");
+        }
+
         return sb.ToString();
     }
 
@@ -662,10 +738,7 @@ public sealed class ArrayItem : IItem
     /// Initializes a new instance of the <see cref="ArrayItem"/> class.
     /// </summary>
     /// <param name="members">The array members.</param>
-    public ArrayItem(IReadOnlyList<ISequence> members)
-    {
-        _members = members;
-    }
+    public ArrayItem(IReadOnlyList<ISequence> members) => _members = members;
 
     /// <summary>
     /// Gets the members of the array.
@@ -719,10 +792,7 @@ public sealed class MapItem : IItem
     /// Initializes a new instance of the <see cref="MapItem"/> class.
     /// </summary>
     /// <param name="entries">The map entries.</param>
-    public MapItem(IReadOnlyDictionary<IAtomicItem, ISequence> entries)
-    {
-        _entries = entries;
-    }
+    public MapItem(IReadOnlyDictionary<IAtomicItem, ISequence> entries) => _entries = entries;
 
     /// <summary>
     /// Gets the entries of the map.
@@ -787,8 +857,16 @@ public sealed class MapItem : IItem
     {
         public bool Equals(IAtomicItem? x, IAtomicItem? y)
         {
-            if (x is null && y is null) return true;
-            if (x is null || y is null) return false;
+            if (x is null && y is null)
+            {
+                return true;
+            }
+
+            if (x is null || y is null)
+            {
+                return false;
+            }
+
             return string.Equals(x.GetStringValue(), y.GetStringValue(), StringComparison.Ordinal);
         }
 

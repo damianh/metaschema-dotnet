@@ -1,5 +1,5 @@
-// Licensed under the MIT License.
-// Demonstrates generating JSON Schema and XSD from OSCAL Metaschema modules.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using System.Text.Json;
 using Metaschema.Loading;
@@ -22,7 +22,10 @@ Console.WriteLine($"Generated JSON Schema for OSCAL Catalog: {jsonSchemaText.Len
 Console.WriteLine();
 Console.WriteLine("JSON Schema preview:");
 foreach (var line in jsonSchemaText.Split('\n').Take(15))
+{
     Console.WriteLine($"  {line}");
+}
+
 Console.WriteLine("  ...");
 Console.WriteLine();
 
@@ -35,7 +38,10 @@ Console.WriteLine($"Generated XSD for OSCAL Catalog: {catalogXsdText.Length:N0} 
 Console.WriteLine();
 Console.WriteLine("XSD preview:");
 foreach (var line in catalogXsdText.Split('\n').Take(12))
+{
     Console.WriteLine($"  {line.TrimEnd()}");
+}
+
 Console.WriteLine("  ...");
 Console.WriteLine();
 

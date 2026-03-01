@@ -1,8 +1,9 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using System.CommandLine;
-using Metaschema.Loading;
 using Metaschema.CodeGeneration;
+using Metaschema.Loading;
 
 namespace Metaschema.Tool.Commands;
 
@@ -99,7 +100,7 @@ public sealed class GenerateCodeCommand : Command
         Options.Add(jsonContextOption);
         Options.Add(noExtensionsOption);
 
-        this.SetAction(async (parseResult, cancellationToken) =>
+        SetAction(async (parseResult, cancellationToken) =>
         {
             var file = parseResult.GetValue(fileArgument)!;
             var ns = parseResult.GetValue(namespaceOption)!;
@@ -192,7 +193,7 @@ public sealed class GenerateCodeCommand : Command
 
             Console.WriteLine();
             Console.WriteLine($"✓ Code generation complete. {files.Count} file(s) generated.");
-            
+
             if (useRecords)
             {
                 Console.WriteLine();
@@ -201,7 +202,7 @@ public sealed class GenerateCodeCommand : Command
                 Console.WriteLine($"     <Compile Include=\"{Path.GetFileName(outputDir)}\\**\\*.g.cs\" />");
                 Console.WriteLine("  2. Build your project - the STJ source generator will complete the JsonContext");
                 Console.WriteLine("  3. Use the generated types:");
-                
+
                 var rootAssembly = module.AssemblyDefinitions.FirstOrDefault(a => a.RootName is not null);
                 if (rootAssembly is not null)
                 {
@@ -210,7 +211,7 @@ public sealed class GenerateCodeCommand : Command
                     Console.WriteLine($"     Console.WriteLine(data.{GetFirstProperty(rootAssembly)});");
                 }
             }
-            
+
             return 0;
         }
         catch (ModuleLoadException ex)
@@ -228,10 +229,13 @@ public sealed class GenerateCodeCommand : Command
 
     private static string ToPascalCase(string name)
     {
-        if (string.IsNullOrEmpty(name)) return name;
-        
+        if (string.IsNullOrEmpty(name))
+        {
+            return name;
+        }
+
         var parts = name.Split('-', '_', '.');
-        return string.Concat(parts.Select(p => 
+        return string.Concat(parts.Select(p =>
             p.Length > 0 ? char.ToUpperInvariant(p[0]) + p[1..] : p));
     }
 
@@ -239,7 +243,7 @@ public sealed class GenerateCodeCommand : Command
     {
         var firstField = assembly.Model?.Elements.OfType<Metaschema.Model.FieldInstance>().FirstOrDefault();
         var firstAssembly = assembly.Model?.Elements.OfType<Metaschema.Model.AssemblyInstance>().FirstOrDefault();
-        
+
         if (firstField is not null)
         {
             return ToPascalCase(firstField.EffectiveName);

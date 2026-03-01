@@ -1,4 +1,5 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using System.Text.Json;
 using Metaschema.Loading;
@@ -20,8 +21,8 @@ public class OscalSmokeTests
         // Arrange - Load the OSCAL metadata metaschema
         var loader = new ModuleLoader();
         var metaschemaPath = Path.Combine(
-            AppContext.BaseDirectory, 
-            "..", "..", "..", "..", "..", 
+            AppContext.BaseDirectory,
+            "..", "..", "..", "..", "..",
             "reference", "oscal", "v1.2.0", "oscal_metadata_metaschema.xml");
 
         // Act
@@ -30,13 +31,13 @@ public class OscalSmokeTests
         // Assert
         var hashField = module.GetFieldDefinition("hash");
         hashField.ShouldNotBeNull("Hash field should be defined in OSCAL metadata metaschema");
-        
+
         hashField.FlagInstances.Count.ShouldBeGreaterThan(0, "Hash field should have flag instances");
-        
+
         var algorithmFlag = hashField.FlagInstances.FirstOrDefault(f => f.EffectiveName == "algorithm");
         algorithmFlag.ShouldNotBeNull("Hash field should have 'algorithm' flag");
         algorithmFlag.IsRequired.ShouldBeTrue("Algorithm flag should be required");
-        
+
         // Verify the inline flag definition is attached
         algorithmFlag.ResolvedDefinition.ShouldNotBeNull("Inline flag should have definition attached");
         algorithmFlag.ResolvedDefinition!.DataTypeName.ShouldBe("string");
@@ -165,13 +166,13 @@ public class OscalSmokeTests
         // Assert
         metadata.ShouldNotBeNull();
         metadata.IsSealed.ShouldBeTrue("Generated types should be sealed records");
-        
+
         var lastModified = metadata.GetProperty("LastModified");
         lastModified.ShouldNotBeNull();
-        
+
         var version = metadata.GetProperty("Version");
         version.ShouldNotBeNull();
-        
+
         var oscalVersion = metadata.GetProperty("OscalVersion");
         oscalVersion.ShouldNotBeNull();
     }
@@ -236,9 +237,9 @@ public class OscalSmokeTests
         // Assert
         json.ShouldContain("\"last-modified\":");
         json.ShouldContain("\"2023-10-12T00:00:00"); // Should have direct timestamp, not {"value": "..."}
-        json.ShouldContain("\"version\":"); 
+        json.ShouldContain("\"version\":");
         json.ShouldContain("\"1.1\""); // Should have direct string, not {"value": "1.1"}
-        
+
         // Should NOT contain the nested "value" property structure
         json.ShouldNotContain("\"last-modified\":{\"value\":");
         json.ShouldNotContain("\"version\":{\"value\":");
@@ -260,7 +261,7 @@ public class OscalSmokeTests
         }
 
         var json = File.ReadAllText(jsonPath);
-        
+
         // Parse and extract just the metadata
         using var doc = JsonDocument.Parse(json);
         var metadataElement = doc.RootElement.GetProperty("system-security-plan").GetProperty("metadata");

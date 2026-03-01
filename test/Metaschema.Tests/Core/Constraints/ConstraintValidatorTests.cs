@@ -1,4 +1,5 @@
-// Licensed under the MIT License.
+// Copyright (c) Damian Hickey. All rights reserved.
+// See LICENSE in the project root for license information.
 
 using Metaschema.Metapath.Item;
 using Shouldly;
@@ -415,7 +416,10 @@ public class ConstraintValidatorTests
             while (current is not null)
             {
                 if (current.Name is not null)
+                {
                     parts.Add(current.Name);
+                }
+
                 current = current.Parent;
             }
             parts.Reverse();
