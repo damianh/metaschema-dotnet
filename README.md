@@ -1,7 +1,9 @@
 # Metaschema .NET
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![.NET 10](https://img.shields.io/badge/.NET-10.0-purple.svg)](https://dotnet.microsoft.com/download/dotnet/10.0)
+[![CI](https://github.com/damianh/metaschema-dotnet/actions/workflows/ci.yml/badge.svg)](https://github.com/damianh/metaschema-dotnet/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![.NET](https://img.shields.io/badge/.NET-10.0-purple.svg)](https://dotnet.microsoft.com/)
+[![GitHub Stars](https://img.shields.io/github/stars/damianh/metaschema-dotnet.svg)](https://github.com/damianh/metaschema-dotnet/stargazers)
 
 A .NET implementation of the [Metaschema](https://pages.nist.gov/metaschema/) toolchain, providing equivalent functionality to [metaschema-java](https://github.com/metaschema-framework/metaschema-java) and [metaschema-node](https://github.com/metaschema-framework/metaschema-node).
 
@@ -22,13 +24,10 @@ Metaschema is a framework for defining information models that can be used to ge
 
 ## Packages
 
-| Package | Description |
-|---------|-------------|
-| `DamianH.Metaschema.Core` | Core library with model, Metapath, data types, and constraints |
-| `DamianH.Metaschema.Databind` | Serialization and code generation |
-| `DamianH.Metaschema.Schemagen` | XSD and JSON Schema generation |
-| `DamianH.Metaschema.Tool` | Command-line tool |
-| `DamianH.Metaschema.Testing` | Test utilities and fixtures |
+| Package | Description | NuGet | Downloads |
+|---------|-------------|-------|-----------|
+| **DamianH.Metaschema** | Comprehensive library for working with NIST Metaschema including model loading, validation, serialization, code generation, and schema generation | [![NuGet](https://img.shields.io/nuget/v/DamianH.Metaschema.svg)](https://www.nuget.org/packages/DamianH.Metaschema/) | [![Downloads](https://img.shields.io/nuget/dt/DamianH.Metaschema.svg)](https://www.nuget.org/packages/DamianH.Metaschema/) |
+| **DamianH.Metaschema.Tool** | Command-line tool for validation, schema generation, code generation, and format conversion | [![NuGet](https://img.shields.io/nuget/v/DamianH.Metaschema.Tool.svg)](https://www.nuget.org/packages/DamianH.Metaschema.Tool/) | [![Downloads](https://img.shields.io/nuget/dt/DamianH.Metaschema.Tool.svg)](https://www.nuget.org/packages/DamianH.Metaschema.Tool/) |
 
 ## Requirements
 
